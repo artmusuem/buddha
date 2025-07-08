@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buddhist Artifact – Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+  <script defer src="/buddha/js/bundle.js"></script>
+</head>
+<body class="statue-page">
+  <div id="menu-placeholder"></div>
+  
+  <header class="site-header">
+    <div class="header-content">
+      <h1 class="museum-title">Buddha Museum</h1>
+      <div class="search-bar">
+        <input type="text" id="searchBox" placeholder="Search Buddhist artifacts..." />
+        <button id="searchButton">🔍</button>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="statue-nav">
+    <a href="#" class="nav-prev">← Previous Artifact</a>
+    <a href="/buddha/" class="nav-gallery">🏛 Gallery Overview</a>
+    <a href="#" class="nav-next">Next Artifact →</a>
+  </nav>
+
+  <main class="artwork-main">
+    <!-- Hero Section with Main Image and Basic Info -->
+    <section class="artwork-hero">
+      <div class="artwork-image-container">
+        <img src="/buddha/images/placeholder.jpg" alt="Loading Artifact" class="statue-image lightbox-trigger" />
+        <div class="image-caption">
+          <span class="sku">Loading...</span>
+        </div>
+      </div>
+      
+      <div class="artwork-primary-info">
+        <header class="artwork-header">
+          <h1 class="statue-title">Loading...</h1>
+          <h2 class="subtitle">Loading...</h2>
+          <div class="artwork-meta-basic">
+            <span class="medium">Loading...</span>
+          </div>
+        </header>
+        
+        <div class="artwork-description">
+          <p class="essay">Loading...</p>
+        </div>
+
+        <!-- Key Details Grid -->
+        <div class="details-grid">
+          <div class="detail-item">
+            <label>Dimensions</label>
+            <span class="dimensions">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <label>Medium</label>
+            <span class="medium">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <label>Estimate</label>
+            <span class="estimate">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <label>Price Realized</label>
+            <span class="price-realized">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Provenance and Auction Details Section -->
+    <section class="auction-details">
+      <h3>Auction Information & Provenance</h3>
+      <div class="auction-content">
+        <div class="provenance-history">
+          <h4>Provenance</h4>
+          <p class="provenance">Loading...</p>
+        </div>
+        <div class="lot-details">
+          <h4>Lot Information</h4>
+          <div class="lot-grid">
+            <div class="lot-item">
+              <label>Original Lot</label>
+              <a href="#" class="lot-link" target="_blank">View on Christie's</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<!-- Tags and Categories -->
+<section class="artwork-metadata">
+ <h3>Categories &amp; Tags</h3>
+ <div class="metadata-content">
+   <div class="tags-container">
+     <h4>Tags</h4>
+     <ul class="tags-list">
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link">Gandharan Art</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link">Tibetan Art</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link">Chinese Art</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link">Buddha Heads</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link">Stucco Works</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link">Bronze Works</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link">Ancient Period</a></li>
+       <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link">Paintings</a></li>
+     </ul>
+   </div>
+   
+   <div class="filters-container">
+     <h4>Classification</h4>
+     <div class="filters-grid">
+       <div class="filter-item">
+         <label>Medium</label>
+         <span class="medium-filter">Loading...</span>
+       </div>
+       <div class="filter-item">
+         <label>Region/Origin</label>
+         <span class="region-filter">Loading...</span>
+       </div>
+       <div class="filter-item">
+         <label>Time Period</label>
+         <span class="period-filter">Loading...</span>
+       </div>
+       <div class="filter-item">
+         <label>Object Type</label>
+         <span class="type-filter">Loading...</span>
+       </div>
+     </div>
+   </div>
+ </div>
+</section>
+
+
+<!-- Authentication Badge -->
+<section class="provenance-section">
+  <h3>Authentication & Documentation</h3>
+  <div class="provenance-content">
+    <div class="authentication-badge">
+      <span class="verified-icon">✓</span>
+      <p>This artifact has been documented from a reputable auction house with established provenance.</p>
+    </div>
+    <div class="document-links">
+      <a href="http://localhost/buddha/page-templates/dt-2.html?sku=LOT-502" class="lot-link" target="_blank">
+        🔗 View Original Christie's Listing
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+    <!-- Expert Commentary -->
+    <section class="expert-commentary">
+      <div class="curator-profile">
+        <div class="profile-image">
+          <img src="/buddha/images/curator-profile.jpg" alt="Curator Profile" />
+        </div>
+        <div class="profile-info">
+          <h4>Expert Commentary</h4>
+          <h5>Dr. Sarah Chen</h5>
+          <p class="title">Senior Curator of Asian Art, Buddha Museum</p>
+          <p class="commentary">"This remarkable piece exemplifies the artistic traditions that define Buddhist art across cultures and centuries, showing the synthesis of local and Buddhist artistic elements."</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-branding">
+        <h2>Buddha Museum</h2>
+        <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
+      </div>
+      <div class="footer-links">
+        <a href="/buddha/">Gallery</a>
+        <a href="#">About</a>
+        <a href="#">Collections</a>
+        <a href="#">Research</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Buddha Museum. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox for Image Viewing -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close">×</span>
+    <div class="lightbox-content">
+      <img src="" alt="Lightbox Image" class="lightbox-image" />
+      <div class="lightbox-info">
+        <h3 class="lightbox-title">Artifact Title</h3>
+        <p class="lightbox-details">Artifact Details</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+  
+  .search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-bar input {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-bar button {
+  padding: 0.75rem;
+  border: none;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.search-bar button:hover {
+  transform: scale(1.05);
+}
+  .tags-list li {
+	display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	background: #8B4513;
+	color: white;
+	padding: 0.25rem 0.75rem;
+	border-radius: 20px;
+	font-size: 0.85rem;
+	/* display: inline-block; */
+	/* margin-right: 10px; */
+	/* margin-bottom: 5px; */
+}
+  
+  .tag-link, .filter-link {
+	color: #fff;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+  
+    /* Enhanced Professional Styling for Buddha Museum */
+    .statue-page {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #fafafa;
+    }
+
+    .site-header {
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .museum-title {
+font-size: 2rem;
+  font-weight: 300;
+  color: #fff;
+  display: block;
+  margin: 0;
+    margin-left: 0px;
+  width: 300px;
+  margin-left: 50px;
+    }
+
+    .statue-nav {
+      background: white;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .statue-nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #8B4513;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .statue-nav a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .artwork-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .artwork-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .statue-image {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .statue-image:hover {
+      transform: scale(1.02);
+    }
+
+    .statue-title {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      color: #8B4513;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      font-style: italic;
+      margin: 0 0 1rem 0;
+    }
+
+    .artwork-meta-basic {
+      color: #888;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .essay {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #444;
+      text-align: justify;
+      margin: 1.5rem 0;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-item label {
+      font-weight: bold;
+      color: #8B4513;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .auction-details,
+    .artwork-metadata,
+    .provenance-section {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .auction-details h3,
+    .artwork-metadata h3,
+    .provenance-section h3 {
+      color: #8B4513;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .auction-details h4 {
+      color: #8B4513;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .provenance {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .lot-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .lot-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lot-item label {
+      font-weight: bold;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lot-link {
+      color: #8B4513;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .lot-link:hover {
+      text-decoration: underline;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-item label {
+      font-weight: bold;
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .filter-item a {
+      color: #8B4513;
+      text-decoration: none;
+    }
+
+    .filter-item a:hover {
+      text-decoration: underline;
+    }
+
+    .authentication-badge {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .verified-icon {
+      background: #4caf50;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .document-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .document-links .lot-link {
+      background: #8B4513;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .document-links .lot-link:hover {
+      background: #A0522D;
+    }
+
+    .expert-commentary {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .curator-profile {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .profile-image img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-info h4 {
+      color: #8B4513;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-info h5 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .profile-info .title {
+      color: #666;
+      font-style: italic;
+      margin: 0.25rem 0 1rem 0;
+    }
+
+    .commentary {
+      font-style: italic;
+      border-left: 3px solid #8B4513;
+      padding-left: 1rem;
+      margin: 0;
+    }
+
+    .site-footer {
+      background: #333;
+      color: white;
+      padding: 2rem 0 1rem 0;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid #555;
+      margin-top: 1rem;
+    }
+
+ 
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .artwork-hero {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .details-grid,
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .curator-profile {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .document-links {
+        flex-direction: column;
+      }
+      
+      .statue-nav a {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    }
+
+    /* Lightbox Enhancements */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+    }
+
+    .lightbox.active {
+      display: block;
+    }
+
+    .lightbox-content {
+      position: relative;
+      margin: 2% auto;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .lightbox-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      max-height: 90vh;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+    }
+	
+	
+	
+	
+	@media (max-width: 480px) {
+  .museum-title {
+    font-size: 1.5rem;
+  }
+}
+	
+	
+	
+	
+  </style>
+  
+  
+  
+<style>
+/* Buddha CSS - Updated to use 2x2 grid layout on mobile */
+
+@media (max-width: 768px) {
+  #searchButton {
+    margin-top: -15px;
+  }
+}
+
+#menu-toggle {
+  margin-top: 15px;
+}
+
+.car-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ccc;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.car-sidebar.open {
+  transform: translateX(0);
+}
+
+/* Fixed header area - doesn't scroll */
+.car-sidebar-header {
+  flex-shrink: 0;
+  padding: 6em 1em 1em 1em;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Scrollable content area */
+.car-sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1em;
+}
+
+#close-sidebar {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #333;
+}
+
+.car-sidebar h2 {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+  color: #333;
+}
+
+.car-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.car-sidebar ul li {
+  margin-bottom: 0.5em;
+}
+
+.car-sidebar ul li a {
+  text-decoration: none;
+  color: #8B4513;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  padding: 0.25rem 0;
+}
+
+.car-sidebar ul li a:hover {
+  color: #A0522D;
+  background-color: rgba(139, 69, 19, 0.1);
+  border-radius: 4px;
+  padding-left: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.car-sidebar details summary {
+  cursor: pointer;
+  color: #8B4513;
+  font-weight: bold;
+  padding: 0.5em 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.car-sidebar details summary:hover {
+  color: #A0522D;
+}
+
+.car-sidebar details[open] summary {
+  margin-bottom: 1rem;
+}
+
+.car-sidebar details ul {
+  padding-left: 1rem;
+  border-left: 2px solid #e0e0e0;
+  margin-left: 0.5rem;
+}
+
+.car-sidebar details ul li a {
+  color: #666;
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.car-sidebar details ul li a:hover {
+  color: #8B4513;
+}
+
+/* Scrollbar styling for content area */
+.car-sidebar-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.car-sidebar-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.car-sidebar-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.car-sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+#menu-toggle {
+  position: fixed;
+  top: 1em;
+  display: block;
+  left: 1em;
+  z-index: 1100;
+  background: rgba(139, 69, 19, 0.9);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  display: block;
+  font-size: 1.5em;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+#menu-toggle:hover {
+  background: rgba(139, 69, 19, 1);
+  transform: scale(1.1);
+}
+
+.museum-title {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #fff;
+  display: block;
+  margin: 0;
+  width: 300px;
+  margin-left: 50px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-bar input {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-bar button {
+  padding: 0.75rem;
+  border: none;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.search-bar button:hover {
+  transform: scale(1.05);
+}
+
+.quick-filters {
+  background: white;
+  padding: 1.5rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+/* Desktop - 4 buttons across */
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.filter-buttons button {
+  background-color: #f8f9fa;
+  border: 2px solid #8B4513;
+  border-radius: 25px;
+  padding: 0.75em 1.5em;
+  cursor: pointer;
+  font-size: 0.95em;
+  color: #8B4513;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.filter-buttons button:hover {
+  background-color: #8B4513;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+#clear-filters {
+  margin-top: 1rem;
+  display: none;
+  text-align: center;
+}
+
+#clear-filters button {
+  background-color: #fff4f4;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+  padding: 0.5em 1.5em;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+#clear-filters button:hover {
+  background-color: #dc3545;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-item {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+  transform: scale(1.05);
+}
+
+.gallery-item h3 {
+  color: #8B4513;
+  font-size: 1.1rem;
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.gallery-item .subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gallery-item a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.site-header {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: white;
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#gallery-title {
+  text-align: center;
+  color: #8B4513;
+  font-size: 2.5rem;
+  font-weight: 300;
+  padding: 2rem 0 1rem 0;
+  margin: 0;
+}
+
+.gallery-stats {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+body {
+  background-color: #faf8f5;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 3rem 0;
+  margin-top: 4rem;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+/* No results message */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.no-results h3 {
+  color: #8B4513;
+  margin-bottom: 1rem;
+}
+
+/* Loading state */
+.gallery-loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+/* Responsive Design - Updated for 2x2 grid layout */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  /* 2x2 grid layout instead of single column */
+  .filter-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    max-width: 400px;
+    justify-items: center;
+  }
+  
+  .filter-buttons button {
+    width: 100%;
+    max-width: 180px;
+  }
+  
+  .gallery {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .gallery-item {
+    max-width: 100%;
+  }
+  
+  #gallery-title {
+    font-size: 2rem;
+    padding: 1.5rem 1rem 1rem 1rem;
+  }
+  
+  #menu-toggle {
+    top: 0.5em;
+    left: 0.5em;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .museum-title {
+    font-size: 1.5rem;
+  }
+  
+  .filter-buttons {
+    max-width: 350px;
+    gap: 0.5rem;
+  }
+  
+  .filter-buttons button {
+    max-width: 160px;
+    padding: 0.6em 1.2em;
+    font-size: 0.9em;
+  }
+  
+  .gallery {
+    padding: 0.5rem;
+  }
+  
+  .gallery-item {
+    padding: 1rem;
+  }
+  
+  .gallery-item img {
+    height: 200px;
+  }
+}
+
+/* Loading Animation */
+.gallery-item {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.gallery-item:nth-child(even) {
+  animation-delay: 0.1s;
+}
+
+.gallery-item:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced hover effects */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(139, 69, 19, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.gallery-item:hover::before {
+  opacity: 1;
+}
+</style>
+  
+  
+</body>
+</html>

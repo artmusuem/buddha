@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate of Authenticity – Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+  <script defer src="/buddha/js/bundle.js"></script>
+</head>
+
+<body class="authenticity-page">
+  <div id="menu-placeholder"></div>
+  
+  <header class="site-header">
+    <div class="header-content">
+      <h1 class="museum-title">Buddha Museum</h1>
+      <div class="search-bar">
+        <input type="text" id="searchBox" placeholder="Search Buddhist artifacts..." />
+        <button id="searchButton">🔍</button>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="statue-nav">
+    <a href="#" class="nav-prev">← Back to Artifact</a>
+    <a href="/buddha/" class="nav-gallery">🏛 Gallery</a>
+  </nav>
+
+  <main class="authenticity-main">
+    <!-- Certificate Header -->
+    <section class="certificate-header">
+      <div class="certificate-seal">
+        <div class="seal-content">
+          <span class="seal-text">AUTHENTICATED</span>
+          <span class="seal-year">EST. 2025</span>
+        </div>
+      </div>
+      <div class="certificate-title">
+        <h1>Certificate of Authenticity</h1>
+        <h2>Buddhist Art Artifact</h2>
+        <p class="certificate-subtitle">Official Documentation</p>
+      </div>
+    </section>
+
+    <!-- Artwork Information -->
+    <section class="artwork-certificate-info">
+      <div class="certificate-image-container">
+        <img src="" alt="Reference Image" class="authenticity-image" />
+        <div class="image-watermark">BUDDHA MUSEUM</div>
+      </div>
+      
+      <div class="certificate-details">
+        <h3 class="title">Loading...</h3>
+        <h4 class="subtitle">Loading...</h4>
+        
+        <!-- Technical Specifications -->
+        <div class="specifications-grid">
+          <div class="spec-section">
+            <h5>Physical Specifications</h5>
+            <ul class="spec-list">
+              <li class="sku-item"><strong>Catalogue Reference:</strong> <span class="sku">Loading...</span></li>
+              <li class="dimensions-item"><strong>Dimensions:</strong> <span class="dimensions">Loading...</span></li>
+              <li class="medium-item"><strong>Medium:</strong> <span class="medium">Loading...</span></li>
+              <li class="estimate-item"><strong>Estimate:</strong> <span class="estimate">Loading...</span></li>
+            </ul>
+          </div>
+          
+          <div class="spec-section">
+            <h5>Market Information</h5>
+            <ul class="spec-list">
+              <li class="price-realized-item"><strong>Price Realized:</strong> <span class="price-realized">Loading...</span></li>
+              <li class="lot-link-item"><strong>Auction Record:</strong> <a href="" target="_blank" class="lot-link">View Original Listing</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Authentication Sections -->
+    <section class="authentication-content">
+      <!-- Provenance -->
+      <div class="auth-section provenance-section">
+        <div class="section-header">
+          <h4>📋 Provenance History</h4>
+        </div>
+        <div class="section-content">
+          <p class="provenance-text">Loading...</p>
+        </div>
+      </div>
+
+      <!-- Scholarly Analysis -->
+      <div class="auth-section essay-section">
+        <div class="section-header">
+          <h4>📚 Scholarly Analysis</h4>
+        </div>
+        <div class="section-content">
+          <p class="essay-text">Loading...</p>
+        </div>
+      </div>
+
+      <!-- Technical Analysis -->
+      <div class="auth-section technical-section">
+        <div class="section-header">
+          <h4>🔬 Technical Analysis</h4>
+        </div>
+        <div class="section-content">
+          <p><strong>Material Composition:</strong> <span class="material-analysis">Loading...</span></p>
+          <p><strong>Cultural Context:</strong> <span class="cultural-context">Loading...</span></p>
+          <p><strong>Artistic Features:</strong> <span class="artistic-features">Loading...</span></p>
+          <p><strong>Dating Evidence:</strong> <span class="dating-evidence">Loading...</span></p>
+        </div>
+      </div>
+
+      <!-- Authentication Statement -->
+      <div class="auth-section authentication-statement">
+        <div class="section-header">
+          <h4>✓ Authentication Statement</h4>
+        </div>
+        <div class="section-content">
+          <div class="authentication-badge">
+            <div class="auth-seal">
+              <span class="check-mark">✓</span>
+            </div>
+            <div class="auth-text">
+              <p><strong>This artifact has been authenticated by the Buddha Museum's expert team.</strong></p>
+              <p>Our authentication process includes:</p>
+              <ul class="auth-checklist">
+                <li>✓ Stylistic analysis by Buddhist art specialists</li>
+                <li>✓ Technical examination and materials analysis</li>
+                <li>✓ Provenance research and documentation</li>
+                <li>✓ Comparison with authenticated artifacts</li>
+                <li>✓ Cross-reference with auction records</li>
+                <li>✓ Cultural and religious context verification</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Expert Verification -->
+    <section class="expert-verification">
+      <div class="verification-header">
+        <h3>Expert Verification</h3>
+        <p>This certificate is issued by the Buddha Museum's Department of Authentication</p>
+      </div>
+      
+      <div class="expert-profiles">
+        <div class="expert-profile">
+          <div class="profile-image">
+            <img src="/buddha/images/curator-profile.jpg" alt="Dr. Sarah Chen" />
+          </div>
+          <div class="profile-info">
+            <h5>Dr. Sarah Chen</h5>
+            <p class="title">Senior Curator of Asian Art & Authentication Specialist</p>
+            <p class="credentials">Ph.D. Buddhist Art History, Columbia University</p>
+            <div class="signature-line">
+              <div class="signature">Dr. Sarah Chen</div>
+              <div class="date" id="cert-date">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificate Footer -->
+    <section class="certificate-footer">
+      <div class="footer-content">
+        <div class="certificate-number">
+          <strong>Certificate No.:</strong> <span class="cert-number">BDM-AUTH-<span class="sku-ref">Loading...</span>-2025</span>
+        </div>
+        <div class="issue-date">
+          <strong>Issue Date:</strong> <span id="issue-date">January 15, 2025</span>
+        </div>
+        <div class="validity">
+          <strong>Valid:</strong> Indefinitely (subject to new research findings)
+        </div>
+      </div>
+      
+      <div class="museum-footer">
+        <h4>Buddha Museum</h4>
+        <p>123 Museum Avenue, Cultural District</p>
+        <p>Official authentication authority for Buddhist art artifacts</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-branding">
+        <h2>Buddha Museum</h2>
+        <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
+      </div>
+      <div class="footer-links">
+        <a href="/buddha/">Gallery</a>
+        <a href="#">About</a>
+        <a href="#">Authentication</a>
+        <a href="#">Research</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Buddha Museum. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+<script>
+  // Helper function to check if a field should be shown
+  function shouldShowField(value) {
+    return value && value !== 'hide' && value !== undefined && value !== null && value.trim() !== '';
+  }
+
+  // Helper function to update field or hide container
+  function updateFieldOrHide(selector, value, containerSelector = null) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+    
+    const container = containerSelector ? document.querySelector(containerSelector) : element?.closest('li');
+    
+    if (shouldShowField(value)) {
+      element.textContent = value;
+      if (container) container.style.display = '';
+    } else {
+      if (container) container.style.display = 'none';
+    }
+  }
+
+  // Helper function to update section or hide entire section
+  function updateSectionOrHide(textSelector, value, sectionSelector) {
+    const textElement = document.querySelector(textSelector);
+    if (!textElement) return;
+    
+    const sectionElement = document.querySelector(sectionSelector);
+    
+    if (shouldShowField(value)) {
+      textElement.textContent = value;
+      if (sectionElement) sectionElement.style.display = '';
+    } else {
+      if (sectionElement) sectionElement.style.display = 'none';
+    }
+  }
+
+  // Helper function to safely update simple elements
+  function updateElementSafely(selector, value, hideElement = false) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+    
+    if (shouldShowField(value)) {
+      element.textContent = value;
+      element.style.display = '';
+    } else if (hideElement) {
+      element.style.display = 'none';
+    }
+  }
+
+  // Helper function to update links
+  function updateLinkSafely(selector, url, text = null, containerSelector = null) {
+    const element = document.querySelector(selector);
+    if (!element) return;
+    
+    const container = containerSelector ? document.querySelector(containerSelector) : element?.closest('li');
+    
+    if (shouldShowField(url)) {
+      element.href = url;
+      if (text) element.textContent = text;
+      element.style.display = '';
+      if (container) container.style.display = '';
+    } else {
+      if (container) container.style.display = 'none';
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const sku = params.get("sku");
+
+    // Update navigation back link
+    const backLink = document.querySelector(".nav-prev");
+    if (backLink && sku) {
+      backLink.href = `/buddha/page-templates/dt-1.html?sku=${sku}`;
+    }
+
+    // Set current date
+    const currentDate = new Date().toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    const dateElements = document.querySelectorAll('#cert-date, #issue-date');
+    dateElements.forEach(el => el.textContent = currentDate);
+
+    fetch("/buddha/data/buddha-collection.json")
+      .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json();
+      })
+      .then(data => {
+        const item = data.find(s => s.sku === sku);
+
+        if (item) {
+          // Update page title
+          document.title = `${shouldShowField(item.title) ? item.title : 'Artifact'} - Certificate of Authenticity – Buddha Museum`;
+          
+          // Handle image safely
+          const imageElement = document.querySelector(".authenticity-image");
+          if (imageElement && shouldShowField(item.image)) {
+            imageElement.src = item.image;
+            imageElement.alt = shouldShowField(item.title) ? item.title : 'Buddhist Artifact';
+            imageElement.style.display = '';
+          } else if (imageElement) {
+            imageElement.style.display = 'none';
+          }
+
+          // Handle title and subtitle
+          updateElementSafely(".title", item.title, true);
+          updateElementSafely(".subtitle", item.subtitle, true);
+
+          // Update certificate number reference
+          updateElementSafely(".sku-ref", item.sku);
+
+          // Handle technical specifications - mapped to JSON structure
+          updateFieldOrHide(".sku", item.sku, ".sku-item");
+          updateFieldOrHide(".dimensions", item.dimensions, ".dimensions-item");
+          updateFieldOrHide(".medium", item.medium, ".medium-item");
+          updateFieldOrHide(".estimate", item.estimate, ".estimate-item");
+          updateFieldOrHide(".price-realized", item.price_realized, ".price-realized-item");
+
+          // Handle auction link
+          updateLinkSafely(".lot-link", item.lot_link, "View Original Listing", ".lot-link-item");
+
+          // Handle provenance
+          updateSectionOrHide(".provenance-text", item.provenance, ".provenance-section");
+
+          // Handle scholarly analysis (essay)
+          updateSectionOrHide(".essay-text", item.essay, ".essay-section");
+
+          // Generate technical analysis content based on available data
+          let materialAnalysis = "";
+          let culturalContext = "";
+          let artisticFeatures = "";
+          let datingEvidence = "";
+
+          if (item.medium) {
+            materialAnalysis = `This artifact is crafted from ${item.medium.toLowerCase()}, a material commonly used in Gandharan Buddhist sculpture.`;
+          }
+
+          if (item.subtitle && item.subtitle.includes("GANDHARA")) {
+            culturalContext = "Created in the ancient region of Gandhara, this piece reflects the unique Greco-Buddhist artistic synthesis that characterized the region.";
+          }
+
+          if (item.essay) {
+            // Extract artistic features from essay
+            const essayLower = item.essay.toLowerCase();
+            if (essayLower.includes("face") || essayLower.includes("expression")) {
+              artisticFeatures = "Features characteristic serene facial expression with finely modeled details typical of Gandharan Buddha representations.";
+            }
+          }
+
+          if (item.subtitle) {
+            const periodMatch = item.subtitle.match(/(\d+)(?:ST|ND|RD|TH)-(\d+)(?:ST|ND|RD|TH)\s+CENTURY/i);
+            if (periodMatch) {
+              datingEvidence = `Stylistic analysis and material characteristics support dating to the ${periodMatch[0].toLowerCase()}.`;
+            }
+          }
+
+          updateElementSafely(".material-analysis", materialAnalysis);
+          updateElementSafely(".cultural-context", culturalContext);
+          updateElementSafely(".artistic-features", artisticFeatures);
+          updateElementSafely(".dating-evidence", datingEvidence);
+
+          // Hide technical section if no content
+          const technicalSection = document.querySelector(".technical-section");
+          if (!materialAnalysis && !culturalContext && !artisticFeatures && !datingEvidence) {
+            if (technicalSection) technicalSection.style.display = 'none';
+          }
+
+        } else {
+          const mainElement = document.querySelector("main");
+          if (mainElement) {
+            mainElement.innerHTML = `
+              <div class="error-content">
+                <h2>Artifact Certificate Not Found</h2>
+                <p>No artifact found with SKU: ${sku}</p>
+                <a href="/buddha/" class="return-link">Return to Gallery</a>
+              </div>
+            `;
+          }
+        }
+      })
+      .catch(error => {
+        console.error("Failed to load data:", error);
+        const mainElement = document.querySelector("main");
+        if (mainElement) {
+          mainElement.innerHTML = `
+            <div class="error-content">
+              <h2>Error Loading Certificate</h2>
+              <p>${error.message}</p>
+              <a href="/buddha/" class="return-link">Return to Gallery</a>
+            </div>
+          `;
+        }
+      });
+  });
+</script>
+
+<style>
+/* Professional Certificate Styling - Buddha Museum Theme */
+.authenticity-page {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fafafa;
+  min-height: 100vh;
+}
+
+.site-header {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: white;
+  padding: 1rem 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.museum-title {
+  font-size: 2rem;
+  font-weight: 300;
+  margin: 0;
+  color: #fff;
+}
+
+.search-bar {
+  display: table;
+  margin: 0 auto;
+}
+
+.statue-nav {
+  background: white;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.statue-nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: #8B4513;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.statue-nav a:hover {
+  background-color: #f0f0f0;
+}
+
+.authenticity-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* Certificate Header */
+.certificate-header {
+  text-align: center;
+  padding: 2rem 0;
+  border-bottom: 3px solid #8B4513;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.certificate-seal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 80px;
+  height: 80px;
+  border: 3px solid #8B4513;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+}
+
+.seal-content {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #8B4513;
+}
+
+.seal-text {
+  display: block;
+  font-size: 0.6rem;
+}
+
+.seal-year {
+  display: block;
+  font-size: 0.5rem;
+}
+
+.certificate-title h1 {
+  font-size: 2.5rem;
+  color: #8B4513;
+  margin: 0;
+  font-weight: 300;
+}
+
+.certificate-title h2 {
+  font-size: 1.8rem;
+  color: #666;
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+
+.certificate-subtitle {
+  color: #888;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Artwork Information */
+.artwork-certificate-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.certificate-image-container {
+  position: relative;
+}
+
+.authenticity-image {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.authenticity-image:hover {
+  transform: scale(1.02);
+}
+
+.image-watermark {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(139, 69, 19, 0.8);
+  color: white;
+  padding: 2px 6px;
+  font-size: 0.6rem;
+  border-radius: 2px;
+}
+
+.certificate-details h3 {
+  font-size: 2.5rem;
+  color: #8B4513;
+  margin: 0 0 0.5rem 0;
+}
+
+.certificate-details h4 {
+  font-size: 1.2rem;
+  color: #666;
+  font-style: italic;
+  margin: 0 0 1rem 0;
+}
+
+.specifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.spec-section h5 {
+  color: #8B4513;
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+
+.spec-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.spec-list li {
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.spec-list strong {
+  color: #555;
+  display: inline-block;
+  min-width: 120px;
+}
+
+.spec-list a {
+  color: #8B4513;
+  text-decoration: none;
+}
+
+.spec-list a:hover {
+  text-decoration: underline;
+}
+
+/* Authentication Content */
+.authentication-content {
+  margin: 2rem 0;
+}
+
+.auth-section {
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.section-header {
+  background: #8B4513;
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: 0;
+}
+
+.section-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.section-content {
+  padding: 1.5rem;
+}
+
+.section-content p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #444;
+}
+
+.authentication-badge {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  background: #e8f5e8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #4caf50;
+}
+
+.auth-seal {
+  background: #4caf50;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.auth-checklist {
+  margin: 1rem 0 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.auth-checklist li {
+  margin-bottom: 0.5rem;
+  color: #4caf50;
+}
+
+/* Expert Verification */
+.expert-verification {
+  margin: 3rem 0 2rem 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  border: 2px solid #8B4513;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.verification-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.verification-header h3 {
+  color: #8B4513;
+  margin: 0 0 0.5rem 0;
+}
+
+.expert-profile {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.profile-image img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #8B4513;
+}
+
+.profile-info h5 {
+  margin: 0;
+  color: #8B4513;
+  font-size: 1.2rem;
+}
+
+.profile-info .title {
+  margin: 0.25rem 0;
+  color: #666;
+  font-style: italic;
+}
+
+.profile-info .credentials {
+  margin: 0.25rem 0 1rem 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.signature-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
+}
+
+.signature {
+  font-family: 'Brush Script MT', cursive;
+  font-size: 1.5rem;
+  color: #8B4513;
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Certificate Footer */
+.certificate-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 3px solid #8B4513;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.footer-content > div {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.museum-footer h4 {
+  color: #8B4513;
+  margin: 0 0 0.5rem 0;
+}
+
+.museum-footer p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Site Footer */
+.site-footer {
+  background: #333;
+  color: white;
+  padding: 2rem 0 1rem 0;
+  margin-top: 3rem;
+}
+
+.site-footer .footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  box-shadow: none;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid #555;
+  margin-top: 1rem;
+}
+
+/* Error Styling */
+.error-content {
+  text-align: center;
+  padding: 3rem;
+}
+
+.error-content h2 {
+  color: #cc0000;
+  margin-bottom: 1rem;
+}
+
+.return-link {
+  display: inline-block;
+  background: #8B4513;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+.return-link:hover {
+  background: #A0522D;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .artwork-certificate-info {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .specifications-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .expert-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .signature-line {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .statue-nav a {
+    display: block;
+    margin: 0.5rem 0;
+  }
+  
+  .document-links {
+    flex-direction: column;
+  }
+}
+</style>
