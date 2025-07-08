@@ -1,189 +1,516 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buddha Collection Editor</title>
-  <link rel="stylesheet" href="/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buddha Collection Admin</title>
+  <script>
+    // Environment detection and path setup
+    (function() {
+      const isGitHub = window.location.hostname.includes('github.io');
+      const basePath = isGitHub ? '/buddha' : '';
+      
+      // Store for use throughout the page
+      window.SITE_BASE_PATH = basePath;
+      window.IS_GITHUB = isGitHub;
+      
+      if (isGitHub) {
+        // Show Gateway page for GitHub Pages users
+        document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Admin Gateway - Buddha Museum</title>
+            <style>
+              body { 
+                font-family: 'Georgia', 'Times New Roman', serif; 
+                text-align: center; 
+                padding: 50px 20px; 
+                background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+                min-height: 100vh;
+                margin: 0;
+                color: white;
+              }
+              .container { 
+                max-width: 700px; 
+                margin: 0 auto; 
+                background: white; 
+                color: #333;
+                padding: 50px; 
+                border-radius: 12px; 
+                box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
+              }
+              h1 { 
+                color: #8B4513; 
+                margin-bottom: 30px; 
+                font-size: 2.5rem;
+                font-weight: 300;
+              }
+              p { margin: 20px 0; line-height: 1.7; font-size: 1.1rem; }
+              .gateway-link { 
+                display: inline-block; 
+                background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+                color: white; 
+                padding: 20px 40px; 
+                text-decoration: none; 
+                border-radius: 8px; 
+                margin: 30px 0; 
+                font-weight: bold; 
+                font-size: 1.2rem;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+              }
+              .gateway-link:hover { 
+                transform: translateY(-2px); 
+                box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+              }
+              .gallery-link { 
+                display: inline-block; 
+                background: #666; 
+                color: white; 
+                padding: 12px 25px; 
+                text-decoration: none; 
+                border-radius: 6px; 
+                margin: 10px; 
+                transition: background 0.3s;
+              }
+              .gallery-link:hover { background: #555; }
+              .features {
+                background: #f8f9fa;
+                padding: 25px;
+                border-radius: 8px;
+                margin: 30px 0;
+                text-align: left;
+              }
+              .features h3 {
+                color: #8B4513;
+                margin-top: 0;
+              }
+              .features ul {
+                margin: 0;
+                padding-left: 20px;
+              }
+              .features li {
+                margin: 8px 0;
+              }
+              .platform-badge {
+                background: #e3f2fd;
+                color: #1976d2;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: bold;
+                display: inline-block;
+                margin: 10px 0;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>🌐 Netlify Editor Gateway</h1>
+              <div class="platform-badge">📍 Currently on: GitHub Pages</div>
+              
+              <p><strong>Welcome to the Buddha Museum Admin Gateway!</strong></p>
+              <p>You're viewing the <strong>GitHub Pages</strong> version of the site. For full admin functionality including live GitHub editing, please use our Netlify admin portal.</p>
+              
+              <div class="features">
+                <h3>🛠 Available Admin Features on Netlify:</h3>
+                <ul>
+                  <li>✅ <strong>Live GitHub Editing</strong> - Save directly to repository</li>
+                  <li>✅ <strong>Real-time Updates</strong> - Changes appear instantly</li>
+                  <li>✅ <strong>Local Backup</strong> - Download and restore data</li>
+                  <li>✅ <strong>Full JSON Management</strong> - Complete collection control</li>
+                  <li>✅ <strong>Secure API Access</strong> - Server-side GitHub integration</li>
+                </ul>
+              </div>
+              
+              <a href="https://museumart.netlify.app/admin/" class="gateway-link">
+                🚀 Launch Netlify Admin Portal
+              </a>
+              
+              <p><strong>Why use Netlify for admin?</strong><br>
+              Our admin panel requires server-side functions to securely connect with GitHub's API. These functions are hosted on Netlify and enable direct repository editing.</p>
+              
+              <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+                <a href="${basePath}/" class="gallery-link">← Browse Gallery</a>
+                <a href="https://museumart.netlify.app/" class="gallery-link">Netlify Site</a>
+              </div>
+            </div>
+          </body>
+          </html>
+        `);
+        return;
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="/css/style.css" id="main-css">
+</head>
+<body class="admin-page">
+  <!-- This content only loads on Netlify -->
+  <header class="admin-header">
+    <div class="header-content">
+      <h1>🛠 Buddha Collection Admin</h1>
+      <div class="admin-nav">
+        <a href="/" class="nav-link gallery-link">← Back to Gallery</a>
+        <a href="https://artmusuem.github.io/buddha/" class="nav-link github-link" target="_blank">
+          📖 Live Edits on GitHub
+        </a>
+        <span class="platform-indicator">📍 Netlify Admin</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div id="statusMessage" class="status-message" style="display: none;"></div>
+    
+    <div class="admin-controls">
+      <div class="form-section">
+        <label for="skuSelector">Select Artifact:</label>
+        <select id="skuSelector">
+          <option value="">Loading...</option>
+        </select>
+      </div>
+
+      <div class="button-group">
+        <button id="saveButton" class="btn btn-local">💾 Save Locally</button>
+        <button id="githubSaveButton" class="btn btn-github">🌐 Save to GitHub</button>
+        <button id="downloadButton" class="btn btn-download">📥 Download JSON</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="form-panel">
+        <h3>Edit Artifact Details</h3>
+        <form class="edit-form">
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" data-json-path="title">
+          </div>
+          
+          <div class="form-group">
+            <label for="subtitle">Subtitle:</label>
+            <input type="text" id="subtitle" data-json-path="subtitle">
+          </div>
+          
+          <div class="form-group">
+            <label for="sku">SKU:</label>
+            <input type="text" id="sku" data-json-path="sku">
+          </div>
+          
+          <div class="form-group">
+            <label for="image">Image URL:</label>
+            <input type="text" id="image" data-json-path="image">
+          </div>
+          
+          <div class="form-group">
+            <label for="medium">Medium:</label>
+            <input type="text" id="medium" data-json-path="medium">
+          </div>
+          
+          <div class="form-group">
+            <label for="dimensions">Dimensions:</label>
+            <input type="text" id="dimensions" data-json-path="dimensions">
+          </div>
+          
+          <div class="form-group">
+            <label for="estimate">Estimate:</label>
+            <input type="text" id="estimate" data-json-path="estimate">
+          </div>
+          
+          <div class="form-group">
+            <label for="price_realized">Price Realized:</label>
+            <input type="text" id="price_realized" data-json-path="price_realized">
+          </div>
+          
+          <div class="form-group">
+            <label for="provenance">Provenance:</label>
+            <textarea id="provenance" data-json-path="provenance" rows="3"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="essay">Essay:</label>
+            <textarea id="essay" data-json-path="essay" rows="6"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="lot_link">Auction Link:</label>
+            <input type="text" id="lot_link" data-json-path="lot_link">
+          </div>
+          
+          <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" data-json-path="status">
+              <option value="">Show (default)</option>
+              <option value="hide">Hide</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="preview-panel">
+        <h3>JSON Preview</h3>
+        <pre id="jsonPreview">Select an artifact to edit...</pre>
+      </div>
+    </div>
+  </main>
+
+  <script src="/admin/editor.js" id="main-js"></script>
+
+  <script>
+    // Update paths when DOM is ready (for Netlify only)
+    document.addEventListener("DOMContentLoaded", function() {
+      const basePath = window.SITE_BASE_PATH || '';
+      
+      // Update CSS path
+      const cssLink = document.getElementById('main-css');
+      if (cssLink) {
+        cssLink.href = `${basePath}/css/style.css`;
+      }
+      
+      // Update JavaScript path
+      const jsScript = document.getElementById('main-js');
+      if (jsScript) {
+        jsScript.src = `${basePath}/admin/editor.js`;
+      }
+      
+      // Update gallery navigation link
+      const galleryLink = document.querySelector('.gallery-link');
+      if (galleryLink) {
+        galleryLink.href = `${basePath}/`;
+      }
+      
+      console.log('Admin paths updated for environment:', basePath || 'root');
+    });
+  </script>
+
   <style>
-    body {
-      font-family: sans-serif;
-      margin: 2em;
-      background-color: #f9f9f9;
+    .admin-page {
+      font-family: 'Arial', sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
     }
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 2em;
-    }
-    .editor-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2em;
-      background: white;
-      padding: 2em;
-      border-radius: 8px;
+
+    .admin-header {
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+      color: white;
+      padding: 1rem 0;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    #skuSelector {
-      width: 100%;
-      padding: 0.5em;
-      font-size: 1em;
-      margin-bottom: 2em;
-      border: 2px solid #ddd;
-      border-radius: 4px;
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    label {
+
+    .admin-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .nav-link:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .github-link {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .github-link:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .platform-indicator {
+      background: rgba(255,255,255,0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .admin-main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .status-message {
+      padding: 1rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
       font-weight: bold;
+    }
+
+    .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .status-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+
+    .admin-controls {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .form-section {
+      margin-bottom: 1rem;
+    }
+
+    .form-section label {
       display: block;
-      margin-top: 1em;
-      color: #555;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #333;
     }
-    textarea, input[type="text"], input:not([type]) {
+
+    .form-section select {
       width: 100%;
-      padding: 0.5em;
-      font-size: 1em;
+      padding: 0.75rem;
       border: 1px solid #ddd;
       border-radius: 4px;
-      box-sizing: border-box;
+      font-size: 1rem;
     }
-    textarea {
-      min-height: 80px;
-      resize: vertical;
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-    pre {
-      background: #f4f4f4;
-      padding: 1em;
-      overflow: auto;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-      max-height: 600px;
-    }
-    button {
-      padding: 0.75em 1.5em;
-      font-size: 1em;
+
+    .btn {
+      padding: 0.75rem 1.5rem;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      margin: 0;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s;
     }
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    #saveButton {
-      background-color: #4CAF50;
+
+    .btn-local {
+      background: #28a745;
       color: white;
     }
-    #saveButton:hover:not(:disabled) {
-      background-color: #45a049;
+
+    .btn-local:hover {
+      background: #218838;
     }
-    #githubSaveButton {
-      background-color: #24292e;
+
+    .btn-github {
+      background: #8B4513;
       color: white;
     }
-    #githubSaveButton:hover:not(:disabled) {
-      background-color: #1a1e22;
+
+    .btn-github:hover {
+      background: #A0522D;
     }
-    #downloadButton {
-      background-color: #2196F3;
+
+    .btn-download {
+      background: #6c757d;
       color: white;
     }
-    #downloadButton:hover {
-      background-color: #1976D2;
+
+    .btn-download:hover {
+      background: #5a6268;
     }
-    .form-section {
+
+    .admin-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .form-panel, .preview-panel {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-panel h3, .preview-panel h3 {
+      margin-top: 0;
+      color: #8B4513;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    #jsonPreview {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 4px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      line-height: 1.4;
       max-height: 600px;
       overflow-y: auto;
-      padding-right: 1em;
-      width: 600px;
     }
-    .button-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5em;
-      margin-top: 1em;
-    }
-    .status-message {
-      margin-top: 1em;
-      padding: 0.5em;
-      border-radius: 4px;
-      display: none;
-      font-size: 0.9em;
-    }
-    .status-success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    .status-error {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    .status-info {
-      background-color: #d1ecf1;
-      color: #0c5460;
-      border: 1px solid #bee5eb;
+
+    @media (max-width: 768px) {
+      .admin-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+      
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .admin-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .nav-link, .platform-indicator {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+      }
     }
   </style>
-</head>
-<body>
-  <h1>Buddha Collection JSON Editor</h1>
-  
-  <label for="skuSelector">Select Artwork SKU</label>
-  <select id="skuSelector"></select>
-
-  <div class="editor-section">
-    <div class="form-section">
-      <label>Title</label>
-      <input data-json-path="title" />
-
-      <label>Subtitle</label>
-      <input data-json-path="subtitle" />
-
-      <label>Image Path</label>
-      <input data-json-path="image" />
-
-      <label>Estimate</label>
-      <input data-json-path="estimate" />
-
-      <label>Price Realized</label>
-      <input data-json-path="price_realized" />
-
-      <label>Dimensions</label>
-      <input data-json-path="dimensions" />
-
-      <label>Medium</label>
-      <input data-json-path="medium" />
-
-      <label>Provenance</label>
-      <textarea data-json-path="provenance"></textarea>
-
-      <label>SKU</label>
-      <input data-json-path="sku" readonly style="background-color: #f0f0f0;" />
-
-      <label>Lot Link</label>
-      <input data-json-path="lot_link" />
-
-      <label>Essay</label>
-      <textarea data-json-path="essay"></textarea>
-
-      <div class="button-group">
-        <button id="saveButton">💾 Save Locally</button>
-        <button id="githubSaveButton">🌐 Save to GitHub</button>
-        <button id="downloadButton">⬇️ Export Collection</button>
-      </div>
-      
-      <div id="statusMessage" class="status-message"></div>
-    </div>
-    <div>
-      <h3>Live Preview</h3>
-      <pre id="jsonPreview">{}</pre>
-    </div>
-  </div>
-
-  <script src="/admin/editor.js"></script>
 </body>
 </html>
