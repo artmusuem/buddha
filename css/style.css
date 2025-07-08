@@ -1,0 +1,600 @@
+/* === Global Reset & Typography === */
+body {
+  font-family: 'Georgia', serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  color: #222;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+  margin-top: 0;
+  color: #222;
+}
+
+a {
+  color: #005599;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* === Header & Footer === */
+header, footer {
+  text-align: center;
+  padding: 1em 1em;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  font-size: 0.9em;
+  color: #777;
+}
+
+/* === Navigation Links === */
+.statue-nav {
+  display: table;
+  margin: 0 auto;
+  text-align: center;
+  background: #eee;
+  padding: 0.5em 0;
+  font-size: 1em;
+  margin-bottom: 1.5em;
+  width: 90%; /* Responsive width */
+  max-width: 400px; /* Limit on larger screens */
+}
+
+.statue-nav a {
+  display: table-cell;
+  padding: 0.3em 0.6em;
+  text-decoration: none;
+  color: #005599;
+  vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+  .statue-nav {
+    font-size: 0.9em;
+    width: 85%; /* Adjusts for small screens */
+    max-width: 330px; /* Smaller limit */
+  }
+
+  .statue-nav a {
+    padding: 0.2em 0.4em;
+  }
+}
+
+@media (max-width: 360px) {
+  .statue-nav {
+    font-size: 0.8em;
+    width: 80%;
+    max-width: 280px;
+  }
+
+  .statue-nav a {
+    padding: 0.15em 0.3em;
+  }
+}
+
+/* === Search Bar === */
+.search-bar {
+  position: relative;
+  max-width: 400px;
+  margin: 1em auto;
+  text-align: center;
+}
+
+.search-bar {
+  position: relative;
+  margin: 1em auto;
+  text-align: center;
+}
+
+#searchBox {
+  width: 90%; /* Responsive width */
+  max-width: 400px; /* Limit on larger screens */
+  padding: 0.75em 2.5em 0.75em 1em;
+  font-size: 1em;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+#searchBox:focus {
+  border-color: #005599;
+}
+
+#searchButton {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5em;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #005599;
+}
+
+#searchButton:hover {
+  color: #003366;
+}
+
+@media (max-width: 400px) {
+  #searchBox {
+    width: 85%; /* Adjusts for very small screens */
+    padding: 0.6em 2em 0.6em 0.8em;
+  }
+
+  #searchButton {
+    right: 3px;
+    font-size: 1.1em;
+  }
+}
+
+#searchButton:hover {
+  color: #003366;
+}
+
+#searchResults {
+  margin-top: 1em;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* === Gallery Layout (index.html) === */
+.gallery {
+  max-width: 1200px;
+  margin: 2em auto;
+  padding: 0 1em;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2em;
+}
+
+.gallery-item {
+  flex: 0 0 220px;
+  max-width: 220px;
+  text-align: center;
+  background: #fff;
+  padding: 1em;
+  border: 1px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.03);
+}
+
+.gallery-item img {
+  width: 220px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  margin-bottom: 0.6rem;
+}
+
+.gallery-item h3 {
+  font-size: 1.1rem;
+  margin: 0.4rem 0 0.2rem;
+  color: #222;
+}
+
+.gallery-item p {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* === Statue Page Layout === */
+.statue-page main {
+  max-width: 1100px;
+  margin: 2em auto;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.statue-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2em;
+  align-items: flex-start;
+}
+
+.statue-hero img {
+  width: 250px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.statue-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.statue-title {
+  font-size: 1.4rem;
+  margin-bottom: 0.2em;
+  color: #333;
+}
+
+.subtitle {
+  color: #777;
+  font-style: italic;
+  margin-bottom: 1em;
+}
+
+.details {
+  list-style: none;
+  padding: 0;
+}
+
+.details li {
+  margin-bottom: 0.3em;
+}
+
+/* === Historical Summary === */
+.narrative {
+  margin-top: 1.5em;
+  background: #f4f4f4;
+  padding: 1em;
+  border-left: 4px solid #005599;
+}
+
+.narrative h4 {
+  margin-bottom: 0.5em;
+}
+
+/* === Documentation Section === */
+.document-link {
+  background-color: #fff;
+  padding: 1em;
+  border-top: 1px solid #eee;
+}
+
+.document-link a {
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 0.5em;
+  background-color: #444;
+  color: #fff;
+  padding: 0.5em 1em;
+  border-radius: 3px;
+}
+
+/* === Curator Profile === */
+.curator-profile {
+  display: flex;
+  gap: 1.5em;
+  align-items: center;
+  border-top: 1px solid #ddd;
+  padding-top: 1.5em;
+}
+
+.profile-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.profile-info {
+  font-size: 0.95em;
+}
+
+/* === Search Results === */
+.search-results {
+  max-width: 1100px;
+  margin: 2em auto;
+  padding: 1em;
+}
+
+.search-result {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  padding: 0.8em 0;
+  margin-bottom: 1em;
+}
+
+.search-result img {
+  width: 80px;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.search-result h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.3em;
+}
+
+.search-result p {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* === Responsive Queries === */
+@media (max-width: 1024px) {
+  .gallery {
+    gap: 1.5em;
+  }
+  .gallery-item {
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+  .statue-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .gallery {
+    gap: 1em;
+  }
+  .gallery-item {
+    flex: 0 0 90%;
+    max-width: 90%;
+  }
+  .statue-nav {
+    flex-direction: column;
+    gap: 1em;
+  }
+  .profile-image img {
+    width: 60px;
+    height: 60px;
+  }
+  .search-result {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .search-result img {
+    width: 100px;
+  }
+}
+
+/* === Authenticity Page Layout === */
+.authenticity-page main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2em;
+}
+
+.document-hero {
+  padding: 2em;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.authenticity-image {
+  max-width: 150px;
+  max-height: 150px;
+  margin-bottom: 1em;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.document-hero h2 {
+  margin-bottom: 0.5em;
+}
+
+.statue-title {
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #777;
+  margin-bottom: 1em;
+}
+
+.details {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  display: inline-block;
+}
+
+.details li {
+  margin-bottom: 0.5em;
+}
+
+.details .estimated-value {
+  font-weight: bold;
+  color: #006600; /* Green for value emphasis */
+}
+
+.provenance, .historical-significance, .acquisition-record, .certification-note {
+  margin-top: 2em;
+  padding: 1.5em;
+  background: #f4f4f4;
+  border-left: 4px solid #005599;
+  border-radius: 0 4px 4px 0;
+}
+
+.provenance h4, .historical-significance h4, .acquisition-record h4, .certification-note h4 {
+  margin-bottom: 0.5em;
+}
+
+/* === Lightbox === */
+.lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox-image {
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2em;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.lightbox-close:hover {
+  color: #ccc;
+}
+
+/* Ensure statue image triggers lightbox */
+.statue-image.lightbox-trigger {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.statue-image.lightbox-trigger:hover {
+  transform: scale(1.05);
+}
+
+
+
+
+/* ===== FIXED: CLASS MAPPINGS for DT-1 Template Conversion ===== */
+
+/* Ensure artwork title matches original .statue-title styling */
+.artwork-title {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+/* Match previous layout image rules (was .main-image) */
+.artwork-image {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Center and match .description style */
+.artwork-description {
+  max-width: 800px;
+  margin: 1.5em auto;
+  font-size: 1.1em;
+  line-height: 1.6;
+  text-align: center;
+  color: #444;
+}
+
+/* Match previous and next nav button styles */
+.plane-nav, .artwork-nav {
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 2em auto;
+  padding: 0 1em;
+}
+
+.plane-nav a, .artwork-nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.plane-nav a:hover, .artwork-nav a:hover {
+  text-decoration: underline;
+}
+
+/* Match original button block for provenance link */
+.provenance-button {
+  text-align: center;
+  margin: 2.5em 0;
+}
+
+.provenance-button a {
+  background-color: #000;
+  color: white;
+  padding: 0.8em 1.6em;
+  text-decoration: none;
+  font-size: 1em;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.provenance-button a:hover {
+  background-color: #444;
+}
+
+/* Maintain table styling for detail display */
+.details-table {
+  margin: 2em auto;
+  width: 90%;
+  max-width: 800px;
+  border-collapse: collapse;
+}
+
+.details-table td {
+  padding: 0.75em 1em;
+  border-bottom: 1px solid #ddd;
+}
+
+.details-table td:first-child {
+  font-weight: bold;
+  color: #333;
+  width: 30%;
+}
+
+
+
+
+.tag-link, .filter-link {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.tag-link:hover, .filter-link:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+
+.tags-list li {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
