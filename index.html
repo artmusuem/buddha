@@ -5,7 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buddha Museum</title>
   <link rel="stylesheet" href="/buddha/css/style.css" />
-
+ <script>
+// Check for auto-filter IMMEDIATELY when page loads, before any images render
+(function() {
+  const autoFilter = sessionStorage.getItem('autoFilter');
+  if (autoFilter) {
+    console.log("Pre-loading filter detected:", autoFilter);
+    sessionStorage.removeItem('autoFilter');
+    
+    // Set a flag for bundle.js to know there's a pending filter
+    window.pendingAutoFilter = autoFilter;
+    
+    // Hide the gallery initially to prevent flash
+    document.addEventListener("DOMContentLoaded", () => {
+      const gallery = document.getElementById("gallery");
+      if (gallery) {
+        gallery.style.visibility = "hidden";
+      }
+    });
+  }
+})();
+</script>
 
   <script defer src="/buddha/js/bundle.js"></script>
 
