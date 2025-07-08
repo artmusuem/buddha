@@ -4,8 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Certificate of Authenticity – Buddha Museum</title>
-  <link rel="stylesheet" href="/buddha/css/style.css" />
-  <script defer src="/buddha/js/bundle.js"></script>
+  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
+  <script>
+    // Environment detection and path setup - runs immediately
+    (function() {
+      const isGitHub = window.location.hostname.includes('github.io');
+      const basePath = isGitHub ? '/buddha' : '';
+      
+      console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
+      
+      // Store for use throughout the page
+      window.SITE_BASE_PATH = basePath;
+      
+      // Update CSS link immediately
+      const cssLink = document.getElementById('main-css');
+      if (cssLink) {
+        cssLink.href = `${basePath}/css/style.css`;
+      }
+    })();
+  </script>
+  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
 </head>
 
 <body class="authenticity-page">
@@ -24,7 +42,7 @@
 
   <nav class="statue-nav">
     <a href="#" class="nav-prev">← Back to Artifact</a>
-    <a href="/buddha/" class="nav-gallery">🏛 Gallery</a>
+    <a href="/buddha/" class="nav-gallery gallery-link">🏛 Gallery</a>
   </nav>
 
   <main class="authenticity-main">
@@ -149,7 +167,7 @@
       <div class="expert-profiles">
         <div class="expert-profile">
           <div class="profile-image">
-            <img src="/buddha/images/curator-profile.jpg" alt="Dr. Sarah Chen" />
+            <img src="/buddha/images/curator-profile.jpg" alt="Dr. Sarah Chen" id="curator-image" />
           </div>
           <div class="profile-info">
             <h5>Dr. Sarah Chen</h5>
@@ -193,7 +211,7 @@
         <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
       </div>
       <div class="footer-links">
-        <a href="/buddha/">Gallery</a>
+        <a href="/buddha/" class="gallery-link">Gallery</a>
         <a href="#">About</a>
         <a href="#">Authentication</a>
         <a href="#">Research</a>
@@ -205,6 +223,33 @@
   </footer>
 
 <script>
+  // Smart data loader with fallback (same as bundle.js)
+  async function fetchBuddhaData() {
+    const paths = [
+      "/buddha/data/buddha-collection.json", // GitHub Pages path
+      "/data/buddha-collection.json"         // Netlify path
+    ];
+    
+    for (const path of paths) {
+      try {
+        console.log(`Trying to fetch from: ${path}`);
+        const response = await fetch(path);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`✅ Successfully loaded data from: ${path}`);
+          return data.filter(item => item.status !== "hide");
+        } else {
+          console.log(`❌ Failed to fetch from ${path} - Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.log(`❌ Error fetching from ${path}:`, error.message);
+      }
+    }
+    
+    throw new Error("Could not load buddha-collection.json from any location");
+  }
+
   // Helper function to check if a field should be shown
   function shouldShowField(value) {
     return value && value !== 'hide' && value !== undefined && value !== null && value.trim() !== '';
@@ -270,14 +315,47 @@
     }
   }
 
+  // Generate environment-aware URLs
+  function getPageUrl(path) {
+    const basePath = window.SITE_BASE_PATH || '';
+    return `${basePath}${path}`;
+  }
+
+  function getTemplateUrl(templatePage, sku) {
+    const basePath = window.SITE_BASE_PATH || '';
+    return `${basePath}/page-templates/${templatePage}?sku=${sku}`;
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
+    const basePath = window.SITE_BASE_PATH || '';
+    
+    // Update JavaScript bundle path
+    const jsScript = document.getElementById('main-js');
+    if (jsScript) {
+      jsScript.src = `${basePath}/js/bundle.js`;
+    }
+    
+    // Update curator image
+    const curatorImage = document.getElementById('curator-image');
+    if (curatorImage) {
+      curatorImage.src = `${basePath}/images/curator-profile.jpg`;
+    }
+    
+    // Update all gallery links
+    const galleryLinks = document.querySelectorAll('.gallery-link');
+    galleryLinks.forEach(link => {
+      link.href = getPageUrl('/');
+    });
+    
+    console.log('All paths updated for environment:', basePath || 'root');
+
     const params = new URLSearchParams(window.location.search);
     const sku = params.get("sku");
 
     // Update navigation back link
     const backLink = document.querySelector(".nav-prev");
     if (backLink && sku) {
-      backLink.href = `/buddha/page-templates/dt-1.html?sku=${sku}`;
+      backLink.href = getTemplateUrl('dt-1.html', sku);
     }
 
     // Set current date
@@ -289,11 +367,8 @@
     const dateElements = document.querySelectorAll('#cert-date, #issue-date');
     dateElements.forEach(el => el.textContent = currentDate);
 
-    fetch("/buddha/data/buddha-collection.json")
-      .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
-        return response.json();
-      })
+    // Use smart data loader instead of hardcoded fetch
+    fetchBuddhaData()
       .then(data => {
         const item = data.find(s => s.sku === sku);
 
@@ -377,11 +452,12 @@
         } else {
           const mainElement = document.querySelector("main");
           if (mainElement) {
+            const galleryUrl = getPageUrl('/');
             mainElement.innerHTML = `
               <div class="error-content">
                 <h2>Artifact Certificate Not Found</h2>
                 <p>No artifact found with SKU: ${sku}</p>
-                <a href="/buddha/" class="return-link">Return to Gallery</a>
+                <a href="${galleryUrl}" class="return-link">Return to Gallery</a>
               </div>
             `;
           }
@@ -391,11 +467,12 @@
         console.error("Failed to load data:", error);
         const mainElement = document.querySelector("main");
         if (mainElement) {
+          const galleryUrl = getPageUrl('/');
           mainElement.innerHTML = `
             <div class="error-content">
               <h2>Error Loading Certificate</h2>
               <p>${error.message}</p>
-              <a href="/buddha/" class="return-link">Return to Gallery</a>
+              <a href="${galleryUrl}" class="return-link">Return to Gallery</a>
             </div>
           `;
         }
@@ -903,3 +980,6 @@
   }
 }
 </style>
+
+</body>
+</html>
