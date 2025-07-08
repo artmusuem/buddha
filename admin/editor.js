@@ -174,11 +174,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const result = await response.json();
       
-      githubSaveButton.textContent = "✅ Saved to GitHub!";
-      showStatus(`Successfully saved SKU ${currentSKU} to GitHub repository`, 'success');
-      
-      // Also save locally as backup
-      localStorage.setItem("buddha_collection_backup", JSON.stringify(jsonData));
+githubSaveButton.textContent = "✅ Saved to GitHub!";
+showStatus(`✅ SUCCESS! SKU ${currentSKU} saved to GitHub repository`, 'success');
+
+// Show popup confirmation
+alert(`✅ SUCCESS!\n\nSKU ${currentSKU} has been saved to GitHub repository.\n\nCheck your GitHub commits to verify.`);
+
+// Also save locally as backup
+localStorage.setItem("buddha_collection_backup", JSON.stringify(jsonData));
       
       console.log('Successfully saved to GitHub:', result);
 
