@@ -1,7 +1,53 @@
 // File: /buddha/js/bundle.js (Buddha Museum - Christie's Auction Data Version)
+// Updated with cross-platform path handling for GitHub Pages and Netlify
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("bundle.js loaded on:", window.location.href);
+
+  // === Environment Detection & Path Utilities ===
+  
+  // Detect if we're on GitHub Pages or Netlify
+  const isGitHub = window.location.hostname.includes('github.io');
+  const basePath = isGitHub ? '/buddha' : '';
+  
+  console.log(`Environment detected: ${isGitHub ? 'GitHub Pages' : 'Netlify'}`);
+  console.log(`Base path: "${basePath}"`);
+  
+  // Smart data loader with fallback
+  async function fetchBuddhaData() {
+    const paths = [
+      "/buddha/data/buddha-collection.json", // GitHub Pages path
+      "/data/buddha-collection.json"         // Netlify path
+    ];
+    
+    for (const path of paths) {
+      try {
+        console.log(`Trying to fetch from: ${path}`);
+        const response = await fetch(path);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`✅ Successfully loaded data from: ${path}`);
+          return data.filter(item => item.status !== "hide"); // Apply filter here
+        } else {
+          console.log(`❌ Failed to fetch from ${path} - Status: ${response.status}`);
+        }
+      } catch (error) {
+        console.log(`❌ Error fetching from ${path}:`, error.message);
+      }
+    }
+    
+    throw new Error("Could not load buddha-collection.json from any location");
+  }
+  
+  // Generate environment-aware URLs
+  function getPageUrl(path) {
+    return `${basePath}${path}`;
+  }
+  
+  function getTemplateUrl(templatePage, sku) {
+    return `${basePath}/page-templates/${templatePage}?sku=${sku}`;
+  }
 
   // === Grab common DOM elements across all pages ===
   const urlParams = new URLSearchParams(window.location.search);
@@ -16,11 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Utility Functions ===
 
-  // Fetch data and filter out hidden items
-  function fetchFilteredData(url) {
-    return fetch(url)
-      .then(res => res.json())
-      .then(data => data.filter(item => item.status !== "hide"));
+  // Fetch data and filter out hidden items (now uses smart loader)
+  function fetchFilteredData() {
+    return fetchBuddhaData(); // Filter is already applied in fetchBuddhaData
   }
 
   // Check if a field value is valid (not "hide" or undefined/null)
@@ -111,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "gallery-item";
       const templatePage = item["template-page"] || "dt-1.html";
-      const link = `/buddha/page-templates/${templatePage}?sku=${item.sku}`;
+      const link = getTemplateUrl(templatePage, item.sku); // Use environment-aware URL
       const titleHTML = item.title ? `<h3>${item.title}</h3>` : '';
       const subtitleHTML = item.subtitle ? `<p class="subtitle">${item.subtitle}</p>` : '';
       
@@ -202,24 +246,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Detail Pages (dt-1.html / dt-2.html) Rendering ===
   if (window.location.pathname.includes("dt-1.html") || window.location.pathname.includes("dt-2.html")) {
-    fetchFilteredData("/buddha/data/buddha-collection.json")
+    fetchFilteredData() // Using new smart loader
       .then(data => {
         const item = data.find(i => i.sku === sku);
         if (!item) return;
 
         // First, update the updateText function to handle multiple elements
-		const updateText = (selector, value) => {
-		const elements = document.querySelectorAll(selector); // Changed from querySelector
-		elements.forEach(el => {
-		if (shouldShowField(value)) {
-		el.textContent = value;
-		el.style.display = "";
-		} else {
-		el.style.display = "none";
-	}
-  });
-};
-
+        const updateText = (selector, value) => {
+          const elements = document.querySelectorAll(selector); // Changed from querySelector
+          elements.forEach(el => {
+            if (shouldShowField(value)) {
+              el.textContent = value;
+              el.style.display = "";
+            } else {
+              el.style.display = "none";
+            }
+          });
+        };
 
         // Create filter links for extracted categories
         const updateFilterLink = (selector, categoryType) => {
@@ -231,7 +274,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (values && values.length > 0) {
               const value = values[0]; // Use first matching category
               const displayLabel = labelMap[value] || value.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-              el.innerHTML = `<a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', '${value}'); return true;" class="filter-link">${displayLabel}</a>`;
+              const homeUrl = getPageUrl('/'); // Use environment-aware URL
+              el.innerHTML = `<a href="${homeUrl}" onclick="sessionStorage.setItem('autoFilter', '${value}'); return true;" class="filter-link">${displayLabel}</a>`;
               el.style.display = "";
             } else {
               el.style.display = "none";
@@ -239,33 +283,33 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         };
 
-// Then your existing calls will work for all elements:
-// Populate Christie's auction data fields
-updateText(".statue-title", item.title);
-updateText(".subtitle", item.subtitle);
-updateText(".sku", item.sku);
-updateText(".estimate", item.estimate);
-updateText(".price-realized", item.price_realized);
-updateText(".dimensions", item.dimensions);
-updateText(".medium", item.medium);  // This will now update ALL .medium elements
-updateText(".provenance", item.provenance);
-updateText(".essay", item.essay);
+        // Then your existing calls will work for all elements:
+        // Populate Christie's auction data fields
+        updateText(".statue-title", item.title);
+        updateText(".subtitle", item.subtitle);
+        updateText(".sku", item.sku);
+        updateText(".estimate", item.estimate);
+        updateText(".price-realized", item.price_realized);
+        updateText(".dimensions", item.dimensions);
+        updateText(".medium", item.medium);  // This will now update ALL .medium elements
+        updateText(".provenance", item.provenance);
+        updateText(".essay", item.essay);
 
-// Create filter links based on extracted categories
-updateFilterLink(".medium-filter", "medium");
-updateFilterLink(".region-filter", "region");
-updateFilterLink(".period-filter", "period");
-updateFilterLink(".type-filter", "type");
+        // Create filter links based on extracted categories
+        updateFilterLink(".medium-filter", "medium");
+        updateFilterLink(".region-filter", "region");
+        updateFilterLink(".period-filter", "period");
+        updateFilterLink(".type-filter", "type");
 
-// Add filter button function for dt-1 page
-window.goToFilteredGallery = function(filter) {
-  if (filter) {
-    sessionStorage.setItem('autoFilter', filter);
-  } else {
-    sessionStorage.removeItem('autoFilter');
-  }
-  window.location.href = '/buddha/';
-};
+        // Add filter button function for dt-1 page
+        window.goToFilteredGallery = function(filter) {
+          if (filter) {
+            sessionStorage.setItem('autoFilter', filter);
+          } else {
+            sessionStorage.removeItem('autoFilter');
+          }
+          window.location.href = getPageUrl('/'); // Use environment-aware URL
+        };
 
         // Set main image
         const image = document.querySelector(".statue-image");
@@ -284,119 +328,118 @@ window.goToFilteredGallery = function(filter) {
           lotLink.style.display = "none";
         }
 
-// === Simple Numeric Navigation - Buddha Site ===
-// Goes in numerical order regardless of prefix, wraps around
+        // === Simple Numeric Navigation - Buddha Site ===
+        // Goes in numerical order regardless of prefix, wraps around
 
-// Get current SKU from URL
-const urlParams = new URLSearchParams(window.location.search);
-const currentSku = urlParams.get("sku");
+        // Get current SKU from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSku = urlParams.get("sku");
 
-// Get navigation elements
-const navPrev = document.querySelector(".nav-prev");
-const navNext = document.querySelector(".nav-next");
+        // Get navigation elements
+        const navPrev = document.querySelector(".nav-prev");
+        const navNext = document.querySelector(".nav-next");
 
-if (currentSku && navPrev && navNext) {
-  // Extract just the number from any SKU format
-  function getNumber(sku) {
-    const match = sku.match(/(\d+)/);
-    return match ? parseInt(match[0], 10) : 0;
-  }
-  
-  // Extract prefix from SKU (everything before the number)
-  function getPrefix(sku) {
-    const match = sku.match(/^(.*?)(\d+)/);
-    return match ? match[1] : '';
-  }
-  
-  // Create SKU with same prefix but different number
-  function makeSku(prefix, number) {
-    // Pad with zeros to match original length
-    const originalMatch = currentSku.match(/(\d+)/);
-    if (originalMatch) {
-      const originalLength = originalMatch[0].length;
-      const paddedNumber = number.toString().padStart(originalLength, '0');
-      return prefix + paddedNumber;
-    }
-    return prefix + number;
-  }
-  
-  // Get current number and prefix
-  const currentNumber = getNumber(currentSku);
-  const prefix = getPrefix(currentSku);
-  
-  console.log("Current SKU:", currentSku);
-  console.log("Current number:", currentNumber);
-  console.log("Prefix:", prefix);
-  
-  // Load data to find min/max numbers
-  fetch("/buddha/data/buddha-collection.json")
-    .then(res => res.json())
-    .then(data => {
-      // Get all numbers from SKUs with same prefix
-      const numbers = data
-        .filter(item => item.sku && getPrefix(item.sku) === prefix)
-        .map(item => getNumber(item.sku))
-        .filter(num => num > 0)
-        .sort((a, b) => a - b);
-      
-      if (numbers.length === 0) {
-        console.log("No valid numbers found");
-        return;
-      }
-      
-      const minNumber = Math.min(...numbers);
-      const maxNumber = Math.max(...numbers);
-      
-      console.log("Available numbers:", numbers);
-      console.log("Range:", minNumber, "to", maxNumber);
-      
-      // Find current position in the sorted array
-      const currentIndex = numbers.indexOf(currentNumber);
-      
-      let prevNumber, nextNumber;
-      
-      if (currentIndex === -1) {
-        // Current number not found, use first as fallback
-        prevNumber = maxNumber; // wrap to end
-        nextNumber = minNumber; // wrap to start
-      } else {
-        // Calculate prev/next with wrapping
-        const prevIndex = currentIndex === 0 ? numbers.length - 1 : currentIndex - 1;
-        const nextIndex = currentIndex === numbers.length - 1 ? 0 : currentIndex + 1;
-        
-        prevNumber = numbers[prevIndex];
-        nextNumber = numbers[nextIndex];
-      }
-      
-      // Create navigation SKUs
-      const prevSku = makeSku(prefix, prevNumber);
-      const nextSku = makeSku(prefix, nextNumber);
-      
-      console.log("Previous SKU:", prevSku);
-      console.log("Next SKU:", nextSku);
-      
-      // Set navigation links (Buddha site paths)
-      navPrev.href = `/buddha/page-templates/dt-1.html?sku=${prevSku}`;
-      navNext.href = `/buddha/page-templates/dt-1.html?sku=${nextSku}`;
-      
-      console.log("Buddha navigation set successfully!");
-    })
-    .catch(error => {
-      console.error("Error loading Buddha data:", error);
-      
-      // Fallback: simple +1/-1 navigation
-      const prevNumber = currentNumber === 1 ? 999 : currentNumber - 1;
-      const nextNumber = currentNumber + 1;
-      
-      const prevSku = makeSku(prefix, prevNumber);
-      const nextSku = makeSku(prefix, nextNumber);
-      
-      navPrev.href = `/buddha/page-templates/dt-1.html?sku=${prevSku}`;
-      navNext.href = `/buddha/page-templates/dt-1.html?sku=${nextSku}`;
-      
-      console.log("Using fallback Buddha navigation");
-    });
-}
+        if (currentSku && navPrev && navNext) {
+          // Extract just the number from any SKU format
+          function getNumber(sku) {
+            const match = sku.match(/(\d+)/);
+            return match ? parseInt(match[0], 10) : 0;
+          }
+          
+          // Extract prefix from SKU (everything before the number)
+          function getPrefix(sku) {
+            const match = sku.match(/^(.*?)(\d+)/);
+            return match ? match[1] : '';
+          }
+          
+          // Create SKU with same prefix but different number
+          function makeSku(prefix, number) {
+            // Pad with zeros to match original length
+            const originalMatch = currentSku.match(/(\d+)/);
+            if (originalMatch) {
+              const originalLength = originalMatch[0].length;
+              const paddedNumber = number.toString().padStart(originalLength, '0');
+              return prefix + paddedNumber;
+            }
+            return prefix + number;
+          }
+          
+          // Get current number and prefix
+          const currentNumber = getNumber(currentSku);
+          const prefix = getPrefix(currentSku);
+          
+          console.log("Current SKU:", currentSku);
+          console.log("Current number:", currentNumber);
+          console.log("Prefix:", prefix);
+          
+          // Load data to find min/max numbers
+          fetchBuddhaData() // Using new smart loader
+            .then(data => {
+              // Get all numbers from SKUs with same prefix
+              const numbers = data
+                .filter(item => item.sku && getPrefix(item.sku) === prefix)
+                .map(item => getNumber(item.sku))
+                .filter(num => num > 0)
+                .sort((a, b) => a - b);
+              
+              if (numbers.length === 0) {
+                console.log("No valid numbers found");
+                return;
+              }
+              
+              const minNumber = Math.min(...numbers);
+              const maxNumber = Math.max(...numbers);
+              
+              console.log("Available numbers:", numbers);
+              console.log("Range:", minNumber, "to", maxNumber);
+              
+              // Find current position in the sorted array
+              const currentIndex = numbers.indexOf(currentNumber);
+              
+              let prevNumber, nextNumber;
+              
+              if (currentIndex === -1) {
+                // Current number not found, use first as fallback
+                prevNumber = maxNumber; // wrap to end
+                nextNumber = minNumber; // wrap to start
+              } else {
+                // Calculate prev/next with wrapping
+                const prevIndex = currentIndex === 0 ? numbers.length - 1 : currentIndex - 1;
+                const nextIndex = currentIndex === numbers.length - 1 ? 0 : currentIndex + 1;
+                
+                prevNumber = numbers[prevIndex];
+                nextNumber = numbers[nextIndex];
+              }
+              
+              // Create navigation SKUs
+              const prevSku = makeSku(prefix, prevNumber);
+              const nextSku = makeSku(prefix, nextNumber);
+              
+              console.log("Previous SKU:", prevSku);
+              console.log("Next SKU:", nextSku);
+              
+              // Set navigation links (environment-aware paths)
+              navPrev.href = getTemplateUrl('dt-1.html', prevSku);
+              navNext.href = getTemplateUrl('dt-1.html', nextSku);
+              
+              console.log("Buddha navigation set successfully!");
+            })
+            .catch(error => {
+              console.error("Error loading Buddha data:", error);
+              
+              // Fallback: simple +1/-1 navigation
+              const prevNumber = currentNumber === 1 ? 999 : currentNumber - 1;
+              const nextNumber = currentNumber + 1;
+              
+              const prevSku = makeSku(prefix, prevNumber);
+              const nextSku = makeSku(prefix, nextNumber);
+              
+              navPrev.href = getTemplateUrl('dt-1.html', prevSku);
+              navNext.href = getTemplateUrl('dt-1.html', nextSku);
+              
+              console.log("Using fallback Buddha navigation");
+            });
+        }
       });
   }
 
@@ -404,7 +447,7 @@ if (currentSku && navPrev && navNext) {
   if (window.location.pathname.includes("/")) {
     console.log("✅ Index page detected, starting menu creation...");
     
-    fetchFilteredData("/buddha/data/buddha-collection.json")
+    fetchFilteredData() // Using new smart loader
       .then(data => {
         console.log("✅ Data loaded:", data.length, "items");
         
@@ -493,21 +536,21 @@ if (currentSku && navPrev && navNext) {
 
         window.fullData = data;
         
-// Check for pending auto-filter
-const pendingFilter = window.pendingAutoFilter;
-if (pendingFilter) {
-  console.log("✅ Applying pending auto-filter:", pendingFilter);
-  window.pendingAutoFilter = null;
-  window.filterGallery(pendingFilter);
-  
-  // Show gallery after filter is applied
-  setTimeout(() => {
-    const gallery = document.getElementById("gallery");
-    if (gallery) gallery.style.visibility = "visible";
-  }, 100);
-} else {
-  loadGallery(data);
-}
+        // Check for pending auto-filter
+        const pendingFilter = window.pendingAutoFilter;
+        if (pendingFilter) {
+          console.log("✅ Applying pending auto-filter:", pendingFilter);
+          window.pendingAutoFilter = null;
+          window.filterGallery(pendingFilter);
+          
+          // Show gallery after filter is applied
+          setTimeout(() => {
+            const gallery = document.getElementById("gallery");
+            if (gallery) gallery.style.visibility = "visible";
+          }, 100);
+        } else {
+          loadGallery(data);
+        }
       })
       .catch(error => {
         console.error("❌ Error loading data:", error);
@@ -522,7 +565,8 @@ if (pendingFilter) {
   const performSearch = (query) => {
     query = query?.trim();
     if (!query) return;
-    window.location.href = `/buddha/search-results.html?q=${encodeURIComponent(query)}`;
+    const searchUrl = getPageUrl('/search-results.html'); // Use environment-aware URL
+    window.location.href = `${searchUrl}?q=${encodeURIComponent(query)}`;
   };
 
   if (searchInput && searchButton) {
@@ -537,7 +581,7 @@ if (pendingFilter) {
   if (resultsContainer) {
     const q = urlParams.get("q")?.toLowerCase()?.trim();
     if (q) {
-      fetchFilteredData("/buddha/data/buddha-collection.json")
+      fetchFilteredData() // Using new smart loader
         .then(data => {
           const matches = data.filter(item => {
             const qlc = q.toLowerCase();
@@ -561,9 +605,10 @@ if (pendingFilter) {
           resultsContainer.innerHTML = matches.length
             ? matches.map(item => {
                 const template = item["template-page"] || "dt-1.html";
+                const templateUrl = getTemplateUrl(template, item.sku); // Use environment-aware URL
                 return `
                   <div class="search-result">
-                    <a href="/buddha/page-templates/${template}?sku=${item.sku}">
+                    <a href="${templateUrl}">
                       <img src="${item.image}" alt="${item.title} – ${item.sku}" class="lightbox-trigger" />
                       <div>
                         <h3>${item.title}</h3>
@@ -609,7 +654,4 @@ if (pendingFilter) {
       }
     });
   }
-
-
-
 });
