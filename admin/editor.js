@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // === Load JSON ===
-  fetch("/buddha/data/buddha-collection.json")
+  fetch("/data/buddha/data/buddha-collection.json")
     .then(res => {
       if (!res.ok) {
         throw new Error(`Failed to load buddha-collection.json: ${res.status}`);
