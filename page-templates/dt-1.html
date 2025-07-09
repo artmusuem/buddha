@@ -23,6 +23,24 @@
       }
     })();
   </script>
+	<script>
+function applyReadMore(element) {
+    const text = element.textContent.trim();
+    if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
+    
+    const words = text.split(' ');
+    const short = words.slice(0, 25).join(' ');
+    
+    element.innerHTML = short + '... <span id="readmore" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">read more</span>';
+    
+    element.querySelector('#readmore').onclick = function() {
+        element.innerHTML = text + ' <span id="readless" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">show less</span>';
+        element.querySelector('#readless').onclick = function() {
+            applyReadMore(element);
+        };
+    };
+}
+</script>
   <script defer src="/buddha/js/bundle.js" id="main-js"></script>
 	  
 
