@@ -3,9 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Search Results – Buddha Museum</title>
-  <link rel="stylesheet" href="/buddha/css/style.css" />
-  <script defer src="/buddha/js/bundle.js"></script>
+  <title>Buddha Museum</title>
+
+  <!-- Load config first (must come before anything else) -->
+  <script>
+    (function () {
+      const host = window.location.hostname;
+      const IS_GITHUB = host.includes('github.io');
+      const BASE_PATH = IS_GITHUB ? '/buddha' : '';
+
+      const CONFIG = {
+        IS_GITHUB,
+        IS_NETLIFY: host.includes('netlify.app'),
+        BASE_PATH,
+        DATA_FILENAME: 'statues.json',
+        DATA_PATH: `${BASE_PATH}/data/statues.json`,
+        IMAGE_PATH: `${BASE_PATH}/images/`,
+        CSS_PATH: `${BASE_PATH}/css/style.css`,
+        JS_PATH: `${BASE_PATH}/js/`,
+        PAGE_PATH: `${BASE_PATH}/page-templates/`,
+        HOME_PAGE: `${BASE_PATH}/index.html`
+      };
+
+      window.CONFIG = CONFIG;
+
+      // Set CSS path
+      const css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = CONFIG.CSS_PATH;
+      document.head.appendChild(css);
+
+      // Set JS path
+      const script = document.createElement("script");
+      script.src = `${CONFIG.JS_PATH}bundle.js`;
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  </script>
+</head>
+
   <style>
     .site-header {
     
@@ -650,7 +686,7 @@ footer p {
 }
 
 </style>
-</head>
+
 <body class="search-results-page">
 <header class="site-header">
     <div class="header-content">
@@ -698,7 +734,7 @@ footer p {
       const performSearch = (searchQuery) => {
         const trimmedQuery = searchQuery?.trim();
         if (!trimmedQuery) return;
-        window.location.href = `/buddha/search-results.html?q=${encodeURIComponent(trimmedQuery)}`;
+       window.location.href = `${window.CONFIG.BASE_PATH}/search-results.html?q=${encodeURIComponent(searchQuery)}`;
       };
 
       // Search input handlers
