@@ -1,92 +1,52 @@
-// File: /js/bundle.js (Buddha Museum - Cross-Platform Version)
-// Fixed path handling for GitHub Pages and Netlify compatibility
+// File: /buddha/js/bundle.js (Buddha Museum - Christie's Auction Data Version)
+// Updated with cross-platform path handling for GitHub Pages and Netlify
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("bundle.js loaded on:", window.location.href);
 
   // === Environment Detection & Path Utilities ===
   
-  // Robust environment detection
+  // Detect if we're on GitHub Pages or Netlify
   const isGitHub = window.location.hostname.includes('github.io');
-  const isNetlify = window.location.hostname.includes('netlify.app') || window.location.hostname.includes('netlify.com');
   const basePath = isGitHub ? '/buddha' : '';
   
-  console.log(`Environment detected: ${isGitHub ? 'GitHub Pages' : isNetlify ? 'Netlify' : 'Local/Other'}`);
+  console.log(`Environment detected: ${isGitHub ? 'GitHub Pages' : 'Netlify'}`);
   console.log(`Base path: "${basePath}"`);
   
-  // Store globally for other scripts
-  window.SITE_CONFIG = {
-    basePath: basePath,
-    isGitHub: isGitHub,
-    isNetlify: isNetlify,
-    dataPath: `${basePath}/data`,
-    assetsPath: `${basePath}/assets`,
-    cssPath: `${basePath}/css`,
-    jsPath: `${basePath}/js`
-  };
-  
-  // Smart data loader with comprehensive fallback paths
+  // Smart data loader with fallback
   async function fetchBuddhaData() {
     const paths = [
-      `${basePath}/data/buddha-collection.json`,      // Primary GitHub/Netlify path
-      `${basePath}/data/collection.json`,             // Alternative collection name
-      `${basePath}/data/artifacts.json`,              // Alternative artifacts name
-      '/data/buddha-collection.json',                 // Root fallback
-      '/data/collection.json',                        // Root alternative
-      '/data/artifacts.json',                         // Root artifacts
-      './data/buddha-collection.json',                // Relative fallback
-      './data/collection.json',                       // Relative alternative
-      `${basePath}/assets/data/buddha-collection.json`, // Assets folder fallback
-      `${basePath}/js/data/buddha-collection.json`    // JS folder fallback
+      "/buddha/data/buddha-collection.json", // GitHub Pages path
+      "/data/buddha-collection.json"         // Netlify path
     ];
-    
-    let lastError = null;
     
     for (const path of paths) {
       try {
-        console.log(`Attempting to fetch from: ${path}`);
+        console.log(`Trying to fetch from: ${path}`);
         const response = await fetch(path);
         
         if (response.ok) {
           const data = await response.json();
-          
-          // Validate data structure
-          if (data && (Array.isArray(data) || data.artifacts || data.items)) {
-            const items = Array.isArray(data) ? data : (data.artifacts || data.items);
-            const filteredItems = items.filter(item => item.status !== "hide");
-            console.log(`✅ Successfully loaded ${filteredItems.length} items from: ${path}`);
-            return filteredItems;
-          } else {
-            console.warn(`❌ Invalid data structure from ${path}`);
-          }
+          console.log(`✅ Successfully loaded data from: ${path}`);
+          return data.filter(item => item.status !== "hide"); // Apply filter here
         } else {
-          console.warn(`❌ HTTP ${response.status} from ${path}`);
+          console.log(`❌ Failed to fetch from ${path} - Status: ${response.status}`);
         }
       } catch (error) {
-        console.warn(`❌ Network error from ${path}:`, error.message);
-        lastError = error;
+        console.log(`❌ Error fetching from ${path}:`, error.message);
       }
     }
     
-    throw new Error(`Could not load collection data from any location. Last error: ${lastError?.message || 'Unknown error'}`);
+    throw new Error("Could not load buddha-collection.json from any location");
   }
   
   // Generate environment-aware URLs
   function getPageUrl(path) {
-    // Ensure path starts with /
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `${basePath}${cleanPath}`;
+    return `${basePath}${path}`;
   }
   
   function getTemplateUrl(templatePage, sku) {
     return `${basePath}/page-templates/${templatePage}?sku=${sku}`;
-  }
-  
-  function getImageUrl(imagePath) {
-    if (!imagePath) return `${basePath}/images/placeholder.jpg`;
-    if (imagePath.startsWith('http')) return imagePath; // External URL
-    if (imagePath.startsWith('/')) return `${basePath}${imagePath}`;
-    return `${basePath}/images/${imagePath}`;
   }
 
   // === Grab common DOM elements across all pages ===
@@ -102,9 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Utility Functions ===
 
-  // Fetch data and filter out hidden items
+  // Fetch data and filter out hidden items (now uses smart loader)
   function fetchFilteredData() {
-    return fetchBuddhaData();
+    return fetchBuddhaData(); // Filter is already applied in fetchBuddhaData
   }
 
   // Check if a field value is valid (not "hide" or undefined/null)
@@ -195,14 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "gallery-item";
       const templatePage = item["template-page"] || "dt-1.html";
-      const link = getTemplateUrl(templatePage, item.sku);
-      const imageUrl = getImageUrl(item.image);
+      const link = getTemplateUrl(templatePage, item.sku); // Use environment-aware URL
       const titleHTML = item.title ? `<h3>${item.title}</h3>` : '';
       const subtitleHTML = item.subtitle ? `<p class="subtitle">${item.subtitle}</p>` : '';
       
       div.innerHTML = `
         <a href="${link}">
-          <img src="${imageUrl}" alt="${item.title || ''}" class="lightbox-trigger" loading="lazy" />
+          <img src="${item.image}" alt="${item.title || ''}" class="lightbox-trigger" />
           ${titleHTML}
           ${subtitleHTML}
         </a>
@@ -258,32 +217,20 @@ document.addEventListener("DOMContentLoaded", () => {
     "manuscript": "Manuscripts",
     "painting": "Paintings"
   };
-  
-  // Store globally for other scripts
   window.labelMap = labelMap;
 
   // Allow menu filters to trigger gallery filtering
   window.filterGallery = function (category) {
-    if (!title || !clearBtnContainer) {
-      console.warn('Gallery filter elements not found');
-      return;
-    }
-
     if (!category) {
       title.textContent = "All Buddhist Art";
       clearBtnContainer.style.display = "none";
-      loadGallery(window.fullData || []);
+      loadGallery(window.fullData);
       return;
     }
 
     const displayLabel = labelMap[category] || category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     title.textContent = displayLabel;
     clearBtnContainer.style.display = "block";
-
-    if (!window.fullData) {
-      console.warn('No data available for filtering');
-      return;
-    }
 
     const filtered = window.fullData.filter(item => {
       const categories = extractCategories(item);
@@ -294,27 +241,19 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
     
-    console.log(`Filtered ${window.fullData.length} items to ${filtered.length} for category: ${category}`);
     loadGallery(filtered);
   };
 
   // === Detail Pages (dt-1.html / dt-2.html) Rendering ===
   if (window.location.pathname.includes("dt-1.html") || window.location.pathname.includes("dt-2.html")) {
-    console.log('Detail page detected, loading artifact data...');
-    
-    fetchFilteredData()
+    fetchFilteredData() // Using new smart loader
       .then(data => {
         const item = data.find(i => i.sku === sku);
-        if (!item) {
-          console.error('Artifact not found:', sku);
-          return;
-        }
+        if (!item) return;
 
-        console.log('Artifact loaded:', item);
-
-        // Update text function to handle multiple elements
+        // First, update the updateText function to handle multiple elements
         const updateText = (selector, value) => {
-          const elements = document.querySelectorAll(selector);
+          const elements = document.querySelectorAll(selector); // Changed from querySelector
           elements.forEach(el => {
             if (shouldShowField(value)) {
               el.textContent = value;
@@ -335,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (values && values.length > 0) {
               const value = values[0]; // Use first matching category
               const displayLabel = labelMap[value] || value.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-              const homeUrl = getPageUrl('/');
+              const homeUrl = getPageUrl('/'); // Use environment-aware URL
               el.innerHTML = `<a href="${homeUrl}" onclick="sessionStorage.setItem('autoFilter', '${value}'); return true;" class="filter-link">${displayLabel}</a>`;
               el.style.display = "";
             } else {
@@ -344,27 +283,22 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         };
 
+        // Then your existing calls will work for all elements:
         // Populate Christie's auction data fields
         updateText(".statue-title", item.title);
-        updateText(".title", item.title);  // For dt-2.html
         updateText(".subtitle", item.subtitle);
         updateText(".sku", item.sku);
         updateText(".estimate", item.estimate);
         updateText(".price-realized", item.price_realized);
         updateText(".dimensions", item.dimensions);
-        updateText(".medium", item.medium);
+        updateText(".medium", item.medium);  // This will now update ALL .medium elements
         updateText(".provenance", item.provenance);
-        updateText(".provenance-text", item.provenance);  // For dt-2.html
         updateText(".essay", item.essay);
-        updateText(".essay-text", item.essay);  // For dt-2.html
-
-        // Apply read more functionality if available
-        if (typeof applyReadMore === 'function') {
-          const essayElement = document.querySelector('.essay');
-          if (essayElement) {
-            setTimeout(() => applyReadMore(essayElement), 100);
-          }
-        }
+        updateText(".essay", item.essay);
+// Only call if function exists
+if (typeof applyReadMore === 'function') {
+  applyReadMore(document.querySelector('.essay'));
+}
 
         // Create filter links based on extracted categories
         updateFilterLink(".medium-filter", "medium");
@@ -379,54 +313,53 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
             sessionStorage.removeItem('autoFilter');
           }
-          window.location.href = getPageUrl('/');
+          window.location.href = getPageUrl('/'); // Use environment-aware URL
         };
 
-        // Set main image with proper URL handling
-        const images = document.querySelectorAll(".statue-image, .authenticity-image, #main-image");
-        images.forEach(image => {
-          if (item.image) {
-            image.src = getImageUrl(item.image);
-            image.alt = item.title || 'Buddhist Artifact';
-          }
-        });
-
-        // Handle lot link
-        const lotLinks = document.querySelectorAll(".lot-link");
-        lotLinks.forEach(lotLink => {
-          if (item.lot_link && shouldShowField(item.lot_link)) {
-            lotLink.href = item.lot_link;
-            lotLink.textContent = "View Original Lot";
-            lotLink.style.display = "";
-          } else {
-            lotLink.style.display = "none";
-          }
-        });
-
-        // Update certificate link for dt-1 page
-        const certLink = document.getElementById('cert-link');
-        if (certLink) {
-          certLink.href = getTemplateUrl('dt-2.html', item.sku);
+        // Set main image
+        const image = document.querySelector(".statue-image");
+        if (image && item.image) {
+          image.src = item.image;
+          image.alt = item.title || '';
         }
 
-        // === Enhanced Navigation System ===
-        const currentSku = sku;
+        // Handle lot link
+        const lotLink = document.querySelector(".lot-link");
+        if (lotLink && item.lot_link) {
+          lotLink.href = item.lot_link;
+          lotLink.textContent = "View Original Lot";
+          lotLink.style.display = "";
+        } else if (lotLink) {
+          lotLink.style.display = "none";
+        }
+
+        // === Simple Numeric Navigation - Buddha Site ===
+        // Goes in numerical order regardless of prefix, wraps around
+
+        // Get current SKU from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSku = urlParams.get("sku");
+
+        // Get navigation elements
         const navPrev = document.querySelector(".nav-prev");
         const navNext = document.querySelector(".nav-next");
 
         if (currentSku && navPrev && navNext) {
-          // Helper functions
+          // Extract just the number from any SKU format
           function getNumber(sku) {
             const match = sku.match(/(\d+)/);
             return match ? parseInt(match[0], 10) : 0;
           }
           
+          // Extract prefix from SKU (everything before the number)
           function getPrefix(sku) {
             const match = sku.match(/^(.*?)(\d+)/);
             return match ? match[1] : '';
           }
           
+          // Create SKU with same prefix but different number
           function makeSku(prefix, number) {
+            // Pad with zeros to match original length
             const originalMatch = currentSku.match(/(\d+)/);
             if (originalMatch) {
               const originalLength = originalMatch[0].length;
@@ -436,79 +369,92 @@ document.addEventListener("DOMContentLoaded", () => {
             return prefix + number;
           }
           
+          // Get current number and prefix
           const currentNumber = getNumber(currentSku);
           const prefix = getPrefix(currentSku);
           
-          console.log("Navigation setup:", {
-            currentSku,
-            currentNumber,
-            prefix
-          });
+          console.log("Current SKU:", currentSku);
+          console.log("Current number:", currentNumber);
+          console.log("Prefix:", prefix);
           
-          // Get all numbers from SKUs with same prefix
-          const numbers = data
-            .filter(item => item.sku && getPrefix(item.sku) === prefix)
-            .map(item => getNumber(item.sku))
-            .filter(num => num > 0)
-            .sort((a, b) => a - b);
-          
-          if (numbers.length > 0) {
-            console.log("Available numbers:", numbers);
-            
-            // Find current position
-            const currentIndex = numbers.indexOf(currentNumber);
-            let prevNumber, nextNumber;
-            
-            if (currentIndex === -1) {
-              prevNumber = numbers[numbers.length - 1];
-              nextNumber = numbers[0];
-            } else {
-              const prevIndex = currentIndex === 0 ? numbers.length - 1 : currentIndex - 1;
-              const nextIndex = currentIndex === numbers.length - 1 ? 0 : currentIndex + 1;
+          // Load data to find min/max numbers
+          fetchBuddhaData() // Using new smart loader
+            .then(data => {
+              // Get all numbers from SKUs with same prefix
+              const numbers = data
+                .filter(item => item.sku && getPrefix(item.sku) === prefix)
+                .map(item => getNumber(item.sku))
+                .filter(num => num > 0)
+                .sort((a, b) => a - b);
               
-              prevNumber = numbers[prevIndex];
-              nextNumber = numbers[nextIndex];
-            }
-            
-            const prevSku = makeSku(prefix, prevNumber);
-            const nextSku = makeSku(prefix, nextNumber);
-            
-            navPrev.href = getTemplateUrl('dt-1.html', prevSku);
-            navNext.href = getTemplateUrl('dt-1.html', nextSku);
-            
-            console.log("Navigation links set:", {
-              prev: prevSku,
-              next: nextSku
+              if (numbers.length === 0) {
+                console.log("No valid numbers found");
+                return;
+              }
+              
+              const minNumber = Math.min(...numbers);
+              const maxNumber = Math.max(...numbers);
+              
+              console.log("Available numbers:", numbers);
+              console.log("Range:", minNumber, "to", maxNumber);
+              
+              // Find current position in the sorted array
+              const currentIndex = numbers.indexOf(currentNumber);
+              
+              let prevNumber, nextNumber;
+              
+              if (currentIndex === -1) {
+                // Current number not found, use first as fallback
+                prevNumber = maxNumber; // wrap to end
+                nextNumber = minNumber; // wrap to start
+              } else {
+                // Calculate prev/next with wrapping
+                const prevIndex = currentIndex === 0 ? numbers.length - 1 : currentIndex - 1;
+                const nextIndex = currentIndex === numbers.length - 1 ? 0 : currentIndex + 1;
+                
+                prevNumber = numbers[prevIndex];
+                nextNumber = numbers[nextIndex];
+              }
+              
+              // Create navigation SKUs
+              const prevSku = makeSku(prefix, prevNumber);
+              const nextSku = makeSku(prefix, nextNumber);
+              
+              console.log("Previous SKU:", prevSku);
+              console.log("Next SKU:", nextSku);
+              
+              // Set navigation links (environment-aware paths)
+              navPrev.href = getTemplateUrl('dt-1.html', prevSku);
+              navNext.href = getTemplateUrl('dt-1.html', nextSku);
+              
+              console.log("Buddha navigation set successfully!");
+            })
+            .catch(error => {
+              console.error("Error loading Buddha data:", error);
+              
+              // Fallback: simple +1/-1 navigation
+              const prevNumber = currentNumber === 1 ? 999 : currentNumber - 1;
+              const nextNumber = currentNumber + 1;
+              
+              const prevSku = makeSku(prefix, prevNumber);
+              const nextSku = makeSku(prefix, nextNumber);
+              
+              navPrev.href = getTemplateUrl('dt-1.html', prevSku);
+              navNext.href = getTemplateUrl('dt-1.html', nextSku);
+              
+              console.log("Using fallback Buddha navigation");
             });
-          } else {
-            console.warn("No valid numbers found for navigation");
-          }
-        }
-      })
-      .catch(error => {
-        console.error("Failed to load detail page data:", error);
-        
-        // Show error message on page
-        const main = document.querySelector('main');
-        if (main) {
-          main.innerHTML = `
-            <div class="error-content" style="text-align: center; padding: 2rem;">
-              <h2>⚠️ Error Loading Artifact</h2>
-              <p>${error.message}</p>
-              <a href="${getPageUrl('/')}" style="background: #8B4513; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px; display: inline-block; margin-top: 1rem;">Return to Gallery</a>
-            </div>
-          `;
         }
       });
   }
 
   // === Index Gallery Page ===
-  if (window.location.pathname === '/' || window.location.pathname.includes('index.html') || window.location.pathname === basePath + '/') {
-    console.log("✅ Index page detected, starting gallery initialization...");
+  if (window.location.pathname.includes("/")) {
+    console.log("✅ Index page detected, starting menu creation...");
     
-    fetchFilteredData()
+    fetchFilteredData() // Using new smart loader
       .then(data => {
-        console.log("✅ Gallery data loaded:", data.length, "items");
+        console.log("✅ Data loaded:", data.length, "items");
         
         const categories = { 
           medium: new Set(), 
@@ -527,47 +473,47 @@ document.addEventListener("DOMContentLoaded", () => {
           itemCategories.type.forEach(cat => categories.type.add(cat));
         });
 
-        console.log("✅ Categories extracted:", Object.fromEntries(
-          Object.entries(categories).map(([key, set]) => [key, [...set]])
-        ));
+        console.log("✅ Categories collected:", categories);
 
-        // Create dynamic menu if element exists
-        if (menu) {
-          menu.innerHTML = '';
-
-          // Create menu sections
-          for (const [type, values] of Object.entries(categories)) {
-            if (values.size === 0) continue;
-
-            const group = document.createElement("li");
-            
-            const menuLabels = {
-              'medium': 'Medium',
-              'region': 'Region/Origin', 
-              'period': 'Time Period',
-              'type': 'Object Type'
-            };
-            
-            const label = menuLabels[type] || type.charAt(0).toUpperCase() + type.slice(1);
-            
-            group.innerHTML = `
-              <details>
-                <summary>${label}</summary>
-                <ul>
-                  ${[...values].sort().map(v => {
-                    const displayLabel = labelMap[v] || v.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    return `<li><a href="#" onclick="filterGallery('${v}'); return false;">${displayLabel}</a></li>`;
-                  }).join('')}
-                </ul>
-              </details>
-            `;
-            menu.appendChild(group);
-          }
-
-          console.log("✅ Dynamic menu created successfully!");
-        } else {
-          console.warn("⚠️ Menu element not found, skipping menu creation");
+        const menu = document.getElementById("dynamic-menu");
+        if (!menu) {
+          console.error("❌ Menu element not found!");
+          return;
         }
+
+        // Clear any existing content
+        menu.innerHTML = '';
+
+        // Create menu sections
+        for (const [type, values] of Object.entries(categories)) {
+          if (values.size === 0) continue;
+
+          const group = document.createElement("li");
+          
+          const menuLabels = {
+            'medium': 'Medium',
+            'region': 'Region/Origin', 
+            'period': 'Time Period',
+            'type': 'Object Type'
+          };
+          
+          const label = menuLabels[type] || type.charAt(0).toUpperCase() + type.slice(1);
+          
+          group.innerHTML = `
+            <details>
+              <summary>${label}</summary>
+              <ul>
+                ${[...values].sort().map(v => {
+                  const displayLabel = labelMap[v] || v.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                  return `<li><a href="#" onclick="filterGallery('${v}'); return false;">${displayLabel}</a></li>`;
+                }).join('')}
+              </ul>
+            </details>
+          `;
+          menu.appendChild(group);
+        }
+
+        console.log("✅ Menu creation completed!");
         
         // Add sidebar toggle functionality
         const sidebar = document.getElementById("sidebar");
@@ -588,87 +534,58 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Close sidebar when clicking outside
         document.addEventListener("click", (e) => {
-          if (sidebar && !sidebar.contains(e.target) && toggleButton?.contains(e.target) === false) {
+          if (sidebar && !sidebar.contains(e.target) && !toggleButton.contains(e.target)) {
             sidebar.classList.remove("open");
           }
         });
 
-        // Store data globally for filtering
         window.fullData = data;
         
-        // Check for auto-filter from session storage
-        const pendingFilter = sessionStorage.getItem('autoFilter');
-        if (pendingFilter) {
-          console.log("✅ Applying auto-filter:", pendingFilter);
-          sessionStorage.removeItem('autoFilter');
-          setTimeout(() => window.filterGallery(pendingFilter), 100);
-        } else {
-          // Load full gallery
-          loadGallery(data);
-        }
-
-        console.log("✅ Gallery initialization complete!");
+       // Check for sessionStorage auto-filter (FIXED)
+const pendingFilter = sessionStorage.getItem('autoFilter');
+if (pendingFilter) {
+  console.log("✅ Applying auto-filter:", pendingFilter);
+  sessionStorage.removeItem('autoFilter');
+  setTimeout(() => window.filterGallery(pendingFilter), 100);
+} else {
+  loadGallery(data);
+}
       })
       .catch(error => {
-        console.error("❌ Error loading gallery data:", error);
-        
-        if (gallery) {
-          gallery.innerHTML = `
-            <div class="error-content" style="text-align: center; padding: 2rem; grid-column: 1 / -1;">
-              <h2>⚠️ Error Loading Gallery</h2>
-              <p>${error.message}</p>
-              <button onclick="location.reload()" style="background: #8B4513; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Retry</button>
-            </div>
-          `;
-        }
+        console.error("❌ Error loading data:", error);
       });
   }
 
-  // === Search Functionality ===
+  // === Search Results Page ===
   const searchInput = document.getElementById("searchBox");
   const searchButton = document.getElementById("searchButton");
   const resultsContainer = document.getElementById("resultsContainer");
 
   const performSearch = (query) => {
     query = query?.trim();
-    if (!query) {
-      console.warn('Empty search query');
-      return;
-    }
-    
-    const searchUrl = getPageUrl('/search-results.html');
-    console.log('Performing search:', query, 'URL:', searchUrl);
+    if (!query) return;
+    const searchUrl = getPageUrl('/search-results.html'); // Use environment-aware URL
     window.location.href = `${searchUrl}?q=${encodeURIComponent(query)}`;
   };
 
   if (searchInput && searchButton) {
     searchInput.addEventListener("keypress", e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        performSearch(searchInput.value);
-      }
+      if (e.key === "Enter") performSearch(searchInput.value);
     });
-    
-    searchButton.addEventListener("click", (e) => {
-      e.preventDefault();
+    searchButton.addEventListener("click", () => {
       performSearch(searchInput.value);
     });
-    
-    console.log("✅ Search functionality initialized");
   }
 
-  // === Search Results Page ===
   if (resultsContainer) {
-    console.log("Search results page detected");
-    
     const q = urlParams.get("q")?.toLowerCase()?.trim();
     if (q) {
-      console.log("Processing search query:", q);
-      
-      fetchFilteredData()
+      fetchFilteredData() // Using new smart loader
         .then(data => {
           const matches = data.filter(item => {
-            const searchFields = [
+            const qlc = q.toLowerCase();
+
+            const fields = [
               item.title,
               item.subtitle,
               item.sku,
@@ -679,22 +596,19 @@ document.addEventListener("DOMContentLoaded", () => {
               item.dimensions
             ];
 
-            return searchFields.some(field =>
-              typeof field === "string" && field.toLowerCase().includes(q)
+            return fields.some(field =>
+              typeof field === "string" && field.toLowerCase().includes(qlc)
             );
           });
-
-          console.log(`Found ${matches.length} matches for "${q}"`);
 
           resultsContainer.innerHTML = matches.length
             ? matches.map(item => {
                 const template = item["template-page"] || "dt-1.html";
-                const templateUrl = getTemplateUrl(template, item.sku);
-                const imageUrl = getImageUrl(item.image);
+                const templateUrl = getTemplateUrl(template, item.sku); // Use environment-aware URL
                 return `
                   <div class="search-result">
                     <a href="${templateUrl}">
-                      <img src="${imageUrl}" alt="${item.title} – ${item.sku}" class="lightbox-trigger" loading="lazy" />
+                      <img src="${item.image}" alt="${item.title} – ${item.sku}" class="lightbox-trigger" />
                       <div>
                         <h3>${item.title}</h3>
                         <p>${item.subtitle || ''}</p>
@@ -704,20 +618,14 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                 `;
               }).join("")
-            : `<p>No results found for "<strong>${q}</strong>". Try different keywords or browse our <a href="${getPageUrl('/')}">full collection</a>.</p>`;
+            : "<p>No results found for your query.</p>";
         })
         .catch(error => {
           console.error("Failed to load search data:", error);
-          resultsContainer.innerHTML = `
-            <div class="error-content">
-              <h2>⚠️ Search Error</h2>
-              <p>${error.message}</p>
-              <a href="${getPageUrl('/')}" style="background: #8B4513; color: white; padding: 0.75rem 1.5rem; text-decoration: none; border-radius: 4px; display: inline-block; margin-top: 1rem;">Return to Gallery</a>
-            </div>
-          `;
+          resultsContainer.innerHTML = "<p>Error loading search results. Please try again.</p>";
         });
     } else {
-      resultsContainer.innerHTML = `<p>Please enter a search query. <a href="${getPageUrl('/')}">Browse our full collection</a>.</p>`;
+      resultsContainer.innerHTML = "<p>Please enter a search query.</p>";
     }
   }
 
@@ -732,33 +640,17 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         lightboxImage.src = e.target.src;
         lightbox.classList.add("active");
-        console.log("Lightbox opened");
       }
     });
 
     lightboxClose.addEventListener("click", () => {
       lightbox.classList.remove("active");
-      console.log("Lightbox closed");
     });
 
     lightbox.addEventListener("click", (e) => {
       if (e.target === lightbox) {
         lightbox.classList.remove("active");
-        console.log("Lightbox closed by backdrop click");
       }
     });
-    
-    console.log("✅ Lightbox functionality initialized");
   }
-
-  // === Global Error Handling ===
-  window.addEventListener('error', (e) => {
-    console.error('Global error caught:', e.error);
-  });
-
-  window.addEventListener('unhandledrejection', (e) => {
-    console.error('Unhandled promise rejection:', e.reason);
-  });
-
-  console.log("✅ bundle.js initialization complete");
 });
