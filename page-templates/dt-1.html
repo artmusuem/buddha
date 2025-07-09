@@ -21,9 +21,18 @@
       if (cssLink) {
         cssLink.href = `${basePath}/css/style.css`;
       }
+      
+      // Load the correct JavaScript bundle immediately
+      const script = document.createElement('script');
+      script.defer = true;
+      script.src = `${basePath}/js/bundle.js`;
+      script.id = 'main-js';
+      document.head.appendChild(script);
+      
+      console.log(`Loading JavaScript from: ${script.src}`);
     })();
   </script>
-	  <script>
+  <script>
 function applyReadMore(element) {
     const text = element.textContent.trim();
     if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
@@ -41,7 +50,6 @@ function applyReadMore(element) {
     };
 }
 </script>
-  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
 </head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
@@ -236,12 +244,6 @@ function applyReadMore(element) {
     // Update all paths when DOM is ready
     document.addEventListener("DOMContentLoaded", function() {
       const basePath = window.SITE_BASE_PATH || '';
-      
-      // Update JavaScript bundle path
-      const jsScript = document.getElementById('main-js');
-      if (jsScript) {
-        jsScript.src = `${basePath}/js/bundle.js`;
-      }
       
       // Update gallery navigation link
       const galleryLink = document.getElementById('gallery-link');
@@ -761,18 +763,20 @@ font-size: 2rem;
     font-size: 1.5rem;
   }
 }
-  </style>
-	<style>.statue-title {
-	font-size: 1.2rem;
+
+/* Override for smaller titles */
+.statue-title {
+	font-size: 1.8rem !important;
 	margin: 0 0 0.5rem 0;
 	color: #8B4513;
 }
 
 .subtitle {
-	font-size: 1rem;
+	font-size: 1rem !important;
 	color: #666;
 	font-style: italic;
 	margin: 0 0 1rem 0;
-}</style>
+}
+  </style>
 </body>
 </html>
