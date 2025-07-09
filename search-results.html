@@ -5,34 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Search Results – Buddha Museum</title>
 	<script>
-// Environment detection and path setup - runs immediately
+// Load resources with correct paths
 (function() {
   const isGitHub = window.location.hostname.includes('github.io');
   const basePath = isGitHub ? '/buddha' : '';
   
-  console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
+  // Create CSS link
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = `${basePath}/css/style.css`;
+  document.head.appendChild(css);
   
-  // Store for use throughout the page
+  // Create JS script
+  const js = document.createElement('script');
+  js.src = `${basePath}/js/bundle.js`;
+  js.defer = true;
+  document.head.appendChild(js);
+  
   window.SITE_BASE_PATH = basePath;
-  
-  // Create dynamic CSS link with correct path
-  const cssLink = document.createElement('link');
-  cssLink.rel = 'stylesheet';
-  cssLink.href = `${basePath}/css/style.css`;
-  document.head.appendChild(cssLink);
-  
-  // Create dynamic JS script with correct path
-  const script = document.createElement('script');
-  script.src = `${basePath}/js/bundle.js`;
-  script.defer = true;
-  document.head.appendChild(script);
-  
-  console.log('Search page CSS loaded from:', cssLink.href);
-  console.log('Search page JS loaded from:', script.src);
 })();
 </script>
-  <link rel="stylesheet" href="/buddha/css/style.css" />
-  <script defer src="/buddha/js/bundle.js"></script>
   <style>
     .site-header {
     
