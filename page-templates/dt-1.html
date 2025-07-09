@@ -4,13 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Buddhist Artifact – Buddha Museum</title>
-  <link rel="stylesheet" href="/buddha/css/style.css" />
-	<link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
+	<script>
+// Load bundle.js with correct path
+(function() {
+  const isGitHub = window.location.hostname.includes('github.io');
+  const basePath = isGitHub ? '/buddha' : '';
   
-	<script src="/js/bundle.js"></script>
-  <script defer src="/buddha/js/bundle.js"></script>
-	
-
+  const script = document.createElement('script');
+  script.src = `${basePath}/js/bundle.js`;
+  script.defer = true;
+  script.id = 'main-js';
+  document.head.appendChild(script);
+  
+  console.log('Loading bundle.js from:', script.src);
+})();
+</script>
+  <script>
+    // Environment detection and path setup - runs immediately
+    (function() {
+      const isGitHub = window.location.hostname.includes('github.io');
+      const basePath = isGitHub ? '/buddha' : '';
+      
+      console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
+      
+      // Store for use throughout the page
+      window.SITE_BASE_PATH = basePath;
+      
+      // Update CSS link immediately
+      const cssLink = document.getElementById('main-css');
+      if (cssLink) {
+        cssLink.href = `${basePath}/css/style.css`;
+      }
+    })();
+  </script>
 	  <script>
 function applyReadMore(element) {
     const text = element.textContent.trim();
@@ -29,7 +56,7 @@ function applyReadMore(element) {
     };
 }
 </script>
-  
+  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
 </head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
@@ -123,15 +150,14 @@ function applyReadMore(element) {
        <div class="tags-container">
          <h4>Tags</h4>
          <ul class="tags-list">
-  <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'chinese'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Chinese Art</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'head'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'stucco'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Stucco Works</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'bronze'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Bronze Works</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'ancient'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Ancient Period</a></li>
-<li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'painting'); window.location.href = window.CONFIG.HOME_PAGE; return false;" class="tag-link gallery-tag-link">Paintings</a></li>
-
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
          </ul>
        </div>
        
@@ -818,4 +844,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 </body>
 </html>
-
