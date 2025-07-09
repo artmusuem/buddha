@@ -4,10 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Buddhist Artifact – Buddha Museum</title>
-  
-  <!-- Environment detection MUST be first -->
+  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
   <script>
-    // Critical: Environment detection and path setup - runs immediately
+    // Environment detection and path setup - runs immediately
     (function() {
       const isGitHub = window.location.hostname.includes('github.io');
       const basePath = isGitHub ? '/buddha' : '';
@@ -16,38 +15,33 @@
       
       // Store for use throughout the page
       window.SITE_BASE_PATH = basePath;
-      window.IS_GITHUB = isGitHub;
       
-      // Create dynamic CSS link with correct path
-      const cssLink = document.createElement('link');
-      cssLink.rel = 'stylesheet';
-      cssLink.href = `${basePath}/css/style.css`;
-      cssLink.id = 'main-css';
-      document.head.appendChild(cssLink);
-      
-      console.log('CSS loaded from:', cssLink.href);
+      // Update CSS link immediately
+      const cssLink = document.getElementById('main-css');
+      if (cssLink) {
+        cssLink.href = `${basePath}/css/style.css`;
+      }
     })();
   </script>
-
-  <!-- Read More Functionality -->
-  <script>
-    function applyReadMore(element) {
-        const text = element.textContent.trim();
-        if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
-        
-        const words = text.split(' ');
-        const short = words.slice(0, 25).join(' ');
-        
-        element.innerHTML = short + '... <span id="readmore" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">read more</span>';
-        
-        element.querySelector('#readmore').onclick = function() {
-            element.innerHTML = text + ' <span id="readless" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">show less</span>';
-            element.querySelector('#readless').onclick = function() {
-                applyReadMore(element);
-            };
+	  <script>
+function applyReadMore(element) {
+    const text = element.textContent.trim();
+    if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
+    
+    const words = text.split(' ');
+    const short = words.slice(0, 25).join(' ');
+    
+    element.innerHTML = short + '... <span id="readmore" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">read more</span>';
+    
+    element.querySelector('#readmore').onclick = function() {
+        element.innerHTML = text + ' <span id="readless" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">show less</span>';
+        element.querySelector('#readless').onclick = function() {
+            applyReadMore(element);
         };
-    }
-  </script>
+    };
+}
+</script>
+  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
 </head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
@@ -65,33 +59,15 @@
 
   <nav class="statue-nav">
     <a href="#" class="nav-prev">← Previous Artifact</a>
-    <a href="#" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
+    <a href="/buddha/" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
     <a href="#" class="nav-next">Next Artifact →</a>
   </nav>
 
   <main class="artwork-main">
-    <!-- Loading State -->
-    <div id="loading-state" class="loading-container">
-      <div class="loading-content">
-        <div class="loading-spinner"></div>
-        <h2>Loading Artifact Details...</h2>
-        <p id="loading-details">Initializing...</p>
-      </div>
-    </div>
-
-    <!-- Error State -->
-    <div id="error-state" class="error-container" style="display: none;">
-      <div class="error-content">
-        <h2>⚠️ Error Loading Artifact</h2>
-        <p id="error-details">Unable to load artifact details.</p>
-        <button onclick="location.reload()" class="retry-btn">Retry</button>
-      </div>
-    </div>
-
     <!-- Hero Section with Main Image and Basic Info -->
-    <section class="artwork-hero" id="main-content" style="display: none;">
+    <section class="artwork-hero">
       <div class="artwork-image-container">
-        <img src="" alt="Loading Artifact" class="statue-image lightbox-trigger" id="main-image" />
+        <img src="/buddha/images/placeholder.jpg" alt="Loading Artifact" class="statue-image lightbox-trigger" id="placeholder-image" />
         <div class="image-caption">
           <span class="sku">Loading...</span>
         </div>
@@ -133,7 +109,7 @@
     </section>
 
     <!-- Provenance and Auction Details Section -->
-    <section class="auction-details" id="auction-section" style="display: none;">
+    <section class="auction-details">
       <h3>Auction Information & Provenance</h3>
       <div class="auction-content">
         <div class="provenance-history">
@@ -153,20 +129,20 @@
     </section>
 
     <!-- Tags and Categories -->
-    <section class="artwork-metadata" id="metadata-section" style="display: none;">
+    <section class="artwork-metadata">
      <h3>Categories &amp; Tags</h3>
      <div class="metadata-content">
        <div class="tags-container">
          <h4>Tags</h4>
          <ul class="tags-list">
-           <li><a href="#" onclick="goToFilteredGallery('gandharan'); return false;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('tibetan'); return false;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('chinese'); return false;" class="tag-link gallery-tag-link">Chinese Art</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('head'); return false;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('stucco'); return false;" class="tag-link gallery-tag-link">Stucco Works</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('bronze'); return false;" class="tag-link gallery-tag-link">Bronze Works</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('ancient'); return false;" class="tag-link gallery-tag-link">Ancient Period</a></li>
-           <li><a href="#" onclick="goToFilteredGallery('painting'); return false;" class="tag-link gallery-tag-link">Paintings</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
          </ul>
        </div>
        
@@ -195,7 +171,7 @@
     </section>
 
     <!-- Authentication Badge -->
-    <section class="provenance-section" id="auth-section" style="display: none;">
+    <section class="provenance-section">
       <h3>Authentication & Documentation</h3>
       <div class="provenance-content">
         <div class="authentication-badge">
@@ -203,7 +179,7 @@
           <p>This artifact has been documented from a reputable auction house with established provenance.</p>
         </div>
         <div class="document-links">
-          <a href="#" class="lot-link template-link" target="_blank" id="cert-link">
+          <a href="/buddha/page-templates/dt-2.html?sku=LOT-502" class="lot-link template-link" target="_blank">
             🔗 View Original Christie's Listing
           </a>
         </div>
@@ -211,10 +187,10 @@
     </section>
 
     <!-- Expert Commentary -->
-    <section class="expert-commentary" id="expert-section" style="display: none;">
+    <section class="expert-commentary">
       <div class="curator-profile">
         <div class="profile-image">
-          <img src="" alt="Curator Profile" id="curator-image" />
+          <img src="/buddha/images/curator-profile.jpg" alt="Curator Profile" id="curator-image" />
         </div>
         <div class="profile-info">
           <h4>Expert Commentary</h4>
@@ -233,7 +209,7 @@
         <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
       </div>
       <div class="footer-links">
-        <a href="#" class="footer-gallery-link">Gallery</a>
+        <a href="/buddha/" class="footer-gallery-link">Gallery</a>
         <a href="#">About</a>
         <a href="#">Collections</a>
         <a href="#">Research</a>
@@ -256,553 +232,108 @@
     </div>
   </div>
 
-  <!-- Main Application Script - ALL functionality inline to avoid loading issues -->
   <script>
-    // === COMPLETE DT-1 FUNCTIONALITY - STANDALONE ===
-    
-    // Environment-aware utilities
-    const basePath = window.SITE_BASE_PATH || '';
-    const isGitHub = window.IS_GITHUB || false;
-    
-    console.log('DT-1 App initialized - Environment:', isGitHub ? 'GitHub Pages' : 'Netlify', 'Base path:', basePath);
-    
-    // Update loading message
-    function updateLoadingMessage(message) {
-      const loadingDetails = document.getElementById('loading-details');
-      if (loadingDetails) {
-        loadingDetails.textContent = message;
-      }
-      console.log('Loading:', message);
-    }
-    
-    // Smart data loader with comprehensive fallback
-    async function fetchBuddhaData() {
-      const paths = [
-        `${basePath}/data/buddha-collection.json`,
-        `${basePath}/data/collection.json`,
-        `${basePath}/data/artifacts.json`,
-        '/data/buddha-collection.json',
-        '/data/collection.json',
-        '/data/artifacts.json',
-        './data/buddha-collection.json',
-        './data/collection.json'
-      ];
-      
-      for (const path of paths) {
-        try {
-          updateLoadingMessage(`Trying: ${path}`);
-          const response = await fetch(path);
-          
-          if (response.ok) {
-            const data = await response.json();
-            if (data && (Array.isArray(data) || data.artifacts || data.items)) {
-              const items = Array.isArray(data) ? data : (data.artifacts || data.items);
-              const filteredItems = items.filter(item => item.status !== "hide");
-              console.log('✅ Successfully loaded data from:', path, '- Items:', filteredItems.length);
-              return filteredItems;
-            }
-          } else {
-            console.warn(`❌ Failed to load from ${path} - Status: ${response.status}`);
-          }
-        } catch (error) {
-          console.warn(`❌ Error loading from ${path}:`, error.message);
-        }
-      }
-      
-      throw new Error("Could not load collection data from any location");
-    }
-    
-    // Generate environment-aware URLs
-    function getPageUrl(path) {
-      return `${basePath}${path}`;
-    }
-    
-    function getTemplateUrl(templatePage, sku) {
-      return `${basePath}/page-templates/${templatePage}?sku=${sku}`;
-    }
-    
-    // Gallery filter navigation
-    window.goToFilteredGallery = function(filter) {
-      if (filter) {
-        sessionStorage.setItem('autoFilter', filter);
-      } else {
-        sessionStorage.removeItem('autoFilter');
-      }
-      window.location.href = getPageUrl('/');
-    };
-    
-    // Show error state
-    function showError(message) {
-      document.getElementById('loading-state').style.display = 'none';
-      document.getElementById('error-state').style.display = 'block';
-      document.getElementById('error-details').textContent = message;
-    }
-    
-    // Show main content
-    function showContent() {
-      document.getElementById('loading-state').style.display = 'none';
-      document.getElementById('main-content').style.display = 'grid';
-      document.getElementById('auction-section').style.display = 'block';
-      document.getElementById('metadata-section').style.display = 'block';
-      document.getElementById('auth-section').style.display = 'block';
-      document.getElementById('expert-section').style.display = 'block';
-    }
-    
-    // Utility to check if field should be shown
-    function shouldShowField(value) {
-      return value && value !== 'hide' && value !== undefined && value !== null && value.trim() !== '';
-    }
-    
-    // Update text content safely
-    function updateText(selector, value) {
-      const elements = document.querySelectorAll(selector);
-      elements.forEach(el => {
-        if (shouldShowField(value)) {
-          el.textContent = value;
-          el.style.display = "";
-        } else {
-          el.style.display = "none";
-        }
-      });
-    }
-    
-    // Extract categories for filtering
-    function extractCategories(item) {
-      const categories = {
-        medium: [],
-        region: [],
-        period: [],
-        style: [],
-        type: []
-      };
-
-      if (item.medium) {
-        categories.medium.push(item.medium.toLowerCase());
-      }
-
-      if (item.subtitle) {
-        const subtitle = item.subtitle.toLowerCase();
-        if (subtitle.includes('gandhara')) categories.region.push('gandharan');
-        if (subtitle.includes('tibet')) categories.region.push('tibetan');
-        if (subtitle.includes('china') || subtitle.includes('chinese')) categories.region.push('chinese');
-        if (subtitle.includes('india') || subtitle.includes('indian')) categories.region.push('indian');
-        if (subtitle.includes('burma') || subtitle.includes('burmese')) categories.region.push('burmese');
-        if (subtitle.includes('thailand') || subtitle.includes('thai')) categories.region.push('thai');
-        if (subtitle.includes('cambodia') || subtitle.includes('khmer')) categories.region.push('khmer');
-        if (subtitle.includes('nepal') || subtitle.includes('nepalese')) categories.region.push('nepalese');
-        
-        if (subtitle.includes('century')) {
-          if (/\b(4th|5th|6th)\b/.test(subtitle)) {
-            categories.period.push('ancient');
-          } else if (/\b(7th|8th|9th)\b/.test(subtitle)) {
-            categories.period.push('early_medieval');
-          } else if (/\b(10th|11th|12th)\b/.test(subtitle)) {
-            categories.period.push('medieval');
-          } else if (/\b(13th|14th|15th)\b/.test(subtitle)) {
-            categories.period.push('late_medieval');
-          } else if (/\b(16th|17th|18th)\b/.test(subtitle)) {
-            categories.period.push('early_modern');
-          } else if (/\b(19th|20th)\b/.test(subtitle)) {
-            categories.period.push('modern');
-          }
-        }
-      }
-
-      if (item.title) {
-        const title = item.title.toLowerCase();
-        if (title.includes('head')) categories.type.push('head');
-        if (title.includes('buddha')) categories.type.push('buddha');
-        if (title.includes('bodhisattva')) categories.type.push('bodhisattva');
-        if (title.includes('statue') || title.includes('figure')) categories.type.push('statue');
-        if (title.includes('relief')) categories.type.push('relief');
-        if (title.includes('stupa')) categories.type.push('stupa');
-        if (title.includes('manuscript')) categories.type.push('manuscript');
-        if (title.includes('painting')) categories.type.push('painting');
-      }
-
-      return categories;
-    }
-    
-    // Label mapping for display
-    const labelMap = {
-      "stucco": "Stucco",
-      "bronze": "Bronze", 
-      "stone": "Stone",
-      "wood": "Wood",
-      "gilt": "Gilt Bronze",
-      "marble": "Marble",
-      "schist": "Schist",
-      "terracotta": "Terracotta",
-      "painting": "Painting",
-      "manuscript": "Manuscript",
-      "gandharan": "Gandharan",
-      "tibetan": "Tibetan",
-      "chinese": "Chinese",
-      "indian": "Indian",
-      "burmese": "Burmese",
-      "thai": "Thai",
-      "khmer": "Khmer (Cambodian)",
-      "nepalese": "Nepalese",
-      "ancient": "Ancient Period (4th-6th Century)",
-      "early_medieval": "Early Medieval (7th-9th Century)",
-      "medieval": "Medieval Period (10th-12th Century)", 
-      "late_medieval": "Late Medieval (13th-15th Century)",
-      "early_modern": "Early Modern (16th-18th Century)",
-      "modern": "Modern Period (19th-20th Century)",
-      "head": "Buddha Heads",
-      "buddha": "Buddha Figures",
-      "bodhisattva": "Bodhisattva Figures",
-      "statue": "Statues & Figures",
-      "relief": "Relief Sculptures",
-      "stupa": "Stupas",
-      "manuscript": "Manuscripts",
-      "painting": "Paintings"
-    };
-    
-    // Update filter links
-    function updateFilterLink(selector, categoryType, item) {
-      const el = document.querySelector(selector);
-      if (el) {
-        const categories = extractCategories(item);
-        const values = categories[categoryType];
-        
-        if (values && values.length > 0) {
-          const value = values[0];
-          const displayLabel = labelMap[value] || value.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          el.innerHTML = `<a href="#" onclick="goToFilteredGallery('${value}'); return false;" class="filter-link">${displayLabel}</a>`;
-          el.style.display = "";
-        } else {
-          el.style.display = "none";
-        }
-      }
-    }
-    
-    // Setup navigation between artifacts
-    function setupNavigation(data, currentSku) {
-      const navPrev = document.querySelector(".nav-prev");
-      const navNext = document.querySelector(".nav-next");
-      
-      if (!currentSku || !navPrev || !navNext) return;
-      
-      function getNumber(sku) {
-        const match = sku.match(/(\d+)/);
-        return match ? parseInt(match[0], 10) : 0;
-      }
-      
-      function getPrefix(sku) {
-        const match = sku.match(/^(.*?)(\d+)/);
-        return match ? match[1] : '';
-      }
-      
-      function makeSku(prefix, number) {
-        const originalMatch = currentSku.match(/(\d+)/);
-        if (originalMatch) {
-          const originalLength = originalMatch[0].length;
-          const paddedNumber = number.toString().padStart(originalLength, '0');
-          return prefix + paddedNumber;
-        }
-        return prefix + number;
-      }
-      
-      const currentNumber = getNumber(currentSku);
-      const prefix = getPrefix(currentSku);
-      
-      const numbers = data
-        .filter(item => item.sku && getPrefix(item.sku) === prefix)
-        .map(item => getNumber(item.sku))
-        .filter(num => num > 0)
-        .sort((a, b) => a - b);
-      
-      if (numbers.length === 0) return;
-      
-      const currentIndex = numbers.indexOf(currentNumber);
-      let prevNumber, nextNumber;
-      
-      if (currentIndex === -1) {
-        prevNumber = numbers[numbers.length - 1];
-        nextNumber = numbers[0];
-      } else {
-        const prevIndex = currentIndex === 0 ? numbers.length - 1 : currentIndex - 1;
-        const nextIndex = currentIndex === numbers.length - 1 ? 0 : currentIndex + 1;
-        
-        prevNumber = numbers[prevIndex];
-        nextNumber = numbers[nextIndex];
-      }
-      
-      const prevSku = makeSku(prefix, prevNumber);
-      const nextSku = makeSku(prefix, nextNumber);
-      
-      navPrev.href = getTemplateUrl('dt-1.html', prevSku);
-      navNext.href = getTemplateUrl('dt-1.html', nextSku);
-      
-      console.log('Navigation set:', {prev: prevSku, next: nextSku});
-    }
-    
-    // Setup search functionality
-    function setupSearch() {
-      const searchInput = document.getElementById("searchBox");
-      const searchButton = document.getElementById("searchButton");
-      
-      const performSearch = (query) => {
-        query = query?.trim();
-        if (!query) return;
-        const searchUrl = getPageUrl('/search-results.html');
-        window.location.href = `${searchUrl}?q=${encodeURIComponent(query)}`;
-      };
-      
-      if (searchInput && searchButton) {
-        searchInput.addEventListener("keypress", e => {
-          if (e.key === "Enter") performSearch(searchInput.value);
-        });
-        searchButton.addEventListener("click", () => {
-          performSearch(searchInput.value);
-        });
-      }
-    }
-    
-    // Setup lightbox
-    function setupLightbox() {
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImage = document.querySelector(".lightbox-image");
-      const lightboxClose = document.querySelector(".lightbox-close");
-
-      if (lightbox && lightboxImage && lightboxClose) {
-        document.addEventListener("click", (e) => {
-          if (e.target.classList.contains("lightbox-trigger")) {
-            e.preventDefault();
-            lightboxImage.src = e.target.src;
-            lightbox.classList.add("active");
-          }
-        });
-
-        lightboxClose.addEventListener("click", () => {
-          lightbox.classList.remove("active");
-        });
-
-        lightbox.addEventListener("click", (e) => {
-          if (e.target === lightbox) {
-            lightbox.classList.remove("active");
-          }
-        });
-      }
-    }
-    
-    // Main initialization
+    // Update all paths when DOM is ready
     document.addEventListener("DOMContentLoaded", function() {
-      console.log('DT-1 DOM ready, initializing...');
+      const basePath = window.SITE_BASE_PATH || '';
       
-      updateLoadingMessage('Setting up environment...');
+      // Update JavaScript bundle path
+      const jsScript = document.getElementById('main-js');
+      if (jsScript) {
+        jsScript.src = `${basePath}/js/bundle.js`;
+      }
       
-      // Update all gallery links
-      const galleryLinks = document.querySelectorAll('.nav-gallery, .footer-gallery-link, .gallery-tag-link');
-      galleryLinks.forEach(link => {
-        link.href = getPageUrl('/');
+      // Update gallery navigation link
+      const galleryLink = document.getElementById('gallery-link');
+      if (galleryLink) {
+        galleryLink.href = `${basePath}/`;
+      }
+      
+      // Update all gallery tag links
+      const galleryTagLinks = document.querySelectorAll('.gallery-tag-link');
+      galleryTagLinks.forEach(link => {
+        link.href = `${basePath}/`;
       });
+      
+      // Update footer gallery link
+      const footerGalleryLink = document.querySelector('.footer-gallery-link');
+      if (footerGalleryLink) {
+        footerGalleryLink.href = `${basePath}/`;
+      }
+      
+      // Update placeholder image
+      const placeholderImage = document.getElementById('placeholder-image');
+      if (placeholderImage) {
+        placeholderImage.src = `${basePath}/images/placeholder.jpg`;
+      }
       
       // Update curator image
       const curatorImage = document.getElementById('curator-image');
       if (curatorImage) {
-        curatorImage.src = getPageUrl('/images/curator-profile.jpg');
+        curatorImage.src = `${basePath}/images/curator-profile.jpg`;
       }
       
-      // Get SKU from URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const sku = urlParams.get("sku");
+      // Update template links (like dt-2.html link)
+      const templateLinks = document.querySelectorAll('.template-link');
+      templateLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('/buddha/page-templates/')) {
+          link.href = href.replace('/buddha/page-templates/', `${basePath}/page-templates/`);
+        }
+      });
       
-      if (!sku) {
-        showError('No artifact SKU provided in URL');
-        return;
-      }
-      
-      console.log('Loading artifact with SKU:', sku);
-      updateLoadingMessage('Loading artifact data...');
-      
-      // Load data and populate page
-      fetchBuddhaData()
-        .then(data => {
-          updateLoadingMessage('Finding artifact...');
-          
-          const item = data.find(i => i.sku === sku);
-          if (!item) {
-            showError(`Artifact with SKU "${sku}" not found`);
-            return;
-          }
-          
-          console.log('Artifact found:', item);
-          updateLoadingMessage('Populating page...');
-          
-          // Update page title
-          if (item.title) {
-            document.title = `${item.title} – Buddha Museum`;
-          }
-          
-          // Populate all fields
-          updateText(".statue-title", item.title);
-          updateText(".subtitle", item.subtitle);
-          updateText(".sku", item.sku);
-          updateText(".estimate", item.estimate);
-          updateText(".price-realized", item.price_realized);
-          updateText(".dimensions", item.dimensions);
-          updateText(".medium", item.medium);
-          updateText(".provenance", item.provenance);
-          updateText(".essay", item.essay);
-          
-          // Apply read more to essay
-          const essayElement = document.querySelector('.essay');
-          if (essayElement && shouldShowField(item.essay)) {
-            setTimeout(() => applyReadMore(essayElement), 100);
-          }
-          
-          // Set main image
-          const mainImage = document.getElementById('main-image');
-          if (mainImage && shouldShowField(item.image)) {
-            mainImage.src = item.image;
-            mainImage.alt = item.title || 'Buddhist Artifact';
-          }
-          
-          // Handle lot link
-          const lotLink = document.querySelector(".lot-link");
-          if (lotLink && shouldShowField(item.lot_link)) {
-            lotLink.href = item.lot_link;
-            lotLink.textContent = "View Original Lot";
-            lotLink.style.display = "";
-          } else if (lotLink) {
-            lotLink.style.display = "none";
-          }
-          
-          // Update certificate link
-          const certLink = document.getElementById('cert-link');
-          if (certLink) {
-            certLink.href = getTemplateUrl('dt-2.html', item.sku);
-          }
-          
-          // Create filter links
-          updateFilterLink(".medium-filter", "medium", item);
-          updateFilterLink(".region-filter", "region", item);
-          updateFilterLink(".period-filter", "period", item);
-          updateFilterLink(".type-filter", "type", item);
-          
-          // Setup navigation
-          setupNavigation(data, sku);
-          
-          // Setup search
-          setupSearch();
-          
-          // Setup lightbox
-          setupLightbox();
-          
-          updateLoadingMessage('Complete!');
-          
-          // Show content
-          setTimeout(() => {
-            showContent();
-            console.log('✅ DT-1 fully loaded and ready');
-          }, 500);
-        })
-        .catch(error => {
-          console.error('❌ Error loading artifact:', error);
-          showError(`Error loading artifact: ${error.message}`);
-        });
+      console.log('All paths updated for environment:', basePath || 'root');
     });
   </script>
 
   <style>
-    /* Enhanced loading and error states */
-    .loading-container, .error-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 400px;
-      text-align: center;
-      padding: 2rem;
-    }
-    
-    .loading-content, .error-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      max-width: 500px;
-    }
-    
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid #8B4513;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 1rem;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .retry-btn {
-      background: #8B4513;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    
-    .retry-btn:hover {
-      background: #A0522D;
-    }
+  
+  .search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
-    /* Search bar improvements */
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+.search-bar input {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 
-    .search-bar input {
-      padding: 0.75rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      width: 300px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+.search-bar button {
+  padding: 0.75rem;
+  border: none;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
 
-    .search-bar button {
-      padding: 0.75rem;
-      border: none;
-      background: white;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-
-    .search-bar button:hover {
-      transform: scale(1.05);
-    }
-
-    /* Tag list styling */
-    .tags-list li {
-      display: inline-block;
-      margin-right: 10px;
-      margin-bottom: 5px;
-      background: #8B4513;
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-    }
-
-    .tag-link, .filter-link {
-      color: #fff;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
+.search-bar button:hover {
+  transform: scale(1.05);
+}
+  .tags-list li {
+	display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	background: #8B4513;
+	color: white;
+	padding: 0.25rem 0.75rem;
+	border-radius: 20px;
+	font-size: 0.85rem;
+}
+  
+  .tag-link, .filter-link {
+	color: #fff;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+  
     /* Enhanced Professional Styling for Buddha Museum */
     .statue-page {
       font-family: 'Georgia', 'Times New Roman', serif;
@@ -828,13 +359,14 @@
     }
 
     .museum-title {
-      font-size: 2rem;
-      font-weight: 300;
-      color: #fff;
-      display: block;
-      margin: 0;
-      margin-left: 50px;
-      width: 300px;
+font-size: 2rem;
+  font-weight: 300;
+  color: #fff;
+  display: block;
+  margin: 0;
+    margin-left: 0px;
+  width: 300px;
+  margin-left: 50px;
     }
 
     .statue-nav {
@@ -887,13 +419,13 @@
     }
 
     .statue-title {
-      font-size: 1.8rem;
+      font-size: 2.5rem;
       margin: 0 0 0.5rem 0;
       color: #8B4513;
     }
 
     .subtitle {
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: #666;
       font-style: italic;
       margin: 0 0 1rem 0;
@@ -1169,30 +701,6 @@
         display: block;
         margin: 0.5rem 0;
       }
-      
-      .museum-title {
-        font-size: 1.5rem;
-        margin-left: 0;
-        width: auto;
-      }
-      
-      .statue-title {
-        font-size: 1.5rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .museum-title {
-        font-size: 1.3rem;
-      }
-      
-      .statue-title {
-        font-size: 1.3rem;
-      }
-      
-      .subtitle {
-        font-size: 0.95rem;
-      }
     }
 
     /* Lightbox Enhancements */
@@ -1247,6 +755,71 @@
       justify-content: center;
       border: none;
     }
+	
+	@media (max-width: 480px) {
+  .museum-title {
+    font-size: 1.5rem;
+  }
+}
   </style>
+	<style>.statue-title {
+	font-size: 1.2rem;
+	margin: 0 0 0.5rem 0;
+	color: #8B4513;
+}
+
+.subtitle {
+	font-size: 1rem;
+	color: #666;
+	font-style: italic;
+	margin: 0 0 1rem 0;
+}</style>
+<script>// Add this script to the end of your existing dt-1.html, just before the closing </body> tag
+
+<script>
+// Fix for loading state not disappearing
+document.addEventListener("DOMContentLoaded", function() {
+  console.log('DT-1 DOM ready, checking loading state...');
+  
+  // Ensure loading state is hidden after a reasonable time
+  setTimeout(function() {
+    const loadingContainer = document.getElementById('loading-container');
+    const mainContent = document.getElementById('main-content');
+    
+    if (loadingContainer && loadingContainer.style.display !== 'none') {
+      console.log('Hiding persistent loading state...');
+      loadingContainer.style.display = 'none';
+      
+      // Show main content if it exists
+      if (mainContent) {
+        mainContent.style.display = 'grid';
+        // Show other sections
+        const sections = ['#auction-section', '#metadata-section', '#auth-section', '#expert-section'];
+        sections.forEach(selector => {
+          const section = document.querySelector(selector);
+          if (section) section.style.display = 'block';
+        });
+      }
+    }
+  }, 3000); // Hide loading after 3 seconds max
+  
+  // Also hide loading when bundle.js starts working
+  const checkDataLoaded = setInterval(function() {
+    // Check if bundle.js has populated content
+    const titleEl = document.querySelector('.statue-title');
+    if (titleEl && titleEl.textContent !== 'Loading...') {
+      console.log('Content loaded, hiding loading state');
+      const loadingContainer = document.getElementById('loading-container');
+      if (loadingContainer) {
+        loadingContainer.style.display = 'none';
+      }
+      clearInterval(checkDataLoaded);
+    }
+  }, 500);
+  
+  // Clear interval after 10 seconds to avoid infinite checking
+  setTimeout(() => clearInterval(checkDataLoaded), 10000);
+});
+</script>
 </body>
 </html>
