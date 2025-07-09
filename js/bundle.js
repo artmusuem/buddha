@@ -541,15 +541,21 @@ if (typeof applyReadMore === 'function') {
 
         window.fullData = data;
         
-       // Check for sessionStorage auto-filter (FIXED)
-const pendingFilter = sessionStorage.getItem('autoFilter');
-if (pendingFilter) {
-  console.log("✅ Applying auto-filter:", pendingFilter);
-  sessionStorage.removeItem('autoFilter');
-  setTimeout(() => window.filterGallery(pendingFilter), 100);
-} else {
-  loadGallery(data);
-}
+        // Check for pending auto-filter
+        const pendingFilter = window.pendingAutoFilter;
+        if (pendingFilter) {
+          console.log("✅ Applying pending auto-filter:", pendingFilter);
+          window.pendingAutoFilter = null;
+          window.filterGallery(pendingFilter);
+          
+          // Show gallery after filter is applied
+          setTimeout(() => {
+            const gallery = document.getElementById("gallery");
+            if (gallery) gallery.style.visibility = "visible";
+          }, 100);
+        } else {
+          loadGallery(data);
+        }
       })
       .catch(error => {
         console.error("❌ Error loading data:", error);
