@@ -42,6 +42,13 @@ function applyReadMore(element) {
 }
 </script>
   <script defer src="/buddha/js/bundle.js" id="main-js"></script>
+  <script>
+// Simple fix: Hide loading after bundle.js loads
+setTimeout(() => {
+  const loading = document.getElementById('loading-container') || document.querySelector('.loading-container');
+  if (loading) loading.style.display = 'none';
+}, 2000);
+</script>
 </head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
@@ -774,52 +781,5 @@ font-size: 2rem;
 	font-style: italic;
 	margin: 0 0 1rem 0;
 }</style>
-<script>// Add this script to the end of your existing dt-1.html, just before the closing </body> tag
-
-<script>
-// Fix for loading state not disappearing
-document.addEventListener("DOMContentLoaded", function() {
-  console.log('DT-1 DOM ready, checking loading state...');
-  
-  // Ensure loading state is hidden after a reasonable time
-  setTimeout(function() {
-    const loadingContainer = document.getElementById('loading-container');
-    const mainContent = document.getElementById('main-content');
-    
-    if (loadingContainer && loadingContainer.style.display !== 'none') {
-      console.log('Hiding persistent loading state...');
-      loadingContainer.style.display = 'none';
-      
-      // Show main content if it exists
-      if (mainContent) {
-        mainContent.style.display = 'grid';
-        // Show other sections
-        const sections = ['#auction-section', '#metadata-section', '#auth-section', '#expert-section'];
-        sections.forEach(selector => {
-          const section = document.querySelector(selector);
-          if (section) section.style.display = 'block';
-        });
-      }
-    }
-  }, 3000); // Hide loading after 3 seconds max
-  
-  // Also hide loading when bundle.js starts working
-  const checkDataLoaded = setInterval(function() {
-    // Check if bundle.js has populated content
-    const titleEl = document.querySelector('.statue-title');
-    if (titleEl && titleEl.textContent !== 'Loading...') {
-      console.log('Content loaded, hiding loading state');
-      const loadingContainer = document.getElementById('loading-container');
-      if (loadingContainer) {
-        loadingContainer.style.display = 'none';
-      }
-      clearInterval(checkDataLoaded);
-    }
-  }, 500);
-  
-  // Clear interval after 10 seconds to avoid infinite checking
-  setTimeout(() => clearInterval(checkDataLoaded), 10000);
-});
-</script>
 </body>
 </html>
