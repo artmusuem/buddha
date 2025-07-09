@@ -4,8 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buddha Museum</title>
-  <link rel="stylesheet" href="/buddha/css/style.css" />
-    <link rel="stylesheet" href="/css/style.css" />
+  <!-- Load config first -->
+  <script>
+    (function () {
+      const host = window.location.hostname;
+      const IS_GITHUB = host.includes('github.io');
+      const BASE_PATH = IS_GITHUB ? '/buddha' : '';
+
+      const CONFIG = {
+        IS_GITHUB,
+        IS_NETLIFY: host.includes('netlify.app'),
+        BASE_PATH,
+        DATA_FILENAME: 'statues.json',
+        DATA_PATH: `${BASE_PATH}/data/statues.json`,
+        IMAGE_PATH: `${BASE_PATH}/images/`,
+        CSS_PATH: `${BASE_PATH}/css/style.css`,
+        JS_PATH: `${BASE_PATH}/js/`,
+        PAGE_PATH: `${BASE_PATH}/page-templates/`,
+        HOME_PAGE: `${BASE_PATH}/index.html`
+      };
+
+      window.CONFIG = CONFIG;
+
+      // Inject CSS
+      const css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = CONFIG.CSS_PATH;
+      document.head.appendChild(css);
+
+      // Inject JS bundle
+      const script = document.createElement("script");
+      script.src = `${CONFIG.JS_PATH}bundle.js`;
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  </script>
  <script>
  
 
@@ -29,8 +62,7 @@
   }
 })();
 </script>
-<script src="/js/bundle.js"></script>
-  <script defer src="/buddha/js/bundle.js"></script>
+
 
 <style>
 /* Buddha CSS - Updated to use 2x2 grid layout on mobile */
