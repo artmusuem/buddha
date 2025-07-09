@@ -3,45 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buddha Museum</title>
-
-  <!-- Load config first (must come before anything else) -->
-  <script>
-    (function () {
-      const host = window.location.hostname;
-      const IS_GITHUB = host.includes('github.io');
-      const BASE_PATH = IS_GITHUB ? '/buddha' : '';
-
-      const CONFIG = {
-        IS_GITHUB,
-        IS_NETLIFY: host.includes('netlify.app'),
-        BASE_PATH,
-        DATA_FILENAME: 'statues.json',
-        DATA_PATH: `${BASE_PATH}/data/statues.json`,
-        IMAGE_PATH: `${BASE_PATH}/images/`,
-        CSS_PATH: `${BASE_PATH}/css/style.css`,
-        JS_PATH: `${BASE_PATH}/js/`,
-        PAGE_PATH: `${BASE_PATH}/page-templates/`,
-        HOME_PAGE: `${BASE_PATH}/index.html`
-      };
-
-      window.CONFIG = CONFIG;
-
-      // Set CSS path
-      const css = document.createElement("link");
-      css.rel = "stylesheet";
-      css.href = CONFIG.CSS_PATH;
-      document.head.appendChild(css);
-
-      // Set JS path
-      const script = document.createElement("script");
-      script.src = `${CONFIG.JS_PATH}bundle.js`;
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  </script>
-</head>
-
+  <title>Search Results – Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+  <script defer src="/buddha/js/bundle.js"></script>
   <style>
     .site-header {
     
@@ -686,9 +650,9 @@ footer p {
 }
 
 </style>
-
+</head>
 <body class="search-results-page">
-  <header class="site-header">
+<header class="site-header">
     <div class="header-content">
       <h1 class="museum-title">Buddha Museum</h1>
       <div class="search-bar">
@@ -698,21 +662,9 @@ footer p {
       </div>
     </div>
   </header>
-
   <nav class="statue-nav">
-    <a href="#" id="gallery-link" class="nav-gallery">🏛 Gallery</a>
+    <a href="/buddha/index.html" class="nav-gallery">🏛 Gallery</a>
   </nav>
-
-  <script>
-    // Ensure dynamic base path is used
-    document.addEventListener("DOMContentLoaded", () => {
-      const link = document.getElementById("gallery-link");
-      if (link && window.CONFIG?.BASE_PATH !== undefined) {
-        link.href = `${window.CONFIG.BASE_PATH}/index.html`;
-      }
-    });
-  </script>
-
   <main>
     <section class="search-results">
       <h2 id="search-title">Search Results</h2>
@@ -746,7 +698,7 @@ footer p {
       const performSearch = (searchQuery) => {
         const trimmedQuery = searchQuery?.trim();
         if (!trimmedQuery) return;
-       window.location.href = `${window.CONFIG.BASE_PATH}/search-results.html?q=${encodeURIComponent(searchQuery)}`;
+        window.location.href = `/buddha/search-results.html?q=${encodeURIComponent(trimmedQuery)}`;
       };
 
       // Search input handlers
