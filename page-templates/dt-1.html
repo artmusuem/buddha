@@ -42,13 +42,6 @@ function applyReadMore(element) {
 }
 </script>
   <script defer src="/buddha/js/bundle.js" id="main-js"></script>
-  <script>
-// Simple fix: Hide loading after bundle.js loads
-setTimeout(() => {
-  const loading = document.getElementById('loading-container') || document.querySelector('.loading-container');
-  if (loading) loading.style.display = 'none';
-}, 2000);
-</script>
 </head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
