@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Buddhist Artifact – Buddha Museum</title>
   <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
+	<script>
+// Load bundle.js with correct path
+(function() {
+  const isGitHub = window.location.hostname.includes('github.io');
+  const basePath = isGitHub ? '/buddha' : '';
+  
+  const script = document.createElement('script');
+  script.src = `${basePath}/js/bundle.js`;
+  script.defer = true;
+  script.id = 'main-js';
+  document.head.appendChild(script);
+  
+  console.log('Loading bundle.js from:', script.src);
+})();
+</script>
   <script>
     // Environment detection and path setup - runs immediately
     (function() {
