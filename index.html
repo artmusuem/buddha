@@ -1,25 +1,11 @@
-index <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<script>
-  (function() {
-    const isGitHub = window.location.hostname.includes('github.io');
-    const basePath = isGitHub ? '/buddha' : '';
-    window.SITE_BASE_PATH = basePath;
-
-    // Set CSS dynamically
-    const css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.href = `${basePath}/css/style.css`;
-    document.head.appendChild(css);
-
-    // Set JS dynamically
-    const js = document.createElement('script');
-    js.src = `${basePath}/js/bundle.js`;
-    js.defer = true;
-    document.head.appendChild(js);
-  })();
-</script>
-
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
  <script>
  
 
@@ -43,7 +29,8 @@ index <!DOCTYPE html>
   }
 })();
 </script>
-
+<script src="/js/bundle.js"></script>
+  <script defer src="/buddha/js/bundle.js"></script>
 
 <style>
 /* Buddha CSS - Updated to use 2x2 grid layout on mobile */
@@ -599,7 +586,7 @@ footer p {
 }
 </style>
 
-
+</head>
 <body>
   <div id="menu-placeholder"></div>
 
@@ -697,3 +684,4 @@ footer p {
 
 </body>
 </html>
+
