@@ -608,13 +608,35 @@ footer p {
 
   <header class="site-header">
     <div class="header-content">
-      <h1 class="museum-title">Buddha Museum</h1>
-      <div class="search-bar">
-        <input type="text" id="searchBox" placeholder="Search Buddhist artifacts...">
-        <button id="searchButton">🔍</button>
-        <div id="searchResults"></div>
-      </div>
-    </div>
+  <h1 class="museum-title">Buddha Museum</h1>
+  <div class="search-bar">
+    <input type="text" id="searchBox" placeholder="Search Buddhist artifacts..." />
+    <button id="searchButton">🔍</button>
+    <div id="searchResults"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchBox");
+    const searchButton = document.getElementById("searchButton");
+
+    const performSearch = () => {
+      const query = searchInput.value.trim();
+      if (query) {
+        const base = window.CONFIG?.BASE_PATH || '';
+        const searchUrl = `${base}/search-results.html?q=${encodeURIComponent(query)}`;
+        window.location.href = searchUrl;
+      }
+    };
+
+    searchButton.addEventListener("click", performSearch);
+    searchInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") performSearch();
+    });
+  });
+</script>
+
   </header>
   
   <h2 id="gallery-title">All Buddhist Art</h2>
