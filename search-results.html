@@ -4,27 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Search Results – Buddha Museum</title>
-	<script>
-// Load resources with correct paths
-(function() {
-  const isGitHub = window.location.hostname.includes('github.io');
-  const basePath = isGitHub ? '/buddha' : '';
-  
-  // Create CSS link
-  const css = document.createElement('link');
-  css.rel = 'stylesheet';
-  css.href = `${basePath}/css/style.css`;
-  document.head.appendChild(css);
-  
-  // Create JS script
-  const js = document.createElement('script');
-  js.src = `${basePath}/js/bundle.js`;
-  js.defer = true;
-  document.head.appendChild(js);
-  
-  window.SITE_BASE_PATH = basePath;
-})();
-</script>
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+  <script defer src="/buddha/js/bundle.js"></script>
   <style>
     .site-header {
     
@@ -681,13 +662,9 @@ footer p {
       </div>
     </div>
   </header>
-
   <nav class="statue-nav">
-
-    <a href="/buddha/" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
-
+    <a href="/buddha/index.html" class="nav-gallery">🏛 Gallery</a>
   </nav>
-
   <main>
     <section class="search-results">
       <h2 id="search-title">Search Results</h2>
