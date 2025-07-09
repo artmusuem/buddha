@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Certificate of Authenticity – Buddha Museum</title>
-  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
+  <link rel="stylesheet" href="/css/style.css" id="main-css" />
   <script>
     // Environment detection and path setup - runs immediately
     (function() {
       const isGitHub = window.location.hostname.includes('github.io');
-      const basePath = isGitHub ? '/buddha' : '';
+      const basePath = isGitHub ? '/' : '';
       
       console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
       
@@ -23,7 +23,7 @@
       }
     })();
   </script>
-  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
+  <script defer src="/js/bundle.js" id="main-js"></script>
 </head>
 
 <body class="authenticity-page">
@@ -42,7 +42,7 @@
 
   <nav class="statue-nav">
     <a href="#" class="nav-prev">← Back to Artifact</a>
-    <a href="/buddha/" class="nav-gallery gallery-link">🏛 Gallery</a>
+    <a href="/" class="nav-gallery gallery-link">🏛 Gallery</a>
   </nav>
 
   <main class="authenticity-main">
@@ -167,7 +167,7 @@
       <div class="expert-profiles">
         <div class="expert-profile">
           <div class="profile-image">
-            <img src="/buddha/images/curator-profile.jpg" alt="Dr. Sarah Chen" id="curator-image" />
+            <img src="/images/curator-profile.jpg" alt="Dr. Sarah Chen" id="curator-image" />
           </div>
           <div class="profile-info">
             <h5>Dr. Sarah Chen</h5>
@@ -211,7 +211,7 @@
         <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
       </div>
       <div class="footer-links">
-        <a href="/buddha/" class="gallery-link">Gallery</a>
+        <a href="/" class="gallery-link">Gallery</a>
         <a href="#">About</a>
         <a href="#">Authentication</a>
         <a href="#">Research</a>
@@ -226,8 +226,8 @@
   // Smart data loader with fallback (same as bundle.js)
   async function fetchBuddhaData() {
     const paths = [
-      "/buddha/data/buddha-collection.json", // GitHub Pages path
-      "/data/buddha-collection.json"         // Netlify path
+      "/data/-collection.json", // GitHub Pages path
+      "/data/-collection.json"         // Netlify path
     ];
     
     for (const path of paths) {
