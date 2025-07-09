@@ -774,5 +774,58 @@ font-size: 2rem;
 	font-style: italic;
 	margin: 0 0 1rem 0;
 }</style>
+	<script>
+// Simple JSON data loader for dt-1 (same as dt-2.html has)
+async function fetchBuddhaData() {
+  const paths = [
+    "/buddha/data/buddha-collection.json", // GitHub Pages path
+    "/data/buddha-collection.json"         // Netlify path
+  ];
+  
+  for (const path of paths) {
+    try {
+      console.log(`Trying to fetch from: ${path}`);
+      const response = await fetch(path);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log(`✅ Successfully loaded data from: ${path}`);
+        return data.filter(item => item.status !== "hide");
+      } else {
+        console.log(`❌ Failed to fetch from ${path} - Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.log(`❌ Error fetching from ${path}:`, error.message);
+    }
+  }
+  
+  throw new Error("Could not load buddha-collection.json from any location");
+}
+
+// Load data when page loads
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(window.location.search);
+  const sku = params.get("sku");
+  
+  if (sku) {
+    fetchBuddhaData()
+      .then(data => {
+        const item = data.find(s => s.sku === sku);
+        if (item) {
+          // Update the page content
+          if (item.title) document.querySelector(".statue-title").textContent = item.title;
+          if (item.subtitle) document.querySelector(".subtitle").textContent = item.subtitle;
+          if (item.image) document.querySelector(".statue-image").src = item.image;
+          // Add other fields as needed
+          
+          console.log("✅ Data loaded successfully for dt-1");
+        }
+      })
+      .catch(error => {
+        console.error("Failed to load data:", error);
+      });
+  }
+});
+</script>
 </body>
 </html>
