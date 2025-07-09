@@ -688,7 +688,7 @@ footer p {
 </style>
 
 <body class="search-results-page">
-<header class="site-header">
+  <header class="site-header">
     <div class="header-content">
       <h1 class="museum-title">Buddha Museum</h1>
       <div class="search-bar">
@@ -698,9 +698,21 @@ footer p {
       </div>
     </div>
   </header>
+
   <nav class="statue-nav">
-    <a href="/buddha/index.html" class="nav-gallery">🏛 Gallery</a>
+    <a href="#" id="gallery-link" class="nav-gallery">🏛 Gallery</a>
   </nav>
+
+  <script>
+    // Ensure dynamic base path is used
+    document.addEventListener("DOMContentLoaded", () => {
+      const link = document.getElementById("gallery-link");
+      if (link && window.CONFIG?.BASE_PATH !== undefined) {
+        link.href = `${window.CONFIG.BASE_PATH}/index.html`;
+      }
+    });
+  </script>
+
   <main>
     <section class="search-results">
       <h2 id="search-title">Search Results</h2>
