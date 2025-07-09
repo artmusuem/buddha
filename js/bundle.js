@@ -294,7 +294,11 @@ document.addEventListener("DOMContentLoaded", () => {
         updateText(".medium", item.medium);  // This will now update ALL .medium elements
         updateText(".provenance", item.provenance);
         updateText(".essay", item.essay);
-        applyReadMore(document.querySelector('.essay')); // Add this line
+        updateText(".essay", item.essay);
+// Only call if function exists
+if (typeof applyReadMore === 'function') {
+  applyReadMore(document.querySelector('.essay'));
+}
 
         // Create filter links based on extracted categories
         updateFilterLink(".medium-filter", "medium");
