@@ -8,7 +8,7 @@
     // Environment detection and path setup
     (function() {
       const isGitHub = window.location.hostname.includes('github.io');
-      const basePath = isGitHub ? '/buddha' : '';
+      const basePath = isGitHub ? '/' : '';
       
       // Store for use throughout the page
       window.SITE_BASE_PATH = basePath;
@@ -172,7 +172,7 @@
       <h1>🛠 Buddha Collection Admin</h1>
       <div class="admin-nav">
         <a href="/" class="nav-link gallery-link">← Back to Gallery</a>
-        <a href="https://artmusuem.github.io/buddha/" class="nav-link github-link" target="_blank">
+        <a href="https://artmusuem.github.io//" class="nav-link github-link" target="_blank">
           📖 Live Edits on GitHub
         </a>
         <span class="platform-indicator">📍 Netlify Admin</span>
