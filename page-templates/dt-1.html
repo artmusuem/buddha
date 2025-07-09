@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Buddhist Artifact – Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
   <script>
     // Environment detection and path setup - runs immediately
     (function() {
@@ -15,25 +16,14 @@
       // Store for use throughout the page
       window.SITE_BASE_PATH = basePath;
       
-      // Create and add CSS link with correct path immediately
-      const cssLink = document.createElement('link');
-      cssLink.rel = 'stylesheet';
-      cssLink.href = `${basePath}/css/style.css`;
-      cssLink.id = 'main-css';
-      document.head.appendChild(cssLink);
-      
-      // Load the correct JavaScript bundle immediately
-      const script = document.createElement('script');
-      script.defer = true;
-      script.src = `${basePath}/js/bundle.js`;
-      script.id = 'main-js';
-      document.head.appendChild(script);
-      
-      console.log(`Loading CSS from: ${cssLink.href}`);
-      console.log(`Loading JavaScript from: ${script.src}`);
+      // Update CSS link immediately
+      const cssLink = document.getElementById('main-css');
+      if (cssLink) {
+        cssLink.href = `${basePath}/css/style.css`;
+      }
     })();
   </script>
-  <script>
+	  <script>
 function applyReadMore(element) {
     const text = element.textContent.trim();
     if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
@@ -51,6 +41,7 @@ function applyReadMore(element) {
     };
 }
 </script>
+  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
 </head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
@@ -68,7 +59,7 @@ function applyReadMore(element) {
 
   <nav class="statue-nav">
     <a href="#" class="nav-prev">← Previous Artifact</a>
-    <a href="#" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
+    <a href="/buddha/" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
     <a href="#" class="nav-next">Next Artifact →</a>
   </nav>
 
@@ -76,7 +67,7 @@ function applyReadMore(element) {
     <!-- Hero Section with Main Image and Basic Info -->
     <section class="artwork-hero">
       <div class="artwork-image-container">
-        <img src="#" alt="Loading Artifact" class="statue-image lightbox-trigger" id="placeholder-image" />
+        <img src="/buddha/images/placeholder.jpg" alt="Loading Artifact" class="statue-image lightbox-trigger" id="placeholder-image" />
         <div class="image-caption">
           <span class="sku">Loading...</span>
         </div>
@@ -144,14 +135,14 @@ function applyReadMore(element) {
        <div class="tags-container">
          <h4>Tags</h4>
          <ul class="tags-list">
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
-           <li><a href="#" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
          </ul>
        </div>
        
@@ -188,7 +179,7 @@ function applyReadMore(element) {
           <p>This artifact has been documented from a reputable auction house with established provenance.</p>
         </div>
         <div class="document-links">
-          <a href="#" class="lot-link template-link" target="_blank">
+          <a href="/buddha/page-templates/dt-2.html?sku=LOT-502" class="lot-link template-link" target="_blank">
             🔗 View Original Christie's Listing
           </a>
         </div>
@@ -199,7 +190,7 @@ function applyReadMore(element) {
     <section class="expert-commentary">
       <div class="curator-profile">
         <div class="profile-image">
-          <img src="#" alt="Curator Profile" id="curator-image" />
+          <img src="/buddha/images/curator-profile.jpg" alt="Curator Profile" id="curator-image" />
         </div>
         <div class="profile-info">
           <h4>Expert Commentary</h4>
@@ -218,7 +209,7 @@ function applyReadMore(element) {
         <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
       </div>
       <div class="footer-links">
-        <a href="#" class="footer-gallery-link">Gallery</a>
+        <a href="/buddha/" class="footer-gallery-link">Gallery</a>
         <a href="#">About</a>
         <a href="#">Collections</a>
         <a href="#">Research</a>
@@ -245,6 +236,12 @@ function applyReadMore(element) {
     // Update all paths when DOM is ready
     document.addEventListener("DOMContentLoaded", function() {
       const basePath = window.SITE_BASE_PATH || '';
+      
+      // Update JavaScript bundle path
+      const jsScript = document.getElementById('main-js');
+      if (jsScript) {
+        jsScript.src = `${basePath}/js/bundle.js`;
+      }
       
       // Update gallery navigation link
       const galleryLink = document.getElementById('gallery-link');
@@ -279,8 +276,10 @@ function applyReadMore(element) {
       // Update template links (like dt-2.html link)
       const templateLinks = document.querySelectorAll('.template-link');
       templateLinks.forEach(link => {
-        // This will be set dynamically by bundle.js based on current SKU
-        link.href = `${basePath}/page-templates/dt-2.html?sku=LOT-502`;
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('/buddha/page-templates/')) {
+          link.href = href.replace('/buddha/page-templates/', `${basePath}/page-templates/`);
+        }
       });
       
       console.log('All paths updated for environment:', basePath || 'root');
@@ -762,20 +761,18 @@ font-size: 2rem;
     font-size: 1.5rem;
   }
 }
-
-/* Override for smaller titles */
-.statue-title {
-	font-size: 1.8rem !important;
+  </style>
+	<style>.statue-title {
+	font-size: 1.2rem;
 	margin: 0 0 0.5rem 0;
 	color: #8B4513;
 }
 
 .subtitle {
-	font-size: 1rem !important;
+	font-size: 1rem;
 	color: #666;
 	font-style: italic;
 	margin: 0 0 1rem 0;
-}
-  </style>
+}</style>
 </body>
 </html>
