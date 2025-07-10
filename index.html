@@ -5,7 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buddha Museum</title>
 
-  <script src="/js/config.js"></script>
+  <script>
+// Self-loading config that detects environment and loads from correct path
+(function() {
+  const isGitHub = window.location.hostname.includes('github.io');
+  const basePath = isGitHub ? '/buddha' : '';
+  
+  // Store globally
+  window.SITE_BASE_PATH = basePath;
+  console.log(`[CONFIG] Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify/Local'}, Base Path: "${basePath || 'root'}"`);
+  
+  // Function to update all paths
+  function updateAllPaths() {
+    if (!basePath) return; // Skip on Netlify
+    
+    let updatedCount = 0;
+    
+    // Update stylesheets
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href && href.startsWith('/') && !href.startsWith(basePath)) {
+        link.href = basePath + href;
+        updatedCount++;
+      }
+    });
+    
+    // Update scripts
+    document.querySelectorAll('script[src]').forEach(script => {
+      const src = script.getAttribute('src');
+      if (src && src.startsWith('/') && !src.startsWith(basePath)) {
+        const newScript = document.createElement('script');
+        newScript.src = basePath + src;
+        if (script.defer) newScript.defer = true;
+        script.parentNode.replaceChild(newScript, script);
+        updatedCount++;
+      }
+    });
+    
+    console.log(`[CONFIG] Updated ${updatedCount} paths with base: "${basePath}"`);
+  }
+  
+  // Run when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateAllPaths);
+  } else {
+    updateAllPaths();
+  }
+})();
+</script>
   <link rel="stylesheet" href="/css/style.css" />
   <script src="/js/bundle.js" defer></script>
 </head>
