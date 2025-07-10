@@ -484,6 +484,42 @@
       background-color: #fafafa;
     }
 
+    /* Base heading styles for consistency and accessibility */
+    h1 {
+      font-size: 2rem;
+      margin: 1rem 0;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 0.875rem 0;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      margin: 0.75rem 0;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    h4 {
+      font-size: 1.125rem;
+      margin: 0.625rem 0;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    h5 {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
     .site-header {
       background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
       color: white;
@@ -505,3 +541,478 @@
       font-weight: 300;
       color: #fff;
       display: block;
+      margin: 0;
+      margin-left: 50px;
+      width: 300px;
+      line-height: 1.2;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .search-bar input {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 300px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .search-bar button {
+      padding: 0.75rem;
+      border: none;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .search-bar button:hover {
+      transform: scale(1.05);
+    }
+
+    .statue-nav {
+      background: white;
+      padding: 1rem 0;
+      border-bottom: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .statue-nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #8B4513;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .statue-nav a:hover {
+      background-color: #f0f0f0;
+    }
+
+    .artwork-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .artwork-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .statue-image {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .statue-image:hover {
+      transform: scale(1.02);
+    }
+
+    .statue-title {
+      font-size: 2.5rem;
+      margin: 0 0 0.5rem 0;
+      color: #8B4513;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      font-style: italic;
+      margin: 0 0 1rem 0;
+      font-weight: 300;
+      line-height: 1.3;
+    }
+
+    .artwork-meta-basic {
+      color: #888;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .essay {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #444;
+      text-align: justify;
+      margin: 1.5rem 0;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-item label {
+      font-weight: bold;
+      color: #8B4513;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .auction-details,
+    .artwork-metadata,
+    .provenance-section {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .auction-details h3,
+    .artwork-metadata h3,
+    .provenance-section h3 {
+      color: #8B4513;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .auction-details h4 {
+      color: #8B4513;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .provenance {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+
+    .lot-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .lot-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lot-item label {
+      font-weight: bold;
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lot-link {
+      color: #8B4513;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .lot-link:hover {
+      text-decoration: underline;
+    }
+
+    .tags-container h4,
+    .filters-container h4 {
+      color: #8B4513;
+      margin-bottom: 1rem;
+      font-size: 1.125rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .tags-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tags-list li {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 5px;
+      background: #8B4513;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .tag-link {
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-item label {
+      font-weight: bold;
+      color: #666;
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .authentication-badge {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+      border-radius: 4px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .verified-icon {
+      background: #4caf50;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .document-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .document-links .lot-link {
+      background: #8B4513;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .document-links .lot-link:hover {
+      background: #A0522D;
+    }
+
+    .expert-commentary {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .curator-profile {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .profile-image img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-info h4 {
+      color: #8B4513;
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .profile-info h5 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .profile-info .title {
+      color: #666;
+      font-style: italic;
+      margin: 0.25rem 0 1rem 0;
+    }
+
+    .commentary {
+      font-style: italic;
+      border-left: 3px solid #8B4513;
+      padding-left: 1rem;
+      margin: 0;
+    }
+
+    .site-footer {
+      background: #333;
+      color: white;
+      padding: 2rem 0 1rem 0;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-branding h2 {
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem 0;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1rem;
+      border-top: 1px solid #555;
+      margin-top: 1rem;
+    }
+
+    /* Lightbox Enhancements */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+    }
+
+    .lightbox.active {
+      display: block;
+    }
+
+    .lightbox-content {
+      position: relative;
+      margin: 2% auto;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .lightbox-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      max-height: 90vh;
+      border-radius: 8px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      color: white;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1001;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .artwork-hero {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .details-grid,
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .curator-profile {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .document-links {
+        flex-direction: column;
+      }
+      
+      .statue-nav a {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .museum-title {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</body>
+</html>
