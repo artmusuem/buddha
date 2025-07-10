@@ -4,64 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Buddha Museum</title>
-
-  <!-- Self-loading config that handles all paths -->
-  <script>
-    (function() {
-      const isGitHub = window.location.hostname.includes('github.io');
-      const basePath = isGitHub ? '/buddha' : '';
-      
-      // Store globally
-      window.SITE_BASE_PATH = basePath;
-      console.log(`[CONFIG] Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify/Local'}, Base Path: "${basePath || 'root'}"`);
-      
-      // Load CSS immediately
-      const css = document.createElement('link');
-      css.rel = 'stylesheet';
-      css.href = `${basePath}/css/style.css`;
-      document.head.appendChild(css);
-      
-      // Load bundle.js dynamically
-      const script = document.createElement('script');
-      script.src = `${basePath}/js/bundle.js`;
-      script.defer = true;
-      document.head.appendChild(script);
-      
-      console.log(`[CONFIG] Loading CSS: ${css.href}`);
-      console.log(`[CONFIG] Loading JS: ${script.src}`);
-      
-      // Function to update any other paths that get added later
-      function updatePaths() {
-        if (!basePath) return;
-        
-        // Update images
-        document.querySelectorAll('img').forEach(img => {
-          const src = img.getAttribute('src');
-          if (src && src.startsWith('/') && !src.startsWith(basePath)) {
-            img.src = basePath + src;
-          }
-        });
-        
-        // Update links
-        document.querySelectorAll('a[href]').forEach(link => {
-          const href = link.getAttribute('href');
-          if (href && href.startsWith('/') && !href.startsWith(basePath) && !href.startsWith('/#')) {
-            link.href = basePath + href;
-          }
-        });
-      }
-      
-      // Run path updates when DOM is ready
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', updatePaths);
-      } else {
-        updatePaths();
-      }
-    })();
-  </script>
-</head>
-
-   
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
  <script>
  
 
@@ -85,8 +29,8 @@
   }
 })();
 </script>
-
-  
+<script src="/js/bundle.js"></script>
+  <script defer src="/buddha/js/bundle.js"></script>
 
 <style>
 /* Buddha CSS - Updated to use 2x2 grid layout on mobile */
@@ -642,7 +586,7 @@ footer p {
 }
 </style>
 
-
+</head>
 <body>
   <div id="menu-placeholder"></div>
 
@@ -711,7 +655,7 @@ footer p {
   <footer>
     <div class="footer-content">
       <div class="footer-links">
-        <a href="/">Gallery</a>
+        <a href="/buddha/">Gallery</a>
         <a href="#">About</a>
         <a href="#">Collections</a>
         <a href="#">Research</a>
