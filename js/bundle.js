@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const basePath = isGitHub ? '/buddha' : '';
   
   console.log(`Environment detected: ${isGitHub ? 'GitHub Pages' : 'Netlify'}`);
-  console.log(`Base path: "${basePath}"`);
+  console.log(`Base path: "${basePath}"`); 
   
   // Smart data loader with fallback
   async function fetchBuddhaData() {
