@@ -1,43 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buddhist Artifact – Buddha Museum</title>
-  <link rel="stylesheet" href="/css/style.css" id="main-css" />
-	<script>
-// Load bundle.js with correct path
-(function() {
-  const isGitHub = window.location.hostname.includes('github.io');
-  const basePath = isGitHub ? '/' : '';
-  
-  const script = document.createElement('script');
-  script.src = `${basePath}/js/bundle.js`;
-  script.defer = true;
-  script.id = 'main-js';
-  document.head.appendChild(script);
-  
-  console.log('Loading bundle.js from:', script.src);
-})();
-</script>
-  <script>
-    // Environment detection and path setup - runs immediately
-    (function() {
-      const isGitHub = window.location.hostname.includes('github.io');
-      const basePath = isGitHub ? '/' : '';
-      
-      console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
-      
-      // Store for use throughout the page
-      window.SITE_BASE_PATH = basePath;
-      
-      // Update CSS link immediately
-      const cssLink = document.getElementById('main-css');
-      if (cssLink) {
-        cssLink.href = `${basePath}/css/style.css`;
-      }
-    })();
-  </script>
+  <script src="/js/config.js"></script>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="/js/bundle.js" defer></script>
+</head>
+	
 	  <script>
 function applyReadMore(element) {
     const text = element.textContent.trim();
@@ -56,8 +24,7 @@ function applyReadMore(element) {
     };
 }
 </script>
-  <script defer src="/js/bundle.js" id="main-js"></script>
-</head>
+
 <body class="statue-page">
   <div id="menu-placeholder"></div>
   
