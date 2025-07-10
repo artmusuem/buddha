@@ -1,11 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="/js/config.js"></script>
-  <link rel="stylesheet" href="/css/style.css" />
-  <script src="/js/bundle.js" defer></script>
-</head>
-	
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buddhist Artifact – Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
+	<script>
+// Load bundle.js with correct path
+(function() {
+  const isGitHub = window.location.hostname.includes('github.io');
+  const basePath = isGitHub ? '/buddha' : '';
+  
+  const script = document.createElement('script');
+  script.src = `${basePath}/js/bundle.js`;
+  script.defer = true;
+  script.id = 'main-js';
+  document.head.appendChild(script);
+  
+  console.log('Loading bundle.js from:', script.src);
+})();
+</script>
+  <script>
+    // Environment detection and path setup - runs immediately
+    (function() {
+      const isGitHub = window.location.hostname.includes('github.io');
+      const basePath = isGitHub ? '/buddha' : '';
+      
+      console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
+      
+      // Store for use throughout the page
+      window.SITE_BASE_PATH = basePath;
+      
+      // Update CSS link immediately
+      const cssLink = document.getElementById('main-css');
+      if (cssLink) {
+        cssLink.href = `${basePath}/css/style.css`;
+      }
+    })();
+  </script>
 	  <script>
 function applyReadMore(element) {
     const text = element.textContent.trim();
@@ -24,7 +56,8 @@ function applyReadMore(element) {
     };
 }
 </script>
-
+  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
+</head>
 <body class="statue-page">
   <div id="menu-placeholder"></div>
   
@@ -41,7 +74,7 @@ function applyReadMore(element) {
 
   <nav class="statue-nav">
     <a href="#" class="nav-prev">← Previous Artifact</a>
-    <a href="/" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
+    <a href="/buddha/" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
     <a href="#" class="nav-next">Next Artifact →</a>
   </nav>
 
@@ -49,7 +82,7 @@ function applyReadMore(element) {
     <!-- Hero Section with Main Image and Basic Info -->
     <section class="artwork-hero">
       <div class="artwork-image-container">
-        <img src="/images/placeholder.jpg" alt="Loading Artifact" class="statue-image lightbox-trigger" id="placeholder-image" />
+        <img src="/buddha/images/placeholder.jpg" alt="Loading Artifact" class="statue-image lightbox-trigger" id="placeholder-image" />
         <div class="image-caption">
           <span class="sku">Loading...</span>
         </div>
@@ -117,14 +150,14 @@ function applyReadMore(element) {
        <div class="tags-container">
          <h4>Tags</h4>
          <ul class="tags-list">
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
-           <li><a href="/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
+           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
          </ul>
        </div>
        
@@ -161,7 +194,7 @@ function applyReadMore(element) {
           <p>This artifact has been documented from a reputable auction house with established provenance.</p>
         </div>
         <div class="document-links">
-          <a href="/page-templates/dt-2.html?sku=LOT-502" class="lot-link template-link" target="_blank">
+          <a href="/buddha/page-templates/dt-2.html?sku=LOT-502" class="lot-link template-link" target="_blank">
             🔗 View Original Christie's Listing
           </a>
         </div>
@@ -172,7 +205,7 @@ function applyReadMore(element) {
     <section class="expert-commentary">
       <div class="curator-profile">
         <div class="profile-image">
-          <img src="/images/curator-profile.jpg" alt="Curator Profile" id="curator-image" />
+          <img src="/buddha/images/curator-profile.jpg" alt="Curator Profile" id="curator-image" />
         </div>
         <div class="profile-info">
           <h4>Expert Commentary</h4>
@@ -191,7 +224,7 @@ function applyReadMore(element) {
         <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
       </div>
       <div class="footer-links">
-        <a href="/" class="footer-gallery-link">Gallery</a>
+        <a href="/buddha/" class="footer-gallery-link">Gallery</a>
         <a href="#">About</a>
         <a href="#">Collections</a>
         <a href="#">Research</a>
@@ -259,8 +292,8 @@ function applyReadMore(element) {
       const templateLinks = document.querySelectorAll('.template-link');
       templateLinks.forEach(link => {
         const href = link.getAttribute('href');
-        if (href && href.startsWith('/page-templates/')) {
-          link.href = href.replace('/page-templates/', `${basePath}/page-templates/`);
+        if (href && href.startsWith('/buddha/page-templates/')) {
+          link.href = href.replace('/buddha/page-templates/', `${basePath}/page-templates/`);
         }
       });
       
@@ -760,8 +793,8 @@ font-size: 2rem;
 // Simple JSON data loader for dt-1 (same as dt-2.html has)
 async function fetchBuddhaData() {
   const paths = [
-    "/data/-collection.json", // GitHub Pages path
-    "/data/-collection.json"         // Netlify path
+    "/buddha/data/buddha-collection.json", // GitHub Pages path
+    "/data/buddha-collection.json"         // Netlify path
   ];
   
   for (const path of paths) {
