@@ -4,60 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Buddhist Artifact – Buddha Museum</title>
-  <link rel="stylesheet" href="/buddha/css/style.css" id="main-css" />
-	<script>
-// Load bundle.js with correct path
-(function() {
-  const isGitHub = window.location.hostname.includes('github.io');
-  const basePath = isGitHub ? '/buddha' : '';
   
-  const script = document.createElement('script');
-  script.src = `${basePath}/js/bundle.js`;
-  script.defer = true;
-  script.id = 'main-js';
-  document.head.appendChild(script);
-  
-  console.log('Loading bundle.js from:', script.src);
-})();
-</script>
+  <!-- Single, consolidated environment setup script -->
   <script>
-    // Environment detection and path setup - runs immediately
+    // Consolidated environment detection - runs first, before everything else
     (function() {
       const isGitHub = window.location.hostname.includes('github.io');
       const basePath = isGitHub ? '/buddha' : '';
       
-      console.log(`Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
+      console.log(`🌍 Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify'}, Base path: "${basePath}"`);
       
-      // Store for use throughout the page
+      // Store globally for immediate use
       window.SITE_BASE_PATH = basePath;
+      window.IS_GITHUB = isGitHub;
       
-      // Update CSS link immediately
-      const cssLink = document.getElementById('main-css');
-      if (cssLink) {
-        cssLink.href = `${basePath}/css/style.css`;
-      }
+      // Create and append CSS link with correct path immediately
+      const cssLink = document.createElement('link');
+      cssLink.rel = 'stylesheet';
+      cssLink.href = `${basePath}/css/style.css`;
+      cssLink.id = 'main-css';
+      document.head.appendChild(cssLink);
+      
+      console.log('📱 CSS path set to:', cssLink.href);
     })();
   </script>
-	  <script>
-function applyReadMore(element) {
-    const text = element.textContent.trim();
-    if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
-    
-    const words = text.split(' ');
-    const short = words.slice(0, 25).join(' ');
-    
-    element.innerHTML = short + '... <span id="readmore" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">read more</span>';
-    
-    element.querySelector('#readmore').onclick = function() {
-        element.innerHTML = text + ' <span id="readless" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">show less</span>';
-        element.querySelector('#readless').onclick = function() {
-            applyReadMore(element);
+
+  <!-- Read more functionality -->
+  <script>
+    function applyReadMore(element) {
+        const text = element.textContent.trim();
+        if (!text || text === 'Loading...' || text.split(' ').length <= 25) return;
+        
+        const words = text.split(' ');
+        const short = words.slice(0, 25).join(' ');
+        
+        element.innerHTML = short + '... <span class="read-more-btn" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">read more</span>';
+        
+        element.querySelector('.read-more-btn').onclick = function() {
+            element.innerHTML = text + ' <span class="read-less-btn" style="color:#8B4513;cursor:pointer;text-decoration:underline;font-weight:bold">show less</span>';
+            element.querySelector('.read-less-btn').onclick = function() {
+                applyReadMore(element);
+            };
         };
-    };
-}
-</script>
-  <script defer src="/buddha/js/bundle.js" id="main-js"></script>
+    }
+  </script>
 </head>
+
 <body class="statue-page">
   <div id="menu-placeholder"></div>
   
@@ -74,7 +66,7 @@ function applyReadMore(element) {
 
   <nav class="statue-nav">
     <a href="#" class="nav-prev">← Previous Artifact</a>
-    <a href="/buddha/" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
+    <a href="#" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
     <a href="#" class="nav-next">Next Artifact →</a>
   </nav>
 
@@ -82,42 +74,42 @@ function applyReadMore(element) {
     <!-- Hero Section with Main Image and Basic Info -->
     <section class="artwork-hero">
       <div class="artwork-image-container">
-        <img src="/buddha/images/placeholder.jpg" alt="Loading Artifact" class="statue-image lightbox-trigger" id="placeholder-image" />
+        <img src="#" alt="Loading Artifact" class="statue-image lightbox-trigger" id="main-image" />
         <div class="image-caption">
-          <span class="sku">Loading...</span>
+          <span class="sku" id="artifact-sku">Loading...</span>
         </div>
       </div>
       
       <div class="artwork-primary-info">
         <header class="artwork-header">
-          <h1 class="statue-title">Loading...</h1>
-          <h2 class="subtitle">Loading...</h2>
+          <h1 class="statue-title" id="artifact-title">Loading...</h1>
+          <h2 class="subtitle" id="artifact-subtitle">Loading...</h2>
           <div class="artwork-meta-basic">
-            <span class="medium">Loading...</span>
+            <span class="medium" id="artifact-medium">Loading...</span>
           </div>
         </header>
         
         <div class="artwork-description">
-          <p class="essay">Loading...</p>
+          <p class="essay" id="artifact-essay">Loading...</p>
         </div>
 
         <!-- Key Details Grid -->
         <div class="details-grid">
           <div class="detail-item">
             <label>Dimensions</label>
-            <span class="dimensions">Loading...</span>
+            <span class="dimensions" id="artifact-dimensions">Loading...</span>
           </div>
           <div class="detail-item">
             <label>Medium</label>
-            <span class="medium">Loading...</span>
+            <span class="medium" id="artifact-medium-detail">Loading...</span>
           </div>
           <div class="detail-item">
             <label>Estimate</label>
-            <span class="estimate">Loading...</span>
+            <span class="estimate" id="artifact-estimate">Loading...</span>
           </div>
           <div class="detail-item">
             <label>Price Realized</label>
-            <span class="price-realized">Loading...</span>
+            <span class="price-realized" id="artifact-price">Loading...</span>
           </div>
         </div>
       </div>
@@ -129,14 +121,14 @@ function applyReadMore(element) {
       <div class="auction-content">
         <div class="provenance-history">
           <h4>Provenance</h4>
-          <p class="provenance">Loading...</p>
+          <p class="provenance" id="artifact-provenance">Loading...</p>
         </div>
         <div class="lot-details">
           <h4>Lot Information</h4>
           <div class="lot-grid">
             <div class="lot-item">
               <label>Original Lot</label>
-              <a href="#" class="lot-link" target="_blank">View on Christie's</a>
+              <a href="#" class="lot-link" id="christies-link" target="_blank">View on Christie's</a>
             </div>
           </div>
         </div>
@@ -145,19 +137,19 @@ function applyReadMore(element) {
 
     <!-- Tags and Categories -->
     <section class="artwork-metadata">
-     <h3>Categories &amp; Tags</h3>
+     <h3>Categories & Tags</h3>
      <div class="metadata-content">
        <div class="tags-container">
          <h4>Tags</h4>
          <ul class="tags-list">
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'gandharan'); return true;" class="tag-link gallery-tag-link">Gandharan Art</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'tibetan'); return true;" class="tag-link gallery-tag-link">Tibetan Art</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'chinese'); return true;" class="tag-link gallery-tag-link">Chinese Art</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'head'); return true;" class="tag-link gallery-tag-link">Buddha Heads</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'stucco'); return true;" class="tag-link gallery-tag-link">Stucco Works</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'bronze'); return true;" class="tag-link gallery-tag-link">Bronze Works</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'ancient'); return true;" class="tag-link gallery-tag-link">Ancient Period</a></li>
-           <li><a href="/buddha/" onclick="sessionStorage.setItem('autoFilter', 'painting'); return true;" class="tag-link gallery-tag-link">Paintings</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="gandharan">Gandharan Art</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="tibetan">Tibetan Art</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="chinese">Chinese Art</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="head">Buddha Heads</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="stucco">Stucco Works</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="bronze">Bronze Works</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="ancient">Ancient Period</a></li>
+           <li><a href="#" class="tag-link gallery-tag-link" data-filter="painting">Paintings</a></li>
          </ul>
        </div>
        
@@ -166,19 +158,19 @@ function applyReadMore(element) {
          <div class="filters-grid">
            <div class="filter-item">
              <label>Medium</label>
-             <span class="medium-filter">Loading...</span>
+             <span class="medium-filter" id="filter-medium">Loading...</span>
            </div>
            <div class="filter-item">
              <label>Region/Origin</label>
-             <span class="region-filter">Loading...</span>
+             <span class="region-filter" id="filter-region">Loading...</span>
            </div>
            <div class="filter-item">
              <label>Time Period</label>
-             <span class="period-filter">Loading...</span>
+             <span class="period-filter" id="filter-period">Loading...</span>
            </div>
            <div class="filter-item">
              <label>Object Type</label>
-             <span class="type-filter">Loading...</span>
+             <span class="type-filter" id="filter-type">Loading...</span>
            </div>
          </div>
        </div>
@@ -194,7 +186,7 @@ function applyReadMore(element) {
           <p>This artifact has been documented from a reputable auction house with established provenance.</p>
         </div>
         <div class="document-links">
-          <a href="/buddha/page-templates/dt-2.html?sku=LOT-502" class="lot-link template-link" target="_blank">
+          <a href="#" class="lot-link template-link" id="original-listing-link" target="_blank">
             🔗 View Original Christie's Listing
           </a>
         </div>
@@ -205,7 +197,7 @@ function applyReadMore(element) {
     <section class="expert-commentary">
       <div class="curator-profile">
         <div class="profile-image">
-          <img src="/buddha/images/curator-profile.jpg" alt="Curator Profile" id="curator-image" />
+          <img src="#" alt="Curator Profile" id="curator-image" />
         </div>
         <div class="profile-info">
           <h4>Expert Commentary</h4>
@@ -224,7 +216,7 @@ function applyReadMore(element) {
         <p>Preserving and sharing the wisdom of Buddhist art across cultures</p>
       </div>
       <div class="footer-links">
-        <a href="/buddha/" class="footer-gallery-link">Gallery</a>
+        <a href="#" class="footer-gallery-link">Gallery</a>
         <a href="#">About</a>
         <a href="#">Collections</a>
         <a href="#">Research</a>
@@ -247,108 +239,243 @@ function applyReadMore(element) {
     </div>
   </div>
 
+  <!-- Main application script - loads after DOM -->
   <script>
-    // Update all paths when DOM is ready
-    document.addEventListener("DOMContentLoaded", function() {
-      const basePath = window.SITE_BASE_PATH || '';
-      
-      // Update JavaScript bundle path
-      const jsScript = document.getElementById('main-js');
-      if (jsScript) {
-        jsScript.src = `${basePath}/js/bundle.js`;
+    // Improved, reliable data fetching with better error handling
+    class BuddhaDataLoader {
+      constructor() {
+        this.dataCache = null;
+        this.basePath = window.SITE_BASE_PATH || '';
+        this.isGitHub = window.IS_GITHUB || false;
       }
-      
-      // Update gallery navigation link
-      const galleryLink = document.getElementById('gallery-link');
-      if (galleryLink) {
-        galleryLink.href = `${basePath}/`;
-      }
-      
-      // Update all gallery tag links
-      const galleryTagLinks = document.querySelectorAll('.gallery-tag-link');
-      galleryTagLinks.forEach(link => {
-        link.href = `${basePath}/`;
-      });
-      
-      // Update footer gallery link
-      const footerGalleryLink = document.querySelector('.footer-gallery-link');
-      if (footerGalleryLink) {
-        footerGalleryLink.href = `${basePath}/`;
-      }
-      
-      // Update placeholder image
-      const placeholderImage = document.getElementById('placeholder-image');
-      if (placeholderImage) {
-        placeholderImage.src = `${basePath}/images/placeholder.jpg`;
-      }
-      
-      // Update curator image
-      const curatorImage = document.getElementById('curator-image');
-      if (curatorImage) {
-        curatorImage.src = `${basePath}/images/curator-profile.jpg`;
-      }
-      
-      // Update template links (like dt-2.html link)
-      const templateLinks = document.querySelectorAll('.template-link');
-      templateLinks.forEach(link => {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('/buddha/page-templates/')) {
-          link.href = href.replace('/buddha/page-templates/', `${basePath}/page-templates/`);
+
+      async fetchBuddhaData() {
+        if (this.dataCache) {
+          console.log('📦 Using cached data');
+          return this.dataCache;
         }
-      });
-      
-      console.log('All paths updated for environment:', basePath || 'root');
+
+        const possiblePaths = [
+          `${this.basePath}/data/buddha-collection.json`,
+          '/data/buddha-collection.json',
+          './data/buddha-collection.json',
+          '../data/buddha-collection.json'
+        ];
+
+        console.log('🔍 Attempting to load data from multiple paths...');
+        
+        for (const path of possiblePaths) {
+          try {
+            console.log(`  Trying: ${path}`);
+            
+            const response = await fetch(path, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache'
+              }
+            });
+            
+            if (response.ok) {
+              const data = await response.json();
+              console.log(`✅ Successfully loaded data from: ${path}`);
+              console.log(`📊 Loaded ${data.length} items`);
+              
+              this.dataCache = data.filter(item => item.status !== "hide");
+              return this.dataCache;
+            } else {
+              console.log(`❌ ${path} - HTTP ${response.status}: ${response.statusText}`);
+            }
+          } catch (error) {
+            console.log(`❌ ${path} - Error: ${error.message}`);
+          }
+        }
+        
+        throw new Error("Could not load buddha-collection.json from any location");
+      }
+
+      updatePageContent(item) {
+        console.log('🖼️ Updating page content with item:', item.sku);
+        
+        // Update all text content
+        this.safeUpdate('artifact-title', item.title || 'Untitled Artifact');
+        this.safeUpdate('artifact-subtitle', item.subtitle || '');
+        this.safeUpdate('artifact-medium', item.medium || 'Unknown Medium');
+        this.safeUpdate('artifact-medium-detail', item.medium || 'Unknown Medium');
+        this.safeUpdate('artifact-dimensions', item.dimensions || 'Not specified');
+        this.safeUpdate('artifact-estimate', item.estimate || 'Not available');
+        this.safeUpdate('artifact-price', item.price_realized || 'Not available');
+        this.safeUpdate('artifact-provenance', item.provenance || 'Provenance information not available');
+        this.safeUpdate('artifact-sku', item.sku || '');
+        
+        // Update essay with read more functionality
+        const essayElement = document.getElementById('artifact-essay');
+        if (essayElement && item.essay) {
+          essayElement.textContent = item.essay;
+          applyReadMore(essayElement);
+        }
+        
+        // Update images with proper paths
+        this.updateImage('main-image', item.image, item.title || 'Buddhist Artifact');
+        this.updateImage('curator-image', `${this.basePath}/images/curator-profile.jpg`, 'Curator Profile');
+        
+        // Update links
+        this.updateLinks(item);
+        
+        // Update filters
+        this.updateFilters(item);
+        
+        console.log('✅ Page content updated successfully');
+      }
+
+      safeUpdate(elementId, content) {
+        const element = document.getElementById(elementId);
+        if (element) {
+          element.textContent = content;
+        } else {
+          console.warn(`⚠️ Element not found: ${elementId}`);
+        }
+      }
+
+      updateImage(elementId, imagePath, altText) {
+        const element = document.getElementById(elementId);
+        if (element && imagePath) {
+          // Handle both absolute and relative paths
+          const fullPath = imagePath.startsWith('http') ? imagePath : `${this.basePath}${imagePath}`;
+          element.src = fullPath;
+          element.alt = altText;
+          console.log(`🖼️ Updated ${elementId} to: ${fullPath}`);
+        } else if (element) {
+          element.src = `${this.basePath}/images/placeholder.jpg`;
+          element.alt = altText;
+        }
+      }
+
+      updateLinks(item) {
+        // Update gallery links
+        const galleryLinks = document.querySelectorAll('.gallery-tag-link, .nav-gallery, .footer-gallery-link');
+        galleryLinks.forEach(link => {
+          link.href = `${this.basePath}/`;
+          if (link.dataset.filter) {
+            link.onclick = () => {
+              sessionStorage.setItem('autoFilter', link.dataset.filter);
+              return true;
+            };
+          }
+        });
+
+        // Update Christie's link
+        const christiesLink = document.getElementById('christies-link');
+        if (christiesLink && item.lot_link) {
+          christiesLink.href = item.lot_link;
+        }
+
+        // Update original listing link
+        const originalListingLink = document.getElementById('original-listing-link');
+        if (originalListingLink && item.sku) {
+          originalListingLink.href = `${this.basePath}/page-templates/dt-2.html?sku=${item.sku}`;
+        }
+      }
+
+      updateFilters(item) {
+        this.safeUpdate('filter-medium', item.medium || 'Unknown');
+        this.safeUpdate('filter-region', item.region || 'Unknown');
+        this.safeUpdate('filter-period', item.period || 'Unknown');
+        this.safeUpdate('filter-type', item.object_type || 'Unknown');
+      }
+
+      async initializePage() {
+        try {
+          console.log('🚀 Initializing Buddha Museum page...');
+          
+          // Get SKU from URL parameters
+          const params = new URLSearchParams(window.location.search);
+          const sku = params.get("sku");
+          
+          if (!sku) {
+            console.log('⚠️ No SKU parameter found in URL');
+            this.showError('No artifact specified');
+            return;
+          }
+          
+          console.log(`🔍 Loading artifact with SKU: ${sku}`);
+          
+          // Load data
+          const data = await this.fetchBuddhaData();
+          const item = data.find(artifact => artifact.sku === sku);
+          
+          if (!item) {
+            console.log(`❌ Artifact not found: ${sku}`);
+            this.showError(`Artifact "${sku}" not found`);
+            return;
+          }
+          
+          // Update page content
+          this.updatePageContent(item);
+          
+          // Initialize lightbox functionality
+          this.initializeLightbox();
+          
+          console.log('🎉 Page initialization complete!');
+          
+        } catch (error) {
+          console.error('💥 Failed to initialize page:', error);
+          this.showError('Failed to load artifact data');
+        }
+      }
+
+      showError(message) {
+        document.getElementById('artifact-title').textContent = 'Error Loading Artifact';
+        document.getElementById('artifact-subtitle').textContent = message;
+      }
+
+      initializeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.querySelector('.lightbox-image');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const mainImage = document.getElementById('main-image');
+
+        if (mainImage) {
+          mainImage.onclick = () => {
+            lightboxImage.src = mainImage.src;
+            lightbox.classList.add('active');
+          };
+        }
+
+        if (lightboxClose) {
+          lightboxClose.onclick = () => {
+            lightbox.classList.remove('active');
+          };
+        }
+
+        if (lightbox) {
+          lightbox.onclick = (e) => {
+            if (e.target === lightbox) {
+              lightbox.classList.remove('active');
+            }
+          };
+        }
+      }
+    }
+
+    // Initialize when DOM is ready
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log('📄 DOM Content Loaded - Starting initialization...');
+      const loader = new BuddhaDataLoader();
+      loader.initializePage();
     });
+
+    // Fallback initialization with slight delay (for Netlify timing issues)
+    setTimeout(() => {
+      if (document.getElementById('artifact-title').textContent === 'Loading...') {
+        console.log('⏰ Fallback initialization triggered');
+        const loader = new BuddhaDataLoader();
+        loader.initializePage();
+      }
+    }, 1000);
   </script>
 
   <style>
-  
-  .search-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.search-bar input {
-  padding: 0.75rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  width: 300px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.search-bar button {
-  padding: 0.75rem;
-  border: none;
-  background: white;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-.search-bar button:hover {
-  transform: scale(1.05);
-}
-  .tags-list li {
-	display: inline-block;
-	margin-right: 10px;
-	margin-bottom: 5px;
-	background: #8B4513;
-	color: white;
-	padding: 0.25rem 0.75rem;
-	border-radius: 20px;
-	font-size: 0.85rem;
-}
-  
-  .tag-link, .filter-link {
-	color: #fff;
-	text-decoration: none;
-	transition: color 0.3s ease;
-}
-  
     /* Enhanced Professional Styling for Buddha Museum */
     .statue-page {
       font-family: 'Georgia', 'Times New Roman', serif;
@@ -374,473 +501,7 @@ function applyReadMore(element) {
     }
 
     .museum-title {
-font-size: 2rem;
-  font-weight: 300;
-  color: #fff;
-  display: block;
-  margin: 0;
-    margin-left: 0px;
-  width: 300px;
-  margin-left: 50px;
-    }
-
-    .statue-nav {
-      background: white;
-      padding: 1rem 0;
-      border-bottom: 1px solid #e0e0e0;
-      text-align: center;
-    }
-
-    .statue-nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #8B4513;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-
-    .statue-nav a:hover {
-      background-color: #f0f0f0;
-    }
-
-    .artwork-main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .artwork-hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-      background: white;
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .statue-image {
-      width: 100%;
-      height: auto;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    .statue-image:hover {
-      transform: scale(1.02);
-    }
-
-    .statue-title {
-      font-size: 2.5rem;
-      margin: 0 0 0.5rem 0;
-      color: #8B4513;
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-      color: #666;
-      font-style: italic;
-      margin: 0 0 1rem 0;
-    }
-
-    .artwork-meta-basic {
-      color: #888;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
-    }
-
-    .essay {
-      font-size: 1.1rem;
-      line-height: 1.7;
-      color: #444;
-      text-align: justify;
-      margin: 1.5rem 0;
-    }
-
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .detail-item {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .detail-item label {
-      font-weight: bold;
-      color: #8B4513;
-      font-size: 0.9rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .auction-details,
-    .artwork-metadata,
-    .provenance-section {
-      background: white;
-      border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    .auction-details h3,
-    .artwork-metadata h3,
-    .provenance-section h3 {
-      color: #8B4513;
-      border-bottom: 2px solid #e0e0e0;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .auction-details h4 {
-      color: #8B4513;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .provenance {
-      font-size: 1rem;
-      line-height: 1.6;
-      color: #555;
-      margin-bottom: 1.5rem;
-    }
-
-    .lot-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    .lot-item {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .lot-item label {
-      font-weight: bold;
-      color: #666;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .lot-link {
-      color: #8B4513;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .lot-link:hover {
-      text-decoration: underline;
-    }
-
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .filter-item {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .filter-item label {
-      font-weight: bold;
-      color: #666;
-      font-size: 0.85rem;
-      margin-bottom: 0.25rem;
-    }
-
-    .filter-item a {
-      color: #8B4513;
-      text-decoration: none;
-    }
-
-    .filter-item a:hover {
-      text-decoration: underline;
-    }
-
-    .authentication-badge {
-      background: #e8f5e8;
-      border: 1px solid #4caf50;
-      border-radius: 4px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .verified-icon {
-      background: #4caf50;
-      color: white;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-
-    .document-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .document-links .lot-link {
-      background: #8B4513;
-      color: white;
-      padding: 0.75rem 1.5rem;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: background-color 0.3s;
-    }
-
-    .document-links .lot-link:hover {
-      background: #A0522D;
-    }
-
-    .expert-commentary {
-      background: white;
-      border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-
-    .curator-profile {
-      display: flex;
-      gap: 1.5rem;
-      align-items: flex-start;
-    }
-
-    .profile-image img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .profile-info h4 {
-      color: #8B4513;
-      margin-bottom: 0.5rem;
-    }
-
-    .profile-info h5 {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-
-    .profile-info .title {
-      color: #666;
-      font-style: italic;
-      margin: 0.25rem 0 1rem 0;
-    }
-
-    .commentary {
-      font-style: italic;
-      border-left: 3px solid #8B4513;
-      padding-left: 1rem;
-      margin: 0;
-    }
-
-    .site-footer {
-      background: #333;
-      color: white;
-      padding: 2rem 0 1rem 0;
-      margin-top: 3rem;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-    }
-
-    .footer-links a {
-      color: white;
-      text-decoration: none;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 1rem;
-      border-top: 1px solid #555;
-      margin-top: 1rem;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .artwork-hero {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      
-      .details-grid,
-      .filters-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .curator-profile {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .footer-content {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-      
-      .document-links {
-        flex-direction: column;
-      }
-      
-      .statue-nav a {
-        display: block;
-        margin: 0.5rem 0;
-      }
-    }
-
-    /* Lightbox Enhancements */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-    }
-
-    .lightbox.active {
+      font-size: 2rem;
+      font-weight: 300;
+      color: #fff;
       display: block;
-    }
-
-    .lightbox-content {
-      position: relative;
-      margin: 2% auto;
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .lightbox-image {
-      width: 100%;
-      height: auto;
-      display: block;
-      object-fit: contain;
-      max-height: 90vh;
-      border-radius: 8px;
-    }
-
-    .lightbox-close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      color: white;
-      font-size: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 1001;
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: none;
-    }
-	
-	@media (max-width: 480px) {
-  .museum-title {
-    font-size: 1.5rem;
-  }
-}
-  </style>
-	<style>.statue-title {
-	font-size: 1.2rem;
-	margin: 0 0 0.5rem 0;
-	color: #8B4513;
-}
-
-.subtitle {
-	font-size: 1rem;
-	color: #666;
-	font-style: italic;
-	margin: 0 0 1rem 0;
-}</style>
-	<script>
-// Simple JSON data loader for dt-1 (same as dt-2.html has)
-async function fetchBuddhaData() {
-  const paths = [
-    "/buddha/data/buddha-collection.json", // GitHub Pages path
-    "/data/buddha-collection.json"         // Netlify path
-  ];
-  
-  for (const path of paths) {
-    try {
-      console.log(`Trying to fetch from: ${path}`);
-      const response = await fetch(path);
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log(`✅ Successfully loaded data from: ${path}`);
-        return data.filter(item => item.status !== "hide");
-      } else {
-        console.log(`❌ Failed to fetch from ${path} - Status: ${response.status}`);
-      }
-    } catch (error) {
-      console.log(`❌ Error fetching from ${path}:`, error.message);
-    }
-  }
-  
-  throw new Error("Could not load buddha-collection.json from any location");
-}
-
-// Load data when page loads
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const sku = params.get("sku");
-  
-  if (sku) {
-    fetchBuddhaData()
-      .then(data => {
-        const item = data.find(s => s.sku === sku);
-        if (item) {
-          // Update the page content
-          if (item.title) document.querySelector(".statue-title").textContent = item.title;
-          if (item.subtitle) document.querySelector(".subtitle").textContent = item.subtitle;
-          if (item.image) document.querySelector(".statue-image").src = item.image;
-          // Add other fields as needed
-          
-          console.log("✅ Data loaded successfully for dt-1");
-        }
-      })
-      .catch(error => {
-        console.error("Failed to load data:", error);
-      });
-  }
-});
-</script>
-</body>
-</html>
