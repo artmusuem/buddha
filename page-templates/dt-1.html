@@ -48,6 +48,20 @@
         };
     }
   </script>
+
+  <!-- Load bundle.js with correct path - this handles all main functionality -->
+  <script>
+    // Load bundle.js with correct path  
+    (function() {
+      const basePath = window.SITE_BASE_PATH || '';
+      const script = document.createElement('script');
+      script.src = `${basePath}/js/bundle.js`;
+      script.defer = true;
+      script.id = 'bundle-js';
+      document.head.appendChild(script);
+      console.log('📦 Loading bundle.js from:', script.src);
+    })();
+  </script>
 </head>
 
 <body class="statue-page">
@@ -59,15 +73,15 @@
       <div class="search-bar">
         <input type="text" id="searchBox" placeholder="Search Buddhist artifacts..." />
         <button id="searchButton">🔍</button>
-        <div id="searchResults"></div>
+        <div id="searchResults" class="search-results-dropdown"></div>
       </div>
     </div>
   </header>
 
   <nav class="statue-nav">
-    <a href="#" class="nav-prev">← Previous Artifact</a>
+    <a href="#" class="nav-prev" id="prev-link">← Previous Artifact</a>
     <a href="#" class="nav-gallery" id="gallery-link">🏛 Gallery Overview</a>
-    <a href="#" class="nav-next">Next Artifact →</a>
+    <a href="#" class="nav-next" id="next-link">Next Artifact →</a>
   </nav>
 
   <main class="artwork-main">
@@ -241,238 +255,58 @@
 
   <!-- Main application script - loads after DOM -->
   <script>
-    // Improved, reliable data fetching with better error handling
-    class BuddhaDataLoader {
-      constructor() {
-        this.dataCache = null;
-        this.basePath = window.SITE_BASE_PATH || '';
-        this.isGitHub = window.IS_GITHUB || false;
+    // Simple initialization - main functionality is in bundle.js
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log('📄 Template loaded, waiting for bundle.js...');
+      
+      // Ensure bundle.js paths are updated correctly
+      const basePath = window.SITE_BASE_PATH || '';
+      
+      // Update gallery navigation link
+      const galleryLink = document.getElementById('gallery-link');
+      if (galleryLink) {
+        galleryLink.href = `${basePath}/`;
       }
-
-      async fetchBuddhaData() {
-        if (this.dataCache) {
-          console.log('📦 Using cached data');
-          return this.dataCache;
-        }
-
-        const possiblePaths = [
-          `${this.basePath}/data/buddha-collection.json`,
-          '/data/buddha-collection.json',
-          './data/buddha-collection.json',
-          '../data/buddha-collection.json'
-        ];
-
-        console.log('🔍 Attempting to load data from multiple paths...');
-        
-        for (const path of possiblePaths) {
-          try {
-            console.log(`  Trying: ${path}`);
-            
-            const response = await fetch(path, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Cache-Control': 'no-cache'
-              }
-            });
-            
-            if (response.ok) {
-              const data = await response.json();
-              console.log(`✅ Successfully loaded data from: ${path}`);
-              console.log(`📊 Loaded ${data.length} items`);
-              
-              this.dataCache = data.filter(item => item.status !== "hide");
-              return this.dataCache;
-            } else {
-              console.log(`❌ ${path} - HTTP ${response.status}: ${response.statusText}`);
-            }
-          } catch (error) {
-            console.log(`❌ ${path} - Error: ${error.message}`);
-          }
-        }
-        
-        throw new Error("Could not load buddha-collection.json from any location");
+      
+      // Update all gallery tag links
+      const galleryTagLinks = document.querySelectorAll('.gallery-tag-link');
+      galleryTagLinks.forEach(link => {
+        link.href = `${basePath}/`;
+      });
+      
+      // Update footer gallery link
+      const footerGalleryLink = document.querySelector('.footer-gallery-link');
+      if (footerGalleryLink) {
+        footerGalleryLink.href = `${basePath}/`;
       }
-
-      updatePageContent(item) {
-        console.log('🖼️ Updating page content with item:', item.sku);
-        
-        // Update all text content
-        this.safeUpdate('artifact-title', item.title || 'Untitled Artifact');
-        this.safeUpdate('artifact-subtitle', item.subtitle || '');
-        this.safeUpdate('artifact-medium', item.medium || 'Unknown Medium');
-        this.safeUpdate('artifact-medium-detail', item.medium || 'Unknown Medium');
-        this.safeUpdate('artifact-dimensions', item.dimensions || 'Not specified');
-        this.safeUpdate('artifact-estimate', item.estimate || 'Not available');
-        this.safeUpdate('artifact-price', item.price_realized || 'Not available');
-        this.safeUpdate('artifact-provenance', item.provenance || 'Provenance information not available');
-        this.safeUpdate('artifact-sku', item.sku || '');
-        
-        // Update essay with read more functionality
-        const essayElement = document.getElementById('artifact-essay');
-        if (essayElement && item.essay) {
-          essayElement.textContent = item.essay;
-          applyReadMore(essayElement);
-        }
-        
-        // Update images with proper paths
-        this.updateImage('main-image', item.image, item.title || 'Buddhist Artifact');
-        this.updateImage('curator-image', `${this.basePath}/images/curator-profile.jpg`, 'Curator Profile');
-        
-        // Update links
-        this.updateLinks(item);
-        
-        // Update filters
-        this.updateFilters(item);
-        
-        console.log('✅ Page content updated successfully');
+      
+      // Update placeholder image
+      const mainImage = document.getElementById('main-image');
+      if (mainImage && mainImage.src === '#') {
+        mainImage.src = `${basePath}/images/placeholder.jpg`;
       }
-
-      safeUpdate(elementId, content) {
-        const element = document.getElementById(elementId);
-        if (element) {
-          element.textContent = content;
-        } else {
-          console.warn(`⚠️ Element not found: ${elementId}`);
-        }
+      
+      // Update curator image
+      const curatorImage = document.getElementById('curator-image');
+      if (curatorImage && curatorImage.src === '#') {
+        curatorImage.src = `${basePath}/images/curator-profile.jpg`;
       }
-
-      updateImage(elementId, imagePath, altText) {
-        const element = document.getElementById(elementId);
-        if (element && imagePath) {
-          // Handle both absolute and relative paths
-          const fullPath = imagePath.startsWith('http') ? imagePath : `${this.basePath}${imagePath}`;
-          element.src = fullPath;
-          element.alt = altText;
-          console.log(`🖼️ Updated ${elementId} to: ${fullPath}`);
-        } else if (element) {
-          element.src = `${this.basePath}/images/placeholder.jpg`;
-          element.alt = altText;
-        }
-      }
-
-      updateLinks(item) {
-        // Update gallery links
-        const galleryLinks = document.querySelectorAll('.gallery-tag-link, .nav-gallery, .footer-gallery-link');
-        galleryLinks.forEach(link => {
-          link.href = `${this.basePath}/`;
-          if (link.dataset.filter) {
-            link.onclick = () => {
-              sessionStorage.setItem('autoFilter', link.dataset.filter);
-              return true;
-            };
-          }
-        });
-
-        // Update Christie's link
-        const christiesLink = document.getElementById('christies-link');
-        if (christiesLink && item.lot_link) {
-          christiesLink.href = item.lot_link;
-        }
-
-        // Update original listing link
-        const originalListingLink = document.getElementById('original-listing-link');
-        if (originalListingLink && item.sku) {
-          originalListingLink.href = `${this.basePath}/page-templates/dt-2.html?sku=${item.sku}`;
-        }
-      }
-
-      updateFilters(item) {
-        this.safeUpdate('filter-medium', item.medium || 'Unknown');
-        this.safeUpdate('filter-region', item.region || 'Unknown');
-        this.safeUpdate('filter-period', item.period || 'Unknown');
-        this.safeUpdate('filter-type', item.object_type || 'Unknown');
-      }
-
-      async initializePage() {
-        try {
-          console.log('🚀 Initializing Buddha Museum page...');
-          
-          // Get SKU from URL parameters
+      
+      // Update template links (like dt-2.html link)
+      const templateLinks = document.querySelectorAll('.template-link');
+      templateLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
           const params = new URLSearchParams(window.location.search);
           const sku = params.get("sku");
-          
-          if (!sku) {
-            console.log('⚠️ No SKU parameter found in URL');
-            this.showError('No artifact specified');
-            return;
+          if (sku) {
+            link.href = `${basePath}/page-templates/dt-2.html?sku=${sku}`;
           }
-          
-          console.log(`🔍 Loading artifact with SKU: ${sku}`);
-          
-          // Load data
-          const data = await this.fetchBuddhaData();
-          const item = data.find(artifact => artifact.sku === sku);
-          
-          if (!item) {
-            console.log(`❌ Artifact not found: ${sku}`);
-            this.showError(`Artifact "${sku}" not found`);
-            return;
-          }
-          
-          // Update page content
-          this.updatePageContent(item);
-          
-          // Initialize lightbox functionality
-          this.initializeLightbox();
-          
-          console.log('🎉 Page initialization complete!');
-          
-        } catch (error) {
-          console.error('💥 Failed to initialize page:', error);
-          this.showError('Failed to load artifact data');
         }
-      }
-
-      showError(message) {
-        document.getElementById('artifact-title').textContent = 'Error Loading Artifact';
-        document.getElementById('artifact-subtitle').textContent = message;
-      }
-
-      initializeLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImage = document.querySelector('.lightbox-image');
-        const lightboxClose = document.querySelector('.lightbox-close');
-        const mainImage = document.getElementById('main-image');
-
-        if (mainImage) {
-          mainImage.onclick = () => {
-            lightboxImage.src = mainImage.src;
-            lightbox.classList.add('active');
-          };
-        }
-
-        if (lightboxClose) {
-          lightboxClose.onclick = () => {
-            lightbox.classList.remove('active');
-          };
-        }
-
-        if (lightbox) {
-          lightbox.onclick = (e) => {
-            if (e.target === lightbox) {
-              lightbox.classList.remove('active');
-            }
-          };
-        }
-      }
-    }
-
-    // Initialize when DOM is ready
-    document.addEventListener("DOMContentLoaded", () => {
-      console.log('📄 DOM Content Loaded - Starting initialization...');
-      const loader = new BuddhaDataLoader();
-      loader.initializePage();
+      });
+      
+      console.log('✅ Template paths updated, bundle.js will handle the rest');
     });
-
-    // Fallback initialization with slight delay (for Netlify timing issues)
-    setTimeout(() => {
-      if (document.getElementById('artifact-title').textContent === 'Loading...') {
-        console.log('⏰ Fallback initialization triggered');
-        const loader = new BuddhaDataLoader();
-        loader.initializePage();
-      }
-    }, 1000);
   </script>
 
   <style>
@@ -547,10 +381,219 @@
       line-height: 1.2;
     }
 
+    .search-results-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .search-results-header {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      background: #f8f9fa;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .search-view-all a {
+      color: #8B4513;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .search-result-item {
+      display: flex;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .search-result-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .search-result-image {
+      width: 60px;
+      height: 60px;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .search-result-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .search-result-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .search-result-info h4 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1rem;
+      color: #8B4513;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .search-result-subtitle {
+      margin: 0 0 0.25rem 0;
+      font-size: 0.85rem;
+      color: #666;
+      font-style: italic;
+      line-height: 1.2;
+    }
+
+    .search-result-meta {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #888;
+      line-height: 1.2;
+    }
+
+    .search-no-results {
+      padding: 2rem;
+      text-align: center;
+      color: #666;
+    }
+
+    .search-no-results p {
+      margin: 0;
+      font-style: italic;
+    }
+
     .search-bar {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      position: relative;
+    }
+
+    #searchResults {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      margin-top: 4px;
+    }
+
+    .search-results-header {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      background: #f8f9fa;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .search-view-all a {
+      color: #8B4513;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .search-result-item {
+      display: flex;
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .search-result-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .search-result-image {
+      width: 60px;
+      height: 60px;
+      margin-right: 1rem;
+      flex-shrink: 0;
+    }
+
+    .search-result-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .search-result-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .search-result-info h4 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1rem;
+      color: #8B4513;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .search-result-subtitle {
+      margin: 0 0 0.25rem 0;
+      font-size: 0.85rem;
+      color: #666;
+      font-style: italic;
+      line-height: 1.2;
+    }
+
+    .search-result-meta {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #888;
+      line-height: 1.2;
+    }
+
+    .search-no-results {
+      padding: 2rem;
+      text-align: center;
+      color: #666;
+    }
+
+    .search-no-results p {
+      margin: 0;
+      font-style: italic;
     }
 
     .search-bar input {
@@ -590,11 +633,19 @@
       color: #8B4513;
       padding: 0.5rem 1rem;
       border-radius: 4px;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, opacity 0.3s;
     }
 
     .statue-nav a:hover {
       background-color: #f0f0f0;
+    }
+
+    .statue-nav a[style*="opacity: 0.5"] {
+      cursor: not-allowed;
+    }
+
+    .statue-nav a[style*="opacity: 0.5"]:hover {
+      background-color: transparent;
     }
 
     .artwork-main {
@@ -1006,11 +1057,39 @@
         display: block;
         margin: 0.5rem 0;
       }
+
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .search-bar input {
+        width: 250px;
+      }
+
+      .museum-title {
+        margin-left: 0;
+        text-align: center;
+      }
     }
 
     @media (max-width: 480px) {
       .museum-title {
         font-size: 1.5rem;
+      }
+
+      .search-bar input {
+        width: 200px;
+      }
+
+      .search-result-item {
+        padding: 0.75rem;
+      }
+
+      .search-result-image {
+        width: 50px;
+        height: 50px;
+        margin-right: 0.75rem;
       }
     }
   </style>
