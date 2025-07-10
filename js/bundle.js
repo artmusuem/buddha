@@ -1,8 +1,8 @@
-// File: /buddha/js/bundle.js (Buddha Museum - Christie's Auction Data Version)
-// Updated with cross-platform path handling for GitHub Pages and Netlify
+// File: /buddha/js/bundle.js (Buddha Museum - Complete Fixed Version)
+// Updated with reliable navigation, real-time search, and cross-platform compatibility
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("bundle.js loaded on:", window.location.href);
+  console.log("🚀 Bundle.js loaded on:", window.location.href);
 
   // === Environment Detection & Path Utilities ===
   
@@ -10,30 +10,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const isGitHub = window.location.hostname.includes('github.io');
   const basePath = isGitHub ? '/buddha' : '';
   
-  console.log(`Environment detected: ${isGitHub ? 'GitHub Pages' : 'Netlify'}`);
-  console.log(`Base path: "${basePath}"`);
+  console.log(`🌍 Environment detected: ${isGitHub ? 'GitHub Pages' : 'Netlify'}`);
+  console.log(`📁 Base path: "${basePath}"`);
   
-  // Smart data loader with fallback
+  // Store globally for access across functions
+  window.SITE_BASE_PATH = basePath;
+  window.IS_GITHUB = isGitHub;
+  
+  // Enhanced data loader with multiple fallback paths and better error handling
   async function fetchBuddhaData() {
-    const paths = [
-      "/buddha/data/buddha-collection.json", // GitHub Pages path
-      "/data/buddha-collection.json"         // Netlify path
+    const possiblePaths = [
+      `${basePath}/data/buddha-collection.json`,  // Primary path
+      "/data/buddha-collection.json",             // Netlify fallback
+      "./data/buddha-collection.json",            // Relative fallback
+      "../data/buddha-collection.json"            // Parent directory fallback
     ];
     
-    for (const path of paths) {
+    console.log('🔍 Attempting to load data from multiple paths...');
+    
+    for (const path of possiblePaths) {
       try {
-        console.log(`Trying to fetch from: ${path}`);
-        const response = await fetch(path);
+        console.log(`  Trying: ${path}`);
+        const response = await fetch(path, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
+          }
+        });
         
         if (response.ok) {
           const data = await response.json();
           console.log(`✅ Successfully loaded data from: ${path}`);
-          return data.filter(item => item.status !== "hide"); // Apply filter here
+          console.log(`📊 Loaded ${data.length} items`);
+          return data.filter(item => item.status !== "hide");
         } else {
-          console.log(`❌ Failed to fetch from ${path} - Status: ${response.status}`);
+          console.log(`❌ ${path} - HTTP ${response.status}: ${response.statusText}`);
         }
       } catch (error) {
-        console.log(`❌ Error fetching from ${path}:`, error.message);
+        console.log(`❌ ${path} - Error: ${error.message}`);
       }
     }
     
@@ -49,7 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${basePath}/page-templates/${templatePage}?sku=${sku}`;
   }
 
-  // === Grab common DOM elements across all pages ===
+  // === Global Data Cache ===
+  let globalDataCache = null;
+  let currentArtifactData = null;
+
+  // === DOM Elements ===
   const urlParams = new URLSearchParams(window.location.search);
   const sku = urlParams.get("sku")?.toUpperCase();
 
@@ -61,11 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearBtnContainer = document.getElementById("clear-filters");
 
   // === Utility Functions ===
-
-  // Fetch data and filter out hidden items (now uses smart loader)
-  function fetchFilteredData() {
-    return fetchBuddhaData(); // Filter is already applied in fetchBuddhaData
-  }
 
   // Check if a field value is valid (not "hide" or undefined/null)
   function shouldShowField(value) {
@@ -104,7 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (item.subtitle) {
       const subtitle = item.subtitle.toLowerCase();
       if (subtitle.includes('century')) {
-        // Use word boundaries to match exact centuries
         if (/\b(4th|5th|6th)\b/.test(subtitle)) {
           categories.period.push('ancient');
         } else if (/\b(7th|8th|9th)\b/.test(subtitle)) {
@@ -137,16 +150,169 @@ document.addEventListener("DOMContentLoaded", () => {
     return categories;
   }
 
-  // Render gallery tiles dynamically from provided items
+  // === Navigation System ===
+  function setupNavigation(allArtifacts, currentItem) {
+    if (!navPrev || !navNext || !currentItem || !allArtifacts.length) {
+      console.log('⚠️ Navigation setup skipped - missing elements or data');
+      return;
+    }
+
+    const currentIndex = allArtifacts.findIndex(item => item.sku === currentItem.sku);
+    if (currentIndex === -1) {
+      console.log('⚠️ Current artifact not found in collection');
+      return;
+    }
+
+    // Setup previous link
+    if (currentIndex > 0) {
+      const prevArtifact = allArtifacts[currentIndex - 1];
+      navPrev.href = getTemplateUrl('dt-1.html', prevArtifact.sku);
+      navPrev.style.opacity = '1';
+      navPrev.style.pointerEvents = 'auto';
+      navPrev.title = `Previous: ${prevArtifact.title || 'Untitled'}`;
+      navPrev.textContent = '← Previous Artifact';
+    } else {
+      navPrev.href = '#';
+      navPrev.style.opacity = '0.5';
+      navPrev.style.pointerEvents = 'none';
+      navPrev.title = 'No previous artifact';
+      navPrev.textContent = '← Previous Artifact';
+    }
+
+    // Setup next link
+    if (currentIndex < allArtifacts.length - 1) {
+      const nextArtifact = allArtifacts[currentIndex + 1];
+      navNext.href = getTemplateUrl('dt-1.html', nextArtifact.sku);
+      navNext.style.opacity = '1';
+      navNext.style.pointerEvents = 'auto';
+      navNext.title = `Next: ${nextArtifact.title || 'Untitled'}`;
+      navNext.textContent = 'Next Artifact →';
+    } else {
+      navNext.href = '#';
+      navNext.style.opacity = '0.5';
+      navNext.style.pointerEvents = 'none';
+      navNext.title = 'No next artifact';
+      navNext.textContent = 'Next Artifact →';
+    }
+
+    console.log(`🧭 Navigation setup complete: ${currentIndex + 1} of ${allArtifacts.length}`);
+  }
+
+  // === Search System ===
+  function setupSearch(allArtifacts) {
+    const searchBox = document.getElementById('searchBox');
+    const searchButton = document.getElementById('searchButton');
+    const searchResults = document.getElementById('searchResults');
+
+    if (!searchBox || !searchButton) {
+      console.log('⚠️ Search elements not found');
+      return;
+    }
+
+    let searchTimeout;
+
+    const performSearch = () => {
+      const query = searchBox.value.trim().toLowerCase();
+      
+      if (query.length < 2) {
+        if (searchResults) {
+          searchResults.style.display = 'none';
+        }
+        return;
+      }
+
+      if (!allArtifacts || !allArtifacts.length) {
+        console.warn('⚠️ No artifacts data for search');
+        return;
+      }
+
+      const results = allArtifacts.filter(item => {
+        return (item.title && item.title.toLowerCase().includes(query)) ||
+               (item.subtitle && item.subtitle.toLowerCase().includes(query)) ||
+               (item.medium && item.medium.toLowerCase().includes(query)) ||
+               (item.region && item.region.toLowerCase().includes(query)) ||
+               (item.period && item.period.toLowerCase().includes(query)) ||
+               (item.essay && item.essay.toLowerCase().includes(query));
+      });
+
+      displaySearchResults(results, query);
+    };
+
+    // Real-time search as user types
+    searchBox.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(performSearch, 300);
+    });
+
+    // Search on button click
+    searchButton.addEventListener('click', performSearch);
+
+    // Search on Enter key
+    searchBox.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        performSearch();
+      }
+    });
+
+    // Hide results when clicking outside
+    document.addEventListener('click', (e) => {
+      if (searchResults && !searchBox.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.style.display = 'none';
+      }
+    });
+
+    console.log('🔍 Search functionality initialized');
+  }
+
+  function displaySearchResults(results, query) {
+    const searchResults = document.getElementById('searchResults');
+    
+    if (!searchResults) return;
+    
+    if (results.length === 0) {
+      searchResults.innerHTML = `
+        <div class="search-no-results">
+          <p>No artifacts found for "${query}"</p>
+        </div>
+      `;
+      searchResults.style.display = 'block';
+      return;
+    }
+
+    const resultsHtml = results.slice(0, 8).map(item => `
+      <div class="search-result-item" onclick="window.location.href='${getTemplateUrl('dt-1.html', item.sku)}'">
+        <div class="search-result-image">
+          <img src="${item.image ? (item.image.startsWith('http') ? item.image : basePath + item.image) : basePath + '/images/placeholder.jpg'}" 
+               alt="${item.title || 'Artifact'}" />
+        </div>
+        <div class="search-result-info">
+          <h4>${item.title || 'Untitled Artifact'}</h4>
+          <p class="search-result-subtitle">${item.subtitle || ''}</p>
+          <p class="search-result-meta">${item.medium || ''} • ${item.period || ''}</p>
+        </div>
+      </div>
+    `).join('');
+
+    searchResults.innerHTML = `
+      <div class="search-results-header">
+        <span>Found ${results.length} artifact${results.length !== 1 ? 's' : ''}</span>
+        ${results.length > 8 ? `<span class="search-view-all">View all in <a href="${getPageUrl('/')}?search=${encodeURIComponent(query)}">Gallery</a></span>` : ''}
+      </div>
+      ${resultsHtml}
+    `;
+    
+    searchResults.style.display = 'block';
+  }
+
+  // === Gallery System ===
   function loadGallery(items) {
     if (!gallery) return;
     gallery.innerHTML = '';
 
     if (!items.length) {
       gallery.innerHTML = "<p>No results found.</p>";
-      // Update stats for no results
       if (window.updateGalleryStats) {
-        window.updateGalleryStats(window.fullData ? window.fullData.length : 0, 0);
+        window.updateGalleryStats(globalDataCache ? globalDataCache.length : 0, 0);
       }
       return;
     }
@@ -155,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const div = document.createElement("div");
       div.className = "gallery-item";
       const templatePage = item["template-page"] || "dt-1.html";
-      const link = getTemplateUrl(templatePage, item.sku); // Use environment-aware URL
+      const link = getTemplateUrl(templatePage, item.sku);
       const titleHTML = item.title ? `<h3>${item.title}</h3>` : '';
       const subtitleHTML = item.subtitle ? `<p class="subtitle">${item.subtitle}</p>` : '';
       
@@ -169,9 +335,8 @@ document.addEventListener("DOMContentLoaded", () => {
       gallery.appendChild(div);
     });
 
-    // Update gallery stats
-    if (window.updateGalleryStats && window.fullData) {
-      window.updateGalleryStats(window.fullData.length, items.length);
+    if (window.updateGalleryStats && globalDataCache) {
+      window.updateGalleryStats(globalDataCache.length, items.length);
     }
   }
 
@@ -222,20 +387,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Allow menu filters to trigger gallery filtering
   window.filterGallery = function (category) {
     if (!category) {
-      title.textContent = "All Buddhist Art";
-      clearBtnContainer.style.display = "none";
-      loadGallery(window.fullData);
+      if (title) title.textContent = "All Buddhist Art";
+      if (clearBtnContainer) clearBtnContainer.style.display = "none";
+      loadGallery(globalDataCache || []);
       return;
     }
 
     const displayLabel = labelMap[category] || category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    title.textContent = displayLabel;
-    clearBtnContainer.style.display = "block";
+    if (title) title.textContent = displayLabel;
+    if (clearBtnContainer) clearBtnContainer.style.display = "block";
 
-    const filtered = window.fullData.filter(item => {
+    const filtered = (globalDataCache || []).filter(item => {
       const categories = extractCategories(item);
-      
-      // Check if the category matches any extracted categories
       return Object.values(categories).some(catArray => 
         catArray.includes(category.toLowerCase())
       );
@@ -246,14 +409,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // === Detail Pages (dt-1.html / dt-2.html) Rendering ===
   if (window.location.pathname.includes("dt-1.html") || window.location.pathname.includes("dt-2.html")) {
-    fetchFilteredData() // Using new smart loader
+    console.log('📄 Detail page detected, loading artifact data...');
+    
+    fetchBuddhaData()
       .then(data => {
+        globalDataCache = data;
         const item = data.find(i => i.sku === sku);
-        if (!item) return;
+        
+        if (!item) {
+          console.log(`❌ Artifact not found: ${sku}`);
+          return;
+        }
 
-        // First, update the updateText function to handle multiple elements
+        currentArtifactData = item;
+        console.log('🖼️ Loading artifact:', item.sku, '-', item.title);
+
+        // Update text content safely
         const updateText = (selector, value) => {
-          const elements = document.querySelectorAll(selector); // Changed from querySelector
+          const elements = document.querySelectorAll(selector);
           elements.forEach(el => {
             if (shouldShowField(value)) {
               el.textContent = value;
@@ -272,9 +445,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const values = categories[categoryType];
             
             if (values && values.length > 0) {
-              const value = values[0]; // Use first matching category
+              const value = values[0];
               const displayLabel = labelMap[value] || value.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-              const homeUrl = getPageUrl('/'); // Use environment-aware URL
+              const homeUrl = getPageUrl('/');
               el.innerHTML = `<a href="${homeUrl}" onclick="sessionStorage.setItem('autoFilter', '${value}'); return true;" class="filter-link">${displayLabel}</a>`;
               el.style.display = "";
             } else {
@@ -283,7 +456,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         };
 
-        // Then your existing calls will work for all elements:
         // Populate Christie's auction data fields
         updateText(".statue-title", item.title);
         updateText(".subtitle", item.subtitle);
@@ -291,14 +463,15 @@ document.addEventListener("DOMContentLoaded", () => {
         updateText(".estimate", item.estimate);
         updateText(".price-realized", item.price_realized);
         updateText(".dimensions", item.dimensions);
-        updateText(".medium", item.medium);  // This will now update ALL .medium elements
+        updateText(".medium", item.medium);
         updateText(".provenance", item.provenance);
         updateText(".essay", item.essay);
-        updateText(".essay", item.essay);
-// Only call if function exists
-if (typeof applyReadMore === 'function') {
-  applyReadMore(document.querySelector('.essay'));
-}
+
+        // Apply read more functionality if available
+        const essayElement = document.querySelector('.essay');
+        if (essayElement && typeof applyReadMore === 'function') {
+          applyReadMore(essayElement);
+        }
 
         // Create filter links based on extracted categories
         updateFilterLink(".medium-filter", "medium");
@@ -313,7 +486,7 @@ if (typeof applyReadMore === 'function') {
           } else {
             sessionStorage.removeItem('autoFilter');
           }
-          window.location.href = getPageUrl('/'); // Use environment-aware URL
+          window.location.href = getPageUrl('/');
         };
 
         // Set main image
@@ -333,128 +506,27 @@ if (typeof applyReadMore === 'function') {
           lotLink.style.display = "none";
         }
 
-        // === Simple Numeric Navigation - Buddha Site ===
-        // Goes in numerical order regardless of prefix, wraps around
+        // Setup navigation
+        setupNavigation(data, item);
 
-        // Get current SKU from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const currentSku = urlParams.get("sku");
+        // Setup search functionality
+        setupSearch(data);
 
-        // Get navigation elements
-        const navPrev = document.querySelector(".nav-prev");
-        const navNext = document.querySelector(".nav-next");
-
-        if (currentSku && navPrev && navNext) {
-          // Extract just the number from any SKU format
-          function getNumber(sku) {
-            const match = sku.match(/(\d+)/);
-            return match ? parseInt(match[0], 10) : 0;
-          }
-          
-          // Extract prefix from SKU (everything before the number)
-          function getPrefix(sku) {
-            const match = sku.match(/^(.*?)(\d+)/);
-            return match ? match[1] : '';
-          }
-          
-          // Create SKU with same prefix but different number
-          function makeSku(prefix, number) {
-            // Pad with zeros to match original length
-            const originalMatch = currentSku.match(/(\d+)/);
-            if (originalMatch) {
-              const originalLength = originalMatch[0].length;
-              const paddedNumber = number.toString().padStart(originalLength, '0');
-              return prefix + paddedNumber;
-            }
-            return prefix + number;
-          }
-          
-          // Get current number and prefix
-          const currentNumber = getNumber(currentSku);
-          const prefix = getPrefix(currentSku);
-          
-          console.log("Current SKU:", currentSku);
-          console.log("Current number:", currentNumber);
-          console.log("Prefix:", prefix);
-          
-          // Load data to find min/max numbers
-          fetchBuddhaData() // Using new smart loader
-            .then(data => {
-              // Get all numbers from SKUs with same prefix
-              const numbers = data
-                .filter(item => item.sku && getPrefix(item.sku) === prefix)
-                .map(item => getNumber(item.sku))
-                .filter(num => num > 0)
-                .sort((a, b) => a - b);
-              
-              if (numbers.length === 0) {
-                console.log("No valid numbers found");
-                return;
-              }
-              
-              const minNumber = Math.min(...numbers);
-              const maxNumber = Math.max(...numbers);
-              
-              console.log("Available numbers:", numbers);
-              console.log("Range:", minNumber, "to", maxNumber);
-              
-              // Find current position in the sorted array
-              const currentIndex = numbers.indexOf(currentNumber);
-              
-              let prevNumber, nextNumber;
-              
-              if (currentIndex === -1) {
-                // Current number not found, use first as fallback
-                prevNumber = maxNumber; // wrap to end
-                nextNumber = minNumber; // wrap to start
-              } else {
-                // Calculate prev/next with wrapping
-                const prevIndex = currentIndex === 0 ? numbers.length - 1 : currentIndex - 1;
-                const nextIndex = currentIndex === numbers.length - 1 ? 0 : currentIndex + 1;
-                
-                prevNumber = numbers[prevIndex];
-                nextNumber = numbers[nextIndex];
-              }
-              
-              // Create navigation SKUs
-              const prevSku = makeSku(prefix, prevNumber);
-              const nextSku = makeSku(prefix, nextNumber);
-              
-              console.log("Previous SKU:", prevSku);
-              console.log("Next SKU:", nextSku);
-              
-              // Set navigation links (environment-aware paths)
-              navPrev.href = getTemplateUrl('dt-1.html', prevSku);
-              navNext.href = getTemplateUrl('dt-1.html', nextSku);
-              
-              console.log("Buddha navigation set successfully!");
-            })
-            .catch(error => {
-              console.error("Error loading Buddha data:", error);
-              
-              // Fallback: simple +1/-1 navigation
-              const prevNumber = currentNumber === 1 ? 999 : currentNumber - 1;
-              const nextNumber = currentNumber + 1;
-              
-              const prevSku = makeSku(prefix, prevNumber);
-              const nextSku = makeSku(prefix, nextNumber);
-              
-              navPrev.href = getTemplateUrl('dt-1.html', prevSku);
-              navNext.href = getTemplateUrl('dt-1.html', nextSku);
-              
-              console.log("Using fallback Buddha navigation");
-            });
-        }
+        console.log('✅ Detail page setup complete');
+      })
+      .catch(error => {
+        console.error('💥 Error loading detail page data:', error);
       });
   }
 
   // === Index Gallery Page ===
-  if (window.location.pathname.includes("/")) {
-    console.log("✅ Index page detected, starting menu creation...");
+  if (window.location.pathname === "/" || window.location.pathname === "/index.html" || window.location.pathname.endsWith("/buddha/") || window.location.pathname.endsWith("/buddha/index.html")) {
+    console.log("✅ Index page detected, starting gallery setup...");
     
-    fetchFilteredData() // Using new smart loader
+    fetchBuddhaData()
       .then(data => {
-        console.log("✅ Data loaded:", data.length, "items");
+        globalDataCache = data;
+        console.log("✅ Gallery data loaded:", data.length, "items");
         
         const categories = { 
           medium: new Set(), 
@@ -476,44 +548,40 @@ if (typeof applyReadMore === 'function') {
         console.log("✅ Categories collected:", categories);
 
         const menu = document.getElementById("dynamic-menu");
-        if (!menu) {
-          console.error("❌ Menu element not found!");
-          return;
+        if (menu) {
+          menu.innerHTML = '';
+
+          // Create menu sections
+          for (const [type, values] of Object.entries(categories)) {
+            if (values.size === 0) continue;
+
+            const group = document.createElement("li");
+            
+            const menuLabels = {
+              'medium': 'Medium',
+              'region': 'Region/Origin', 
+              'period': 'Time Period',
+              'type': 'Object Type'
+            };
+            
+            const label = menuLabels[type] || type.charAt(0).toUpperCase() + type.slice(1);
+            
+            group.innerHTML = `
+              <details>
+                <summary>${label}</summary>
+                <ul>
+                  ${[...values].sort().map(v => {
+                    const displayLabel = labelMap[v] || v.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    return `<li><a href="#" onclick="filterGallery('${v}'); return false;">${displayLabel}</a></li>`;
+                  }).join('')}
+                </ul>
+              </details>
+            `;
+            menu.appendChild(group);
+          }
+
+          console.log("✅ Menu creation completed!");
         }
-
-        // Clear any existing content
-        menu.innerHTML = '';
-
-        // Create menu sections
-        for (const [type, values] of Object.entries(categories)) {
-          if (values.size === 0) continue;
-
-          const group = document.createElement("li");
-          
-          const menuLabels = {
-            'medium': 'Medium',
-            'region': 'Region/Origin', 
-            'period': 'Time Period',
-            'type': 'Object Type'
-          };
-          
-          const label = menuLabels[type] || type.charAt(0).toUpperCase() + type.slice(1);
-          
-          group.innerHTML = `
-            <details>
-              <summary>${label}</summary>
-              <ul>
-                ${[...values].sort().map(v => {
-                  const displayLabel = labelMap[v] || v.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                  return `<li><a href="#" onclick="filterGallery('${v}'); return false;">${displayLabel}</a></li>`;
-                }).join('')}
-              </ul>
-            </details>
-          `;
-          menu.appendChild(group);
-        }
-
-        console.log("✅ Menu creation completed!");
         
         // Add sidebar toggle functionality
         const sidebar = document.getElementById("sidebar");
@@ -534,13 +602,14 @@ if (typeof applyReadMore === 'function') {
 
         // Close sidebar when clicking outside
         document.addEventListener("click", (e) => {
-          if (sidebar && !sidebar.contains(e.target) && !toggleButton.contains(e.target)) {
+          if (sidebar && !sidebar.contains(e.target) && toggleButton && !toggleButton.contains(e.target)) {
             sidebar.classList.remove("open");
           }
         });
 
-        window.fullData = data;
-        
+        // Setup search functionality
+        setupSearch(data);
+
         // Check for pending auto-filter
         const pendingFilter = window.pendingAutoFilter;
         if (pendingFilter) {
@@ -548,7 +617,6 @@ if (typeof applyReadMore === 'function') {
           window.pendingAutoFilter = null;
           window.filterGallery(pendingFilter);
           
-          // Show gallery after filter is applied
           setTimeout(() => {
             const gallery = document.getElementById("gallery");
             if (gallery) gallery.style.visibility = "visible";
@@ -558,35 +626,17 @@ if (typeof applyReadMore === 'function') {
         }
       })
       .catch(error => {
-        console.error("❌ Error loading data:", error);
+        console.error("❌ Error loading gallery data:", error);
       });
   }
 
   // === Search Results Page ===
-  const searchInput = document.getElementById("searchBox");
-  const searchButton = document.getElementById("searchButton");
   const resultsContainer = document.getElementById("resultsContainer");
-
-  const performSearch = (query) => {
-    query = query?.trim();
-    if (!query) return;
-    const searchUrl = getPageUrl('/search-results.html'); // Use environment-aware URL
-    window.location.href = `${searchUrl}?q=${encodeURIComponent(query)}`;
-  };
-
-  if (searchInput && searchButton) {
-    searchInput.addEventListener("keypress", e => {
-      if (e.key === "Enter") performSearch(searchInput.value);
-    });
-    searchButton.addEventListener("click", () => {
-      performSearch(searchInput.value);
-    });
-  }
 
   if (resultsContainer) {
     const q = urlParams.get("q")?.toLowerCase()?.trim();
     if (q) {
-      fetchFilteredData() // Using new smart loader
+      fetchBuddhaData()
         .then(data => {
           const matches = data.filter(item => {
             const qlc = q.toLowerCase();
@@ -610,7 +660,7 @@ if (typeof applyReadMore === 'function') {
           resultsContainer.innerHTML = matches.length
             ? matches.map(item => {
                 const template = item["template-page"] || "dt-1.html";
-                const templateUrl = getTemplateUrl(template, item.sku); // Use environment-aware URL
+                const templateUrl = getTemplateUrl(template, item.sku);
                 return `
                   <div class="search-result">
                     <a href="${templateUrl}">
@@ -659,4 +709,16 @@ if (typeof applyReadMore === 'function') {
       }
     });
   }
+
+  // === Fallback initialization for Netlify timing issues ===
+  setTimeout(() => {
+    if (!globalDataCache) {
+      console.log('⏰ Fallback initialization triggered');
+      // Re-trigger initialization if data hasn't loaded
+      const event = new Event('DOMContentLoaded');
+      document.dispatchEvent(event);
+    }
+  }, 2000);
+
+  console.log('🎉 Bundle.js initialization complete!');
 });
