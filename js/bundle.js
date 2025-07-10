@@ -1,4 +1,4 @@
-// File: /js/bundle.js (Buddha Museum - Christie's Auction Data Version)
+// File: /buddha/js/bundle.js (Buddha Museum - Christie's Auction Data Version)
 // Updated with cross-platform path handling for GitHub Pages and Netlify
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Detect if we're on GitHub Pages or Netlify
   const isGitHub = window.location.hostname.includes('github.io');
-  const basePath = isGitHub ? '/' : '';
+  const basePath = isGitHub ? '/buddha' : '';
   
   console.log(`Environment detected: ${isGitHub ? 'GitHub Pages' : 'Netlify'}`);
   console.log(`Base path: "${basePath}"`);
@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Smart data loader with fallback
   async function fetchBuddhaData() {
     const paths = [
-      "/data/-collection.json", // GitHub Pages path
-      "/data/-collection.json"         // Netlify path
+      "/buddha/data/buddha-collection.json", // GitHub Pages path
+      "/data/buddha-collection.json"         // Netlify path
     ];
     
     for (const path of paths) {
