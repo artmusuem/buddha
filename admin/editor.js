@@ -263,7 +263,7 @@ localStorage.setItem("buddha_collection_backup", JSON.stringify(jsonData));
       if (!(k in o)) o[k] = {};
       o = o[k];
     });
-    o[keys[keys.length - 1]] = value;
+    o[keys[keys.length - 1]] = value; 
   }
 
   // === Restore from localStorage on page load ===
