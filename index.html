@@ -1,1 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buddha Museum</title>
 
+  <!-- Self-loading config that handles all paths -->
+  <script>
+    (function() {
+      const isGitHub = window.location.hostname.includes('github.io');
+      const basePath = isGitHub ? '/buddha' : '';
+      
+      // Store globally
+      window.SITE_BASE_PATH = basePath;
+      console.log(`[CONFIG] Environment: ${isGitHub ? 'GitHub Pages' : 'Netlify/Local'}, Base Path: "${basePath || 'root'}"`);
+      
+      // Load CSS immediately
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = `${basePath}/css/style.css`;
+      document.head.appendChild(css);
+      
+      // Load bundle.js dynamically
+      const script = document.createElement('script');
+      script.src = `${basePath}/js/bundle.js`;
+      script.defer = true;
+      document.head.appendChild(script);
+      
+      console.log(`[CONFIG] Loading CSS: ${css.href}`);
+      console.log(`[CONFIG] Loading JS: ${script.src}`);
+      
+      // Function to update any other paths that get added later
+      function updatePaths() {
+        if (!basePath) return;
+        
+        // Update images
+        document.querySelectorAll('img').forEach(img => {
+          const src = img.getAttribute('src');
+          if (src && src.startsWith('/') && !src.startsWith(basePath)) {
+            img.src = basePath + src;
+          }
+        });
+        
+        // Update links
+        document.querySelectorAll('a[href]').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && href.startsWith('/') && !href.startsWith(basePath) && !href.startsWith('/#')) {
+            link.href = basePath + href;
+          }
+        });
+      }
+      
+      // Run path updates when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updatePaths);
+      } else {
+        updatePaths();
+      }
+    })();
+  </script>
+</head>
+
+   
+ <script>
+ 
+
+// Check for auto-filter IMMEDIATELY when page loads, before any images render
+(function() {
+  const autoFilter = sessionStorage.getItem('autoFilter');
+  if (autoFilter) {
+    console.log("Pre-loading filter detected:", autoFilter);
+    sessionStorage.removeItem('autoFilter');
+    
+    // Set a flag for bundle.js to know there's a pending filter
+    window.pendingAutoFilter = autoFilter;
+    
+    // Hide the gallery initially to prevent flash
+    document.addEventListener("DOMContentLoaded", () => {
+      const gallery = document.getElementById("gallery");
+      if (gallery) {
+        gallery.style.visibility = "hidden";
+      }
+    });
+  }
+})();
+</script>
+
+  
+
+<style>
+/* Buddha CSS - Updated to use 2x2 grid layout on mobile */
+
+@media (max-width: 768px) {
+  #searchButton {
+    margin-top: -15px;
+  }
+}
+
+#menu-toggle {
+  margin-top: 15px;
+}
+
+.car-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ccc;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.car-sidebar.open {
+  transform: translateX(0);
+}
+
+/* Fixed header area - doesn't scroll */
+.car-sidebar-header {
+  flex-shrink: 0;
+  padding: 6em 1em 1em 1em;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Scrollable content area */
+.car-sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1em;
+}
+
+#close-sidebar {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #333;
+}
+
+.car-sidebar h2 {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+  color: #333;
+}
+
+.car-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.car-sidebar ul li {
+  margin-bottom: 0.5em;
+}
+
+.car-sidebar ul li a {
+  text-decoration: none;
+  color: #8B4513;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  padding: 0.25rem 0;
+}
+
+.car-sidebar ul li a:hover {
+  color: #A0522D;
+  background-color: rgba(139, 69, 19, 0.1);
+  border-radius: 4px;
+  padding-left: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.car-sidebar details summary {
+  cursor: pointer;
+  color: #8B4513;
+  font-weight: bold;
+  padding: 0.5em 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.car-sidebar details summary:hover {
+  color: #A0522D;
+}
+
+.car-sidebar details[open] summary {
+  margin-bottom: 1rem;
+}
+
+.car-sidebar details ul {
+  padding-left: 1rem;
+  border-left: 2px solid #e0e0e0;
+  margin-left: 0.5rem;
+}
+
+.car-sidebar details ul li a {
+  color: #666;
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.car-sidebar details ul li a:hover {
+  color: #8B4513;
+}
+
+/* Scrollbar styling for content area */
+.car-sidebar-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.car-sidebar-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.car-sidebar-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.car-sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+#menu-toggle {
+  position: fixed;
+  top: 1em;
+  display: block;
+  left: 1em;
+  z-index: 1100;
+  background: rgba(139, 69, 19, 0.9);
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  display: block;
+  font-size: 1.5em;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+#menu-toggle:hover {
+  background: rgba(139, 69, 19, 1);
+  transform: scale(1.1);
+}
+
+.museum-title {
+  font-size: 2rem;
+  font-weight: 300;
+  color: #fff;
+  display: block;
+  margin: 0;
+  width: 300px;
+  margin-left: 50px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-bar input {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 300px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search-bar button {
+  padding: 0.75rem;
+  border: none;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.search-bar button:hover {
+  transform: scale(1.05);
+}
+
+.quick-filters {
+  background: white;
+  padding: 1.5rem 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+/* Desktop - 4 buttons across */
+.filter-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.filter-buttons button {
+  background-color: #f8f9fa;
+  border: 2px solid #8B4513;
+  border-radius: 25px;
+  padding: 0.75em 1.5em;
+  cursor: pointer;
+  font-size: 0.95em;
+  color: #8B4513;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.filter-buttons button:hover {
+  background-color: #8B4513;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+#clear-filters {
+  margin-top: 1rem;
+  display: none;
+  text-align: center;
+}
+
+#clear-filters button {
+  background-color: #fff4f4;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+  padding: 0.5em 1.5em;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+#clear-filters button:hover {
+  background-color: #dc3545;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery-item {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.gallery-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+  transform: scale(1.05);
+}
+
+.gallery-item h3 {
+  color: #8B4513;
+  font-size: 1.1rem;
+  margin: 1rem 0 0.5rem 0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.gallery-item .subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gallery-item a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.site-header {
+  background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+  color: white;
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#gallery-title {
+  text-align: center;
+  color: #8B4513;
+  font-size: 2.5rem;
+  font-weight: 300;
+  padding: 2rem 0 1rem 0;
+  margin: 0;
+}
+
+.gallery-stats {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+body {
+  background-color: #faf8f5;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 3rem 0;
+  margin-top: 4rem;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+/* No results message */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.no-results h3 {
+  color: #8B4513;
+  margin-bottom: 1rem;
+}
+
+/* Loading state */
+.gallery-loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+/* Responsive Design - Updated for 2x2 grid layout */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  /* 2x2 grid layout instead of single column */
+  .filter-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    max-width: 400px;
+    justify-items: center;
+  }
+  
+  .filter-buttons button {
+    width: 100%;
+    max-width: 180px;
+  }
+  
+  .gallery {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  
+  .gallery-item {
+    max-width: 100%;
+  }
+  
+  #gallery-title {
+    font-size: 2rem;
+    padding: 1.5rem 1rem 1rem 1rem;
+  }
+  
+  #menu-toggle {
+    top: 0.5em;
+    left: 0.5em;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .museum-title {
+    font-size: 1.5rem;
+  }
+  
+  .filter-buttons {
+    max-width: 350px;
+    gap: 0.5rem;
+  }
+  
+  .filter-buttons button {
+    max-width: 160px;
+    padding: 0.6em 1.2em;
+    font-size: 0.9em;
+  }
+  
+  .gallery {
+    padding: 0.5rem;
+  }
+  
+  .gallery-item {
+    padding: 1rem;
+  }
+  
+  .gallery-item img {
+    height: 200px;
+  }
+}
+
+/* Loading Animation */
+.gallery-item {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.gallery-item:nth-child(even) {
+  animation-delay: 0.1s;
+}
+
+.gallery-item:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced hover effects */
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(139, 69, 19, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.gallery-item:hover::before {
+  opacity: 1;
+}
+</style>
+
+
+<body>
+  <div id="menu-placeholder"></div>
+
+  <button id="menu-toggle" aria-label="Open filter menu">☰</button>
+
+  <div class="car-sidebar" id="sidebar">
+    <!-- Fixed header area -->
+    <div class="car-sidebar-header">
+      <button id="close-sidebar" aria-label="Close sidebar">✕</button>
+      <h2>Filter Collection</h2>
+      <button onclick="filterGallery('')" style="background: #8B4513; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 500;">Show All Items</button>
+    </div>
+    
+    <!-- Scrollable content area -->
+    <div class="car-sidebar-content">
+      <ul id="dynamic-menu"></ul>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-content">
+      <h1 class="museum-title">Buddha Museum</h1>
+      <div class="search-bar">
+        <input type="text" id="searchBox" placeholder="Search Buddhist artifacts...">
+        <button id="searchButton">🔍</button>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </header>
+  
+  <h2 id="gallery-title">All Buddhist Art</h2>
+  <div class="gallery-stats" id="gallery-stats">Loading collection...</div>
+
+  <section class="quick-filters">
+    <div class="filter-buttons">
+      <button onclick="filterGallery('gandharan')">Gandharan Art</button>
+      <button onclick="filterGallery('tibetan')">Tibetan Art</button>
+      <button onclick="filterGallery('chinese')">Chinese Art</button>
+      <button onclick="filterGallery('painting')">Paintings</button>
+    </div>
+    <div id="clear-filters">
+      <button onclick="filterGallery('')">Clear All Filters</button>
+    </div>
+  </section>
+
+  <main>
+    <div id="gallery" class="gallery">
+      <div class="gallery-loading">
+        <h3>Loading Buddhist Art Collection...</h3>
+        <p>Please wait while we prepare the gallery for you.</p>
+      </div>
+    </div>
+  </main>
+<style>.statue-title {
+	font-size: 1.2rem;
+	margin: 0 0 0.5rem 0;
+	color: #8B4513;
+}
+
+.subtitle {
+	font-size: 1rem;
+	color: #666;
+	font-style: italic;
+	margin: 0 0 1rem 0;
+}</style>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-links">
+        <a href="/">Gallery</a>
+        <a href="#">About</a>
+        <a href="#">Collections</a>
+        <a href="#">Research</a>
+        <a href="#">Contact</a>
+      </div>
+      <p>© 2025 Buddha Museum. Preserving Buddhist Art Heritage.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Update gallery stats when items are loaded
+    function updateGalleryStats(totalItems, filteredItems) {
+      const statsElement = document.getElementById('gallery-stats');
+      if (statsElement) {
+        if (filteredItems !== undefined && filteredItems !== totalItems) {
+          statsElement.textContent = `Showing ${filteredItems} of ${totalItems} artifacts`;
+        } else {
+          statsElement.textContent = `${totalItems} artifacts in collection`;
+        }
+      }
+    }
+
+    // Make updateGalleryStats globally available
+    window.updateGalleryStats = updateGalleryStats;
+  </script>
+
+</body>
+</html>
