@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="/js/config.js"></script>
-  <link rel="stylesheet" href="/css/style.css" />
-  <script src="/js/bundle.js" defer></script>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Results – Buddha Museum</title>
+  <link rel="stylesheet" href="/buddha/css/style.css" />
+  <script defer src="/buddha/js/bundle.js"></script>
   <style>
     .site-header {
     
@@ -649,7 +650,7 @@ footer p {
 }
 
 </style>
-
+</head>
 <body class="search-results-page">
 <header class="site-header">
     <div class="header-content">
@@ -662,7 +663,7 @@ footer p {
     </div>
   </header>
   <nav class="statue-nav">
-    <a href="//index.html" class="nav-gallery">🏛 Gallery</a>
+    <a href="/buddha/index.html" class="nav-gallery">🏛 Gallery</a>
   </nav>
   <main>
     <section class="search-results">
@@ -697,7 +698,7 @@ footer p {
       const performSearch = (searchQuery) => {
         const trimmedQuery = searchQuery?.trim();
         if (!trimmedQuery) return;
-        window.location.href = `//search-results.html?q=${encodeURIComponent(trimmedQuery)}`;
+        window.location.href = `/buddha/search-results.html?q=${encodeURIComponent(trimmedQuery)}`;
       };
 
       // Search input handlers
